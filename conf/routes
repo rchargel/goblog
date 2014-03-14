@@ -6,6 +6,7 @@ module:testrunner
 
 GET     /                                       App.Index
 GET     /bookmarks                              App.Bookmarks
+GET     /resume                                 Resume.Index
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

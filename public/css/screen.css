@@ -29,6 +29,13 @@ figure img {
    min-height: 100%;
    position: relative;
 }
+.right { text-align: right; }
+.resume .experience {
+	padding-left: 3em;
+}
+article {
+	max-width: 800px;
+}
 *.main {
    padding: 0;
 }
@@ -84,6 +91,7 @@ section {
 article {
    line-height: 1.4;
    color: #fff;
+   max-width: 900px;
 }
 article a {
    text-decoration: none;
@@ -176,8 +184,13 @@ div.copy {
 pre code {
    overflow: auto;
 }
-@media only screen and (min-width: 480px) {
-   header.main figure { width: 75%; }
+@media only screen and (min-width: 400px) {
+   header.main figure { width: 70%; }
+   section { padding-bottom: 5em; }
+   section { padding: 0 10px 6em 10px; }
+}
+@media only screen and (min-width: 640px) {
+   header.main figure { width: 50%; }
    aside.main {
       padding: 7px 0 7px 0;
       margin-bottom: 5%;
@@ -205,11 +218,9 @@ pre code {
    div.login { float: left; }
    div.copy { float: right; text-align: right;}
    footer { height: 3em; }
-   section { padding-bottom: 5em; }
-   section { padding: 0 10px 6em 10px; }
    article nav { float: right; }
 }
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 900px) {
    header.main figure { width: 50%; }
    section { padding: 0 20px 6em 20px; }
    aside.main nav { padding: 0 0 0 15%; }

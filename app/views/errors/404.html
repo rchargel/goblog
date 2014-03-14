@@ -1,20 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<title>Not found</title>
-	</head>
-	<body>
-{{if eq .RunMode "dev"}}
-{{template "errors/404-dev.html" .}}
-{{else}}
-	{{with .Error}}
-	<h1>
-		{{.Title}}
-	</h1>
-	<p>
-		{{.Description}}
-	</p>
-	{{end}}
-{{end}}
-	</body>
-</html>
+{{set . "title" "You seem to be lost."}}
+{{template "header.html" .}}
+	
+<article>
+	<header>
+		<h2>You seem to be lost</h2>
+	</header>
+	<p>Hey, I'm not sure what you're trying to find, but the page you're looking for just isn't available.</p>
+	<p>Try going back to the <a href="/">home page</a>, or clicking on one of the menu options above.</p>
+</article>
+
+{{template "footer.html" .}}

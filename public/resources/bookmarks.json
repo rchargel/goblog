@@ -20,6 +20,11 @@
 		"Message"  : "Keith Gregory is a developer that I have worked with for a couple of years. Unlike myself, he actually posts regularly."
 	},
 	{
+		"Link"     : "http://jobtipsforgeeks.com/",
+		"LinkText" : "Job Tips for Geeks",
+		"Message"  : "Date Fecak's blog. Dave runs the Philadelphia Java Users Group."
+	},
+	{
 		"Link"     : "http://theoatmeal.com/",
 		"LinkText" : "The Oatmeal",
 		"Message"  : "A funny web comic."

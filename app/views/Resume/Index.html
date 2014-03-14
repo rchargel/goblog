@@ -1,0 +1,43 @@
+{{set . "title" "Software Developer"}}
+{{template "header.html" .}}
+
+<article class="resume">
+	<header>
+		<h2>Resume</h2>
+	</header>
+	<h4 class="right">Rafael Chargel</h4>
+	<hr/>
+	<h5>Summary</h5>
+	<p>{{.resume.Summary}}</p>
+	<hr/>
+	<h5>Experience</h5>
+	{{ range .resume.Experience.Jobs }}
+	<p>
+		<strong>
+		{{.Start}} - {{.End}}<br/>
+		{{.Title}}<br/>
+		{{.Company}}<br/>
+		</strong>
+		<em>{{.Location}}</em>
+	</p>
+	<p class="experience">{{.Description}}</p>
+	<p class="experience"><em>{{.Skills}}</em></p>
+	{{end}}
+	<hr/>
+	<h5>Other Skills</h5>
+	<p>
+		<ul>
+			<li>Skills: {{.resume.AdditionalSkills}}</li>
+			<li>Languages: {{.resume.AdditionalLanguages}}</li>
+		</ul>
+	</p>
+	<hr/>
+	<h5>Education</h5>
+	<p>
+		<strong>{{.resume.Education.Institution}}</strong> - {{.resume.Education.Year}}<br/>
+		{{.resume.Education.Location}}<br/>
+		{{.resume.Education.Degree}}
+	</p>
+</article>
+
+{{template "footer.html" .}}
