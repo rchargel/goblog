@@ -1,6 +1,9 @@
 package app
 
-import "github.com/robfig/revel"
+import (
+	"github.com/robfig/revel"
+	"strings"
+)
 
 func init() {
 	// Filters is the default set of global filters.
@@ -30,9 +33,30 @@ func init() {
 // not sure if it can go in the same filter or not
 var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
 	// Add some common security headers
+	SetMimeType(c)
 	c.Response.Out.Header().Add("X-Frame-Options", "SAMEORIGIN")
 	c.Response.Out.Header().Add("X-XSS-Protection", "1; mode=block")
 	c.Response.Out.Header().Add("X-Content-Type-Options", "nosniff")
 
 	fc[0](c, fc[1:]) // Execute the next filter stage.
+}
+
+var ExtensionMap = map[string]string{
+	"png":  "image/png",
+	"jpg":  "image/jpeg",
+	"gif":  "image/gif",
+	"js":   "application/javascript; charset=utf-8",
+	"css":  "text/css; charset=utf-8",
+	"xml":  "text/xml; charset=utf-8",
+	"html": "text/html; charset=utf-8",
+}
+
+func SetMimeType(c *revel.Controller) {
+	path := c.Request.RequestURI
+	if strings.LastIndex(path, ".") >= 0 {
+		extension := strings.ToLower(path[strings.LastIndex(path, ".")+1:])
+		if mime, ok := ExtensionMap[extension]; ok {
+			c.Response.Out.Header().Set("Content-Type", mime)
+		}
+	}
 }
