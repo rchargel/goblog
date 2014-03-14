@@ -1,14 +1,11 @@
 <!doctype html>
-<html lang="en" id="ng-app" ng-app="zcarioca" xmlns:ng="http://angularjs.org">
+<html lang="en" xmlns:ng="http://angularjs.org">
 	<head>
-		<title>{{.title}}</title>
+		<title>Z Carioca - {{.title}}</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		<link rel="stylesheet" type="text/css" href="/public/css/screen.css" media="screen, projection">
-		<link rel="shortcut icon" type="image/png" href="/public/img/favicon.png">
-		<script src="/public/js/angular-comp.js" type="text/javascript" charset="utf-8"></script>
-		<script src="/public/js/app/application.js" type="text/javascript" charset="utf-8"></script>
 		{{if eq .RunMode "dev"}}
 			<script src="/public/js/jquery.1.11.js" type="text/javascript" charset="utf-8"></script>
  		{{end}}
@@ -47,3 +44,13 @@
 			<!-- end if isUser and not text only -->
 			<h1 id="logo">Z Carioca</h1>
 		</header>
+		<a href="#body-content" class="nav-skip">Skip Navigation</a>
+		<aside class="main">
+			<nav>
+				<a href="/">Z Carioca</a>
+				<a href="/bookmarks">Bookmarks</a>
+				<a href="/projects">Projects</a>
+				<a href="/blog">Blog</a>
+			</nav>
+		</aside>
+		<section id="body-content" class="content">

@@ -1,0 +1,18 @@
+{{set . "title" "Bookmarks"}}
+{{template "header.html" .}}
+
+<article>
+	<header>
+		<h2>Bookmarks</h2>
+	</header>
+	<p>The following links are to some pages that I find helpful or just fun. 
+	I apologize for the disorganized nature of these links. I'll try to add 
+	to this list as I can.</p>
+	<ul>
+		{{range .links}}
+		<li><p><a href="{{.Link}}">{{.LinkText}}</a>: {{.Message}}</p></li>
+		{{end}}
+	</ul>
+</article>
+
+{{template "footer.html" .}}
