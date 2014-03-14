@@ -1,17 +1,49 @@
-<!DOCTYPE html>
-
-<html>
-  <head>
-    <title>{{.title}}</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" type="text/css" href="/public/css/bootstrap.css">
-    <link rel="shortcut icon" type="image/png" href="/public/img/favicon.png">
-    <script src="/public/js/jquery-1.9.1.min.js" type="text/javascript" charset="utf-8"></script>
-    {{range .moreStyles}}
-      <link rel="stylesheet" type="text/css" href="/public/{{.}}">
-    {{end}}
-    {{range .moreScripts}}
-      <script src="/public/{{.}}" type="text/javascript" charset="utf-8"></script>
-    {{end}}
-  </head>
-  <body>
+<!doctype html>
+<html lang="en" id="ng-app" ng-app="zcarioca" xmlns:ng="http://angularjs.org">
+	<head>
+		<title>{{.title}}</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" type="text/css" href="/public/css/screen.css" media="screen, projection">
+		<link rel="shortcut icon" type="image/png" href="/public/img/favicon.png">
+		<script src="/public/js/angular-comp.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/public/js/app/application.js" type="text/javascript" charset="utf-8"></script>
+		{{if eq .RunMode "dev"}}
+			<script src="/public/js/jquery.1.11.js" type="text/javascript" charset="utf-8"></script>
+ 		{{end}}
+		<!--[if lt IE 9]>
+		<script src="/public/js/shivs.js"></script>
+		<![endif]-->
+		<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push([ '_setAccount', 'UA-39324990-1' ]);
+		_gaq.push([ '_setDomainName', 'zcarioca.net' ]);
+		_gaq.push([ '_setAllowLinker', true ]);
+		_gaq.push([ '_trackPageview' ]);
+		(function() {
+			var ga = document.createElement('script');
+			ga.type = 'text/javascript';
+			ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(ga, s);
+		})();
+		</script>
+		{{range .moreStyles}}
+		<link rel="stylesheet" type="text/css" href="/public/{{.}}">
+		{{end}}
+		{{range .moreScripts}}
+		<script src="/public/{{.}}" type="text/javascript" charset="utf-8"></script>
+		{{end}}
+	</head>
+	<body>
+		<div class="container">
+		<header class="main">
+			<!-- if isUser and not text only -->
+			<figure>
+				<img src="/public/img/masthead_2.png" title="Z Carioca" alt="Z Carioca"/>
+			</figure>
+			<!-- end if isUser and not text only -->
+			<h1 id="logo">Z Carioca</h1>
+		</header>

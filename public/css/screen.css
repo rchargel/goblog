@@ -1,0 +1,216 @@
+html, body {
+   margin: 0;
+   padding: 0;
+   height: 100%;
+   background-color: #4d4d4d;
+   font-family: Arial, Helvetica, sans-serif;
+}
+em {
+   padding: 0;
+}
+figure {
+   width: 100%;
+   margin: 0;
+   padding: 0;
+}
+figure img {
+   width: 100%;
+   max-width: 1000px;
+   height: auto;
+   display: block;
+   margin: 0 auto;
+}
+.nav-skip {
+   position: absolute;
+   top:-9999px;
+   left: -9999px;
+}
+.container {
+   min-height: 100%;
+   position: relative;
+}
+*.main {
+   padding: 0;
+}
+header.main {
+   background-color: #4d4d4d;
+   padding-bottom: 10px;
+}
+header.main figure {
+   width: 100%;
+   max-width: 600px;
+}
+header.main figure img { margin-bottom: -18%; }
+aside.main {
+   /* background-color: #fed702; */
+   background-color: #fff;
+   /* border-bottom: 3px solid #dda501; */
+   border-top: 3px solid #62cbe0;
+   border-bottom: 3px solid #62cbe0;
+}
+h1#logo {
+   position: absolute;
+   top: -99999px;
+   left: -99999px;
+}
+aside.main nav {
+   padding-left: 0px;
+}
+aside.main nav a {
+   display: block;
+   text-align: right;
+   line-height: 2;
+   text-decoration: none;
+   color: #333;
+   font-size: 1.2em;
+   padding-right: 10px;
+}
+aside.main nav a:hover, aside.main nav a:active, aside.main nav a.active {
+   color: #000;
+}
+footer {
+   position: absolute;
+   line-height: 1;
+   font-size: 0.85em;
+   height: 5em;
+   bottom: 0;
+   width: 100%;
+   background-color: #fff;
+   border-top: 3px solid #62cbe0;
+}
+section {
+   padding: 0 5px 6em 5px;
+}
+article {
+   line-height: 1.4;
+   color: #fff;
+}
+article a {
+   text-decoration: none;
+   color: #62cbe0;
+}
+article a:hover, article a:active {
+   border-bottom: 1px dotted #62cbe0;
+}
+ul.table-of-contents {
+   list-style: none;
+   margin: 1em 0;
+   padding: 1em 0;
+   border-top: 1px dotted #62cbe0;
+   border-bottom: 1px dotted #62cbe0;
+}
+ul.table-of-contents ul {
+   list-style: disc;
+}
+h1,h2,h3,h4,h5,h6 {
+   color: #fed702;
+   font-weight: bold;
+   line-height: 1;
+}
+h3 { 
+   font-size: 1.8em; 
+   text-decoration: underline;
+   margin: 0; 
+}
+h4 { 
+   font-size: 1.5em; 
+   margin: 0; 
+}
+h5 { 
+   font-size: 1.3em;
+   margin: 0; 
+}
+h6 { 
+   font-size: 1em;
+   margin: 0;
+}
+article h1, article h2 {
+   font-size: 3em;
+   line-height: 1;
+   font-weight: bold;
+   color: #fed702;
+   text-shadow: 1px 1px #62cbe0;
+   font-variant: small-caps;
+   margin: 15px 0;
+}
+article nav a {
+   font-size: 1.1em;
+   padding: 0.3em 0.7em;
+}
+article nav a:hover, article nav a:active {
+   border: 0;
+}
+.blog-item {
+   padding: 0.5em 0;
+   border-bottom: 1px dotted #fff;
+}
+.blog-item header {
+   font-size: 1.2em;
+   padding-bottom: 0.3em;
+   display: block;
+}
+.blog-item time {
+   display: block;
+}
+footer a {
+   text-decoration: none;
+   color: #333;
+}
+footer a:hover, footer a:active {
+   border-bottom: 1px dotted #333;
+}
+footer figure {
+   width: 30px;
+   position: absolute;
+   left: 50%;
+   margin-left: -15px;
+   margin-top: -15px;
+}
+div.login {
+   display: none;
+}
+div.copy {
+   display: block;
+   padding: 15px;
+}
+pre code {
+   overflow: auto;
+}
+@media only screen and (min-width: 480px) {
+   header.main figure { width: 75%; }
+   aside.main {
+      padding: 7px 0 7px 0;
+      margin-bottom: 5%;
+   }
+   aside.main nav {
+      padding: 0 0 0 20%;
+      position: relative;
+      z-index: 10;
+   }
+   aside.main nav a {
+      width: 25%;
+      text-align: center;
+      max-width: 110px;
+      display: inline;
+      padding: 5px 15px;
+      margin: 5px 0;
+      line-height: 1;
+      font-size: 1.1em;
+   }
+   div.login, div.copy {
+      display: block;
+      width: 40%;
+      padding: 5px 9px;
+   }
+   div.login { float: left; }
+   div.copy { float: right; text-align: right;}
+   footer { height: 3em; }
+   section { padding-bottom: 5em; }
+   section { padding: 0 10px 6em 10px; }
+   article nav { float: right; }
+}
+@media only screen and (min-width: 800px) {
+   header.main figure { width: 50%; }
+   section { padding: 0 20px 6em 20px; }
+   aside.main nav { padding: 0 0 0 15%; }
+}
