@@ -6,6 +6,7 @@ module:testrunner
 
 GET     /                                       App.Index
 GET     /bookmarks                              App.Bookmarks
+GET     /robots.txt                             App.Robots
 GET     /resume                                 Resume.Index
 GET     /resume.pdf                             Resume.Pdf
 
