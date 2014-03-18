@@ -33,9 +33,6 @@ figure img {
 .resume .experience {
 	padding-left: 3em;
 }
-article {
-	max-width: 800px;
-}
 *.main {
    padding: 0;
 }
@@ -91,7 +88,7 @@ section {
 article {
    line-height: 1.4;
    color: #fff;
-   max-width: 900px;
+   max-width: 1000px;
 }
 article a {
    text-decoration: none;

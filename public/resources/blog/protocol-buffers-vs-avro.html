@@ -1,0 +1,133 @@
+<p>I've recently been in the position of having to find a decent binary serializer for 
+Java objects. We had been using a custom binary format, but as code progresses, so do 
+the maintenance woes of doing something that others have already done for us. We decided 
+to look at three major tools in this arena: Google's 
+<a href="https://developers.google.com/protocol-buffers/">Protocol Buffers</a>, Apache's 
+<a href="http://avro.apache.org/">Avro</a>, and Facebook's <a href="http://incubator.apache.org/thrift/">Thrift</a>.</p>
+
+<ul class="table-of-contents"></ul>
+
+<p>I started by reading whitepapers and benchmarking tests that others in the community had already 
+performed. GitHub has some great <a href="http://wiki.github.com/eishay/jvm-serializers/">benchmarking tests</a> as a starting point.</p>
+
+<p>My next step was to evaluate how each tool functions, and which of these tools worked best for us. 
+I had to base my criteria on five priorities: speed, size of binary format, community support and documentation, 
+ease of use, and backwards compatibility.</p>
+
+<h3 id="the-test">The Test</h3>
+
+<p>For this evaluation I wanted to be certain I was comparing apples to apples, so I started with a basic object. 
+This object was composed of 10 primitive fields, plus 4 strings, and one set of an additional object (which was just a 
+string 'name', and long 'id').</p>
+
+<p>For the test I built up a list of 1,000,000 unique data points in the form of a simple CSV file, wherein no two data 
+points were alike. I then iterated through each data point and used each line to build up a custom object and an instance 
+of each generated class from both Protocol Buffers and Avro. These were then serialized, then unserialized, and finally 
+the data was used to rebuild a line of CSV text. The whole round-trip looked something like this: text -> object -> 
+binary -> object -> text. The text output was compared to the input in order to assure equality; this part of the test 
+was not used to calculate speed.</p>
+
+<p>I did not test Thrift because while it was functionally similar to Protocol Buffers in terms of speed and use, its 
+documentation was poor and the community was much smaller than either Protocol Buffers or Avro.</p>
+
+<h4 id="speed">Speed</h4>
+
+<p>[1 point]</p>
+
+<p>With the GitHub test results to start with, I wasn't much surprised by the my results in the area of speed, which were as 
+follows (results are the time taken to perform one round trip in <a href="http://en.wiktionary.org/wiki/microsecond">microseconds</a>):</p>
+
+<ul>
+	<li>Custom Binary Conversion: 6.2 &micro;s</li>
+	<li>Avro: 7.1 &micro;s</li>
+	<li>Protocol Buffers: 2.1 &micro;s</li>
+</ul>
+
+<p>Protocol Buffers wins hands down.</p>
+
+<p><em>Avro : 0 | Protocol Buffers : 1</em></p>
+
+<h4 id="binary-format-size">Binary Format Size</h4>
+
+<p>[1 point]</p>
+
+<p>While normally we're talking about only a few bytes here or there, the size of the binary format can be a big deal, 
+simply because of the quantity of data we are dealing with (in our case an average of 100 million messages per hour).</p>
+
+<p>Here is where things got really surprising. The biggest difference between Avro and most binary serializers, is that 
+Avro does not encode the structure of the binary data along with the message. This means that the client reading an encoded 
+message, must have access to the same schema file used by the message encoder. In a closed system such as ours, this isn't 
+theoretically a problem, but I'll have more on this later. All others encode the binary's data structure along with the data 
+itself, often in the form of a header, allowing consumers to easily decode the message. What's most surprising here is that 
+even without the structure encoded into the message, Avro wasn't the most efficient in it's binary encoding. Even our custom 
+code was only slightly less compact than Avro.</p>
+
+<p>Again here are my results (quantities are in average bytes per message):</p>
+
+<ul>
+	<li>Custom Binary Conversion: 186</li>
+	<li>Avro: 182</li>
+	<li>Protocol Buffers: 171</li>
+</ul>
+
+<p>These results would translate to roughly 17 GB/hour at the least compressed (our code) to 15 GB/hour at the most 
+compressed (Protocol Buffers), not at all a big deal over a halfway decent network.</p>
+
+<p><em>Avro : 0 | Protocol Buffers : 2</em></p>
+
+<h4 id="comm-support-doc">Community Support &amp; Documentation</h4>
+
+<p>[1 Point]</p>
+
+<p>As I stated above, this is where Thrift really lost it for me. Their documentation was horrendous, and I couldn't 
+really find enough community resources for it to be a serious contender. At least not yet.</p>
+
+<p>While I did think that Google's documentation was much better organized, both Protocol Buffers and Avro provided 
+enough documentation to get up and running in about an hour. In the case of Avro, their <a href="https://cwiki.apache.org/confluence/display/AVRO/Index">wiki</a> is really your best 
+source of information.</p>
+
+<p><em>Avro : 1 | Protocol Buffers : 3</em></p>
+
+<h4 id="ease-use">Ease of Use</h4>
+
+<p>[2 Points]</p>
+
+<p>For Java developers, and those of us using the Maven build framework, Avro is a sinch. First, Avro has a choice of 
+two different syntaxes for describing their data models: JSON (which we're all familiar with), and Genavro.</p>
+
+<p>Genavro, is actually very similar to Google's Proto language, with two key added features. First, Genavro allows for 
+the use of Maps. Second, it uses a Java Annotation-like syntax to add additional instructions to the code 
+generator (like sorting rules).</p>
+
+<p>The biggest advantage to Avro is it's ease of integration into the Maven build framework; there are already two maven 
+plugins. I've read a few old postings that Google is working on a Maven plugin for Protocol Buffers, but I haven't seen 
+anything. Instead, to generate your models from the Proto files, you have to use Google's command-line compiler, protoc. 
+It's an easy enough tool to use, but because it is a C application that is built from source and installs itself as a 
+number of shared libraries (only tried this in Linux), it's not easy to integrate into a continuous integration build 
+environment. The best I've seen is a plugin that bangs out to shell to generate your files, meaning you're pretty much 
+stuck having to check generated code into your source controller; an unfortunately ugly, but not unlivable situation.</p>
+
+<p><em>Avro: 3 | Protocol Buffers : 3</em></p>
+
+<h4 id="back-compat">Backwards Compatibility</h4>
+
+<p>[2 Points]</p>
+
+<p>This is really a make or break issue for me; the whole point of messaging, after all, is to decouple two systems. 
+This is where Avro really just breaks down. Since both the consumer and producer of binary messages in Avro need to 
+share the same schema (and have that schema on hand), any change to the schema requires a re-release of both 
+applications. I tried a number of different techniques to get a consumer using an old version of the schema to read 
+data produced by a newer version (one extra parameter), but I could not get backwards compatibility to work, 
+something easily accomplished with Protocol Buffers.</p>
+
+<p>Perhaps this was just a limitation of my own skill and/or understanding of Avro, and I welcome any comments to 
+that regard.</p>
+
+<p><em>Avro: 3 | Protocol Buffers : 5</em></p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>The fact is, while speed and data structure are important for any system, a certain amount of latency can be 
+tolerated. Avro is slower and less efficient in constructing the binary array, but not outside of reasonable limits. 
+The real killer here was it's inability to accept changes to the schema without falling on its proverbial face. 
+For our organization, we are going to move to Protocol Buffers (in spite of my <a href="http://googleisskynet.blogspot.com/">anti-Google</a> bias).</p>

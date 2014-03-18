@@ -12,6 +12,7 @@ GET     /resume.pdf                             Resume.Pdf
 GET     /projects                               Projects.List
 GET     /proj/:action                           Projects.Show
 GET     /blog                                   Blogs.List
+GET     /blog/:action                           Blogs.Show
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

@@ -1,0 +1,43 @@
+{{set . "title" .blog.Name}}
+{{template "header.html" .}}
+
+<article>
+	<a href="#blog-content" class="nav-skip">Skip Navigation</a>
+	<nav class="page-top-nav">
+		{{if eq .prev ""}}
+		<a class="prev" href="#" style="display: none;">&#9664; prev</a>
+		{{else}}
+		<a class="prev" href="/blog/{{.prev}}" >&#9664; prev</a>
+		{{end}}
+		<a class="back" href="/blog">blog</a>
+		{{if eq .next ""}}
+		<a class="next" href="#" style="display: none;">next &#9654;</a>
+		{{else}}
+		<a class="prev" href="/blog/{{.next}}" >next &#9654;</a>
+		{{end}}
+	</nav>
+	<header>
+		<h2>{{.blog.Name}}</h2>
+	</header>
+	<div class="blog-content">
+		{{raw .content}}
+	</div>
+	<nav class="page-bottom-nav">
+		{{if eq .prev ""}}
+		<a class="prev" href="#" style="display: none;">&#9664; prev</a>
+		{{else}}
+		<a class="prev" href="/blog/{{.prev}}" >&#9664; prev</a>
+		{{end}}
+		<a class="back" href="/blog">blog</a>
+		{{if eq .next ""}}
+		<a class="next" href="#" style="display: none;">next &#9654;</a>
+		{{else}}
+		<a class="prev" href="/blog/{{.next}}" >next &#9654;</a>
+		{{end}}
+	</nav>
+</article>
+<script type="text/javascript">
+hljs.initHighlightingOnLoad();
+</script>
+
+{{template "footer.html" .}}
