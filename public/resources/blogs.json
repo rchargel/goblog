@@ -1,0 +1,82 @@
+[
+	{
+		"Name"     : "Protocol Buffers vs Avro",
+		"Date"     : "2010-08-27",
+		"Slug"     : "protocol-buffers-vs-avro",
+		"Abstract" : "A comparison of Google's Protocol Buffers and Apache's Avro for serializing/unserializing Java objects.",
+		"Active"   : true,
+		"File"     : "protocol-buffers-vs-avro.html"
+	},
+	{
+		"Name"     : "On the Question of Interviews",
+		"Date"     : "2010-09-29",
+		"Slug"     : "on-the-question-of-interviews",
+		"Abstract" : "Trials and tribulations of an interviewer.",
+		"Active"   : true,
+		"File"     : "on-the-question-of-interviews.html"
+	},
+	{
+		"Name"     : "Why Ubuntu Doesn’t Suck",
+		"Date"     : "2010-10-01",
+		"Slug"     : "why-ubuntu-doesn-t-suck",
+		"Abstract" : "A message to the haters.",
+		"Active"   : true,
+		"File"     : "why-ubuntu-doesn-t-suck.html"
+	},
+	{
+		"Name"     : "Formatting XML in VIM",
+		"Date"     : "2011-03-11",
+		"Slug"     : "formatting-xml-in-vim",
+		"Abstract" : "A Linux trick to simply format XML content with VI(M).",
+		"Active"   : true,
+		"File"     : "formatting-xml-in-vim.html"
+	},
+	{
+		"Name"     : "Evolutionary Algorithms in an Actor Model",
+		"Date"     : "2011-03-21",
+		"Slug"     : "evolutionary-algorithms-in-an-actor-model",
+		"Abstract" : "An attempt to test some theories about evolutionary algorithms within the framework of an Actors Model.",
+		"Active"   : true,
+		"File"     : "evolutionary-algorithms-in-an-actor-model.html"
+	},
+	{
+		"Name"     : "Using Google Closure in the Command Line",
+		"Date"     : "2013-01-15",
+		"Slug"     : "using-google-closure-in-the-command-line",
+		"Abstract" : "Another Linux trick to setup the Google's Closure Javascript compiler into the command-line.",
+		"Active"   : true,
+		"File"     : "using-google-closure-in-the-command-line.html"
+	},
+	{
+		"Name"     : "Formatting JSON in VIM",
+		"Date"     : "2013-02-08",
+		"Slug"     : "formatting-json-in-vim",
+		"Abstract" : "Neat little Linux trick to make JSON formatting easy in VI(M).",
+		"Active"   : true,
+		"File"     : "formatting-json-in-vim.html"
+	},
+	{
+		"Name"     : "Java: Not Dead Yet?",
+		"Date"     : "2013-10-10",
+		"Slug"     : "java-not-dead-yet",
+		"Abstract" : "A short post on the future of java and it's viability for the future.",
+		"Active"   : true,
+		"File"     : "java-not-dead-yet.html"
+	},
+	{
+		"Name"     : "You’re Doing Everything Right, But…",
+		"Date"     : "2013-04-05",
+		"Slug"     : "youre-doing-everything-right-but",
+		"Abstract" : "Continuous integration as the next step.",
+		"Active"   : true,
+		"File"     : "youre-doing-everything-right-but.html"
+	},
+	{
+		"Name"     : "How Hard is it to Develop a Website in WordPress?",
+		"Date"     : "2013-03-01",
+		"Slug"     : "how-hard-is-it-to-develop-a-website-in-wordpress",
+		"Abstract" : "What should your organization be looking for in a WordPress developer.",
+		"Active"   : true,
+		"File"     : "how-hard-is-it-to-develop-a-website-in-wordpress.html"
+	}
+]

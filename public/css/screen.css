@@ -159,6 +159,10 @@ article nav a:hover, article nav a:active {
 }
 .blog-item time {
    display: block;
+   font-size: 80%;
+}
+.blog-roll-details {
+   padding-left: 1em;
 }
 footer a {
    text-decoration: none;

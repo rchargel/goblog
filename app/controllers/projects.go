@@ -24,9 +24,21 @@ type Projects struct {
 
 type ByName []ProjectItem
 
+type FilterActive []ProjectItem
+
 func (l ByName) Len() int           { return len(l) }
 func (l ByName) Swap(i, j int)      { l[i], l[j] = l[j], l[i] }
 func (l ByName) Less(i, j int) bool { return l[i].Name < l[j].Name }
+
+func (l FilterActive) Filter() []ProjectItem {
+	newList := make([]ProjectItem, 0, len(l))
+	for _, item := range []ProjectItem(l) {
+		if item.Active {
+			newList = append(newList, item)
+		}
+	}
+	return newList
+}
 
 func (c *ProjectItem) getContent() string {
 	buffer := &bytes.Buffer{}
@@ -58,6 +70,7 @@ func (c Projects) items() []ProjectItem {
 	} else {
 		panic(err)
 	}
+	projects = FilterActive(projects).Filter()
 	sort.Sort(ByName(projects))
 	return projects
 }

@@ -33,5 +33,12 @@
 		"Abstract" : "An open source, cross-platform, thin client and server for web-based distribution and clinical review of medical imaging results.",
 		"Active"   : true,
 		"File"     : "xebra.html"
+	},
+	{
+		"Name"     : "Country-State-Lookup API",
+		"Slug"     : "country-state-lookup-rest-api",
+		"Abstract" : "A REST-like API to lookup information on countries, states, and languages.",
+		"Active"   : false,
+		"File"     : "csl.html"
 	}
 ]
