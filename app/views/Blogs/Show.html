@@ -18,6 +18,7 @@
 	</nav>
 	<header>
 		<h2>{{.blog.Name}}</h2>
+		<time>{{date .blog.Date.Time}}</time>
 	</header>
 	<div class="blog-content">
 		{{raw .content}}
