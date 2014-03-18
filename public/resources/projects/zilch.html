@@ -1,6 +1,60 @@
 <p>ZiLCh is a free and open source zip-code lookup API for the web. It allows web developers
 to access a zip code database from their front-end code to provide quick address forms for their users.<p>
 
+<p>Requests are passed to the API as GET queries, and the format of the response (YAML, JSON, or XML) is dictated by the extension
+used in the url.</p>
+
+<pre><code class="javascript">/* 
+ * queryMap contains the parameters of the request
+ * for instance:
+ *    queryMap['Country'] = 'US'
+ *    queryMap['ZipCode'] = '12345'
+ */
+function findZipCode(queryMap, callback) {
+    var url = "http://zilch.zcarioca.net/query.";
+    var format = "js"; // JS is used for JSONP, could also be YAML, JSON, or XML
+    url += format;
+
+    jQuery.ajax({
+        url: url,
+        data: queryMap,
+        dataType: 'jsonp',
+        success: function(response) {
+            callback(response);
+        }
+    });
+}
+
+findZipCode({ 'Country' : 'US', 'ZipCode' : '1234' }, function(response) {
+    alert(response.Matching); // the number of matching results
+});</code></pre>
+
+<p>The response would look like this:</p>
+
+<pre><code class="javascript">_0123112({
+    Total: 1,
+    Start: 1,
+    End: 1,
+    Matching: 1,
+    ZipCodeEntries: [{
+        ZipCode: "12345",
+        Type: "UNIQUE",
+        City: "Schenectady",
+        AcceptableCities: [ ],
+        UnacceptableCities: [
+            "General Electric",
+            "Schdy"
+        ],
+        County: "Schenectady County",
+        State: "NY",
+        Country: "US",
+        TimeZone: "America/New_York",
+        AreaCodes: ["518"],
+        Latitude: 42.8,
+        Longitude: -73.92
+    }]
+});</code></pre>
+
 <p>Check out this <a href="http://zilch.zcarioca.net/example.html">example page</a> to see it in action. 
 This page uses JSONP (for cross-domain compatibility) and AngularJS to fill in address information given
 the zip code input.</p>
