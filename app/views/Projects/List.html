@@ -1,0 +1,20 @@
+{{set . "title" "Project List"}}
+{{template "header.html" .}}
+
+<article>
+	<header>
+		<h2>Projects</h2>
+	</header>
+	{{ range .projects }}
+	<div class="blog-item">
+		<header>
+			<a href="/proj/{{.Slug}}">{{.Name}}</a>
+		</header>
+		<div class="proj-roll-details">
+			<p>{{.Abstract}}</p>
+		</div>
+	</div>
+	{{end}}
+</article>
+
+{{template "footer.html" .}}

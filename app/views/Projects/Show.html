@@ -1,0 +1,20 @@
+{{set . "title" .project.Name}}
+{{template "header.html" .}}
+
+<article>
+	<a href="#blog-content" class="nav-skip">Skip Navigation</a>
+	<nav>
+		<a href="/projects">back</a>
+	</nav>
+	<header>
+		<h2>{{.project.Name}}</h2>
+	</header>
+	<div class="blog-content">
+		{{raw .content}}
+	</div>
+</article>
+<script type="text/javascript">
+hljs.initHighlightingOnLoad();
+</script>
+
+{{template "footer.html" .}}

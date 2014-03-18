@@ -1,0 +1,37 @@
+[
+	{
+		"Name"     : "Website: Carvalho + Good",
+		"Slug"     : "carvalho-good-pllc",
+		"Abstract" : "A commercial website built on the JSON Wordpress Theme.",
+		"Active"   : true,
+		"File"     : "carvalhogood.html"
+	},
+	{
+		"Name"     : "ZiLCh",
+		"Slug"     : "zilch",
+		"Abstract" : "Zipcode Lookup Channel. A REST-like API built in Go to lookup zip codes.",
+		"Active"   : true,
+		"File"     : "zilch.html"
+	},
+	{
+		"Name"     : "JSON Wordpress Theme",
+		"Slug"     : "json-wordpress-theme",
+		"Abstract" : "A JSON theme for Wordpress. Turns your Wordpress server into a series of AJAX calls.",
+		"Active"   : true,
+		"File"     : "jsonwordpress.html"
+	},
+	{
+		"Name"     : "Spring Configuration Library",
+		"Slug"     : "spring-configuration-library-java",
+		"Abstract" : "Simplify the development of applications by removing the common boiler-plate code used to read and initialize project properties.",
+		"Active"   : true,
+		"File"     : "springconfig.html"
+	},
+	{
+		"Name"     : "Xebra Radiology Workstation",
+		"Slug"     : "xebra-radiology-workstation",
+		"Abstract" : "An open source, cross-platform, thin client and server for web-based distribution and clinical review of medical imaging results.",
+		"Active"   : true,
+		"File"     : "xebra.html"
+	}
+]

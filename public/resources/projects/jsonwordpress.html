@@ -1,0 +1,32 @@
+<p>This is a JSON theme for wordpress. It essentially turns your wordpress server into a 
+series of AJAX calls. It cannot be shared as a regular wordpress theme as it contains no HTML in its output.</p>
+
+<p><strong>Installation</strong></p>
+
+<p>This really could not be any simpler. Download the source:</p>
+
+<pre><code class="bash">git clone git@github.com:rchargel/json-wordpress-theme.git json-wordpress-theme</code></pre>
+
+<p>This will create a directory in the current folder called 'json-wordpress-theme'. Enter that 
+directory, and you should see this README file, and another directory, with that same name: 
+'json-wordpress-theme'. Just zip up that directory, and you have the theme ready to install.</p>
+
+<pre><code class="bash">zip json-wordpress-theme.zip json-wordpress-theme/*</code></pre>
+
+<p>Now just log into wordpress and install it like any other theme.</p>
+
+<p><strong>Known Issues</strong></p>
+
+<p>At this time, I have only deployed this theme in my own website. It is not really ready for production release. 
+I know of at least two bugs.</p>
+
+<ol>
+	<li>The RSS feed will not work with these URLs.</li>
+	<li>For some reason, only the default permalink format will work when fetching data: eg: /wordpress/?p=post_id</li>
+</ol>
+
+<p>Also, you will not be able to preview your pages, as all you will see is the JSON that is created.</p>
+
+<p>Thanks and have fun with it.</p>
+
+<p>URL: <a href="https://github.com/rchargel/json-wordpress-theme">https://github.com/rchargel/json-wordpress-theme</a></p>
