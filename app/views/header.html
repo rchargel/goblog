@@ -9,9 +9,9 @@
 		<link rel="stylesheet" type="text/css" href="/public/css/highlight.css" media="screen, projection">
 		<script src="/public/js/jquery.1.11.js" type="text/javascript" charset="utf-8"></script>
 		<script src="/public/js/toc.js" type="text/javascript" charset="utf-8"></script>
-		<!--[if lt IE 9]>
+		{{raw "<!--[if lt IE 9]>"}}
 		<script src="/public/js/shivs.js"></script>
-		<![endif]-->
+		{{raw "<![endif]-->"}}
 		{{range .moreStyles}}
 		<link rel="stylesheet" type="text/css" href="/public/{{.}}">
 		{{end}}
@@ -19,9 +19,9 @@
 		<script src="/public/{{.}}" type="text/javascript" charset="utf-8"></script>
 		{{end}}
 		<script type="text/javascript" src="/public/js/highlight.pack.js"></script>
-		<!-- Google Analytics -->
+		{{raw "<!-- Google Analytics -->"}}
 		<script type="text/javascript" src="/public/js/analytics.js"></script>
-		<!-- End Google Analytics -->
+		{{raw "<!-- End Google Analytics -->"}}
 	</head>
 	<body>
 		<div class="container">
