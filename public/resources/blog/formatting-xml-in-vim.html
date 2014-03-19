@@ -1,0 +1,27 @@
+<p>This is one of my all-time favorite hacks.  It's a quick and easy way to format XML documents using VIM.  
+You will need to install the utility library 'libxml2-utils' and make sure that the 'xmllint' command is 
+in your path.</p>
+
+<p><strong>Note:</strong> All commands are assumed to be performed as 'root' unless stated otherwise.  If 
+you choose to perform this is another user, you will need to 'sudo' most of these commands.</p>
+
+<ol>
+	<li><p>Install libxml2-utils:<br/>
+		<strong>Debian/Ubuntu:</strong> <code>apt-get install libxml2-utils</code><br />
+		<strong>RHEL/Fedora:</strong> <code>yum -y install libxml2-utils</code><br />
+		<strong>RPM:</strong> <code>rpm -i path_to_rpm.rpm</code></p>
+	</li>
+
+	<li><p>Add the <em>xmllint</em> command to <em>/usr/bin</em>: If you installed the libxml2-utils library 
+	through any of the tools above, this should already be done for you.</p></li>
+
+	<li><p>Modify the .vimrc file in your home directory (should not be done as root) Add the following to your .vimrc file:</p>
+	<pre><code class="bash">:syntax enable
+function! DoFormatXml()
+% !xmllint % --format
+endfunction
+command!
+FormatXml call DoFormatXml()</code></pre>
+
+	<li><p>Try it out: Next time you are editing an XML file in VIM, just type the following command: <code>:FormatXml</code></p></li>
+</ol>

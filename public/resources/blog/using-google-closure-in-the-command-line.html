@@ -1,0 +1,65 @@
+<p>If I'm going to be completely honest, <em>Compass</em> is by far the simplest and most complete CSS authoring 
+framework.  I just have one major issue with it... Ruby.  It's not that I have a problem with Ruby as a language.  
+Just the contrary, I am a fan of Ruby and Rails, and while I've used neither in a professional context, I have 
+used Rails to build the occasional prototype web application. I just don't want to have to install another 
+compiler on my seriously over-burdened laptop (there's a reason I run Xfce on this sucker).</p>
+
+<p><em>{LESS}</em>, in my opinion, is even worse.  I personally think that Node.js is a fantastic idea, and I love 
+playing with it, but if I'm just working on a simple website, where I am editing everything in VI, I don't want to 
+install Node.js to compile a stylesheet.</p>
+
+<p>That's when I discovered <a href="https://developers.google.com/closure/">Closure</a> and 
+<a href="http://code.google.com/p/closure-stylesheets/">Closure-Stylesheets</a>.  They're both just executable JARs 
+with no dependencies.  What could be simpler than that?  Closure to minify my Javascript files, and Closure 
+Stylesheets to compile and minify my CSS files, easily available via simple command-line calls.  Because they are 
+jars, I can wrap them with a Maven Plugin &mdash; oooh, there's an idea (if it hasn't been done already).  I can even 
+write a Grails Resource Plugin &mdash; second fun project (update: already been done).</p>
+
+<p>But alas, for now I simply wrote a pair of shell scripts to wrap them in the gentle embrace of the Linux command-line.  
+Here's all I had to do to get this to work.</p>
+
+<ol>
+	<li><p>Download the JAR files and stick them someplace easy to remember.  The Javascript compiler comes bundled 
+	in a TAR file so I did that one first, and unpacked it to <code>/usr/local/closure-compiler</code></p></li>
+
+	<li><p>Create the jsminify script in <code>/usr/bin/jsmininify</code>. This script should contain the following:</p>
+
+	<pre><code class="bash">#!/bin/bash
+if [ -z "$1" ]; then
+    java -jar /usr/local/closure-compiler/compiler.jar --help;
+else
+    java -jar /usr/local/closure-compiler/compiler.jar $@;
+fi;</code></pre></li>
+
+	<li><p>Create the cssminify script in <code>/usr/bin/cssminify</code>. This script should contain the following:</p>
+
+	<pre><code class="bash">#!/bin/bash
+unknown_functions="--allowed-non-standard-function color-stop";
+unknown_functions="$unknown_functions --allowed-non-standard-function -moz-radial-gradient";
+unknown_functions="$unknown_functions --allowed-non-standard-function -webkit-radial-gradient";
+unknown_functions="$unknown_functions --allowed-non-standard-function -o-radial-gradient";
+unknown_functions="$unknown_functions --allowed-non-standard-function -ms-radial-gradient";
+unknown_functions="$unknown_functions --allowed-non-standard-function radial-gradient";
+unknown_functions="$unknown_functions --allowed-non-standard-function progid:DXImageTransform.Microsoft.gradient";
+unknown_functions="$unknown_functions --allowed-non-standard-function progid:DXImageTransform.Microsoft.Alpha";
+unknown_functions="$unknown_functions --allowed-unrecognized-property behavior";
+unknown_functions="$unknown_functions --allowed-unrecognized-property -khtml-opacity";
+cmd="java -jar /usr/local/closure-compiler/closure-stylesheets.jar $unknown_functions";
+if [ -z "$1" ]; then
+    java -jar /usr/local/closure-compiler/closure-stylesheets.jar --help
+else
+   java -jar /usr/local/closure-compiler/closure-stylesheets.jar $unknown_functions $@;
+fi;</code></pre>
+
+	<p>You'll notice a whole bunch of calls to <code>--allowed-non-standard-function</code> and <code>--allowed-unrecognized-property</code>. 
+	These basically allow you to use the provided functions and properties, without having to specify these exceptions 
+	each time you use the css compiler.</p></li>
+</ol>
+
+<p>That's it. You're done. Of course you could have put those scripts somewhere on <code>/usr/local</code>, then created a 
+symbolic linkage.</p>
+
+<pre><code class="bash">ln -s /usr/local/closure-compile/jsminify.sh /usr/bin/jsminify</code></pre>
+
+<p>It's really up to you. If I thought that I were going to swap around my implementation of jsminify, I 
+would probably go that route.</p>

@@ -1,0 +1,106 @@
+<p>Recently, I've been spending a lot of time thinking about how to use some very basic principles from 
+evolutionary algorithms within an actor model in order to provide a feedback mechanism to an elastically 
+scalable system. I know, that was a mouthful. The point is simple though. First, when using an actor 
+model (defining workflow within a stream based processing system), it should be possible to use a natural 
+selection algorithm to choose the best processing elements suited to specific conditions. Second, the 
+use of natural selection should allow for the dynamic injection of new algorithms (ignoring any 
+limitations of your actor model implementation) as a method of determining within which scenarios the 
+new algorithm will thrive.</p>
+
+<ul class="table-of-contents"></ul>
+
+<h3 id="the-model">The actor model</h3>
+
+<p>I suppose it's worth taking a little time to briefly explain the actor model. This was a shift in 
+conceptual design as early as 1973. The basic idea is simple, rather than have a single complex 
+processing engine, develop a series of highly parallelized processing elements (PE), each with its 
+own internal memory, processing, and communications capabilities. These PEs then work as functional 
+elements which act upon a data stream. Conceptually, it works similar to a 
+<a href="http://labs.google.com/papers/mapreduce.html">MapReduce</a> system, however 
+rather than a <a href="http://www.haskell.org/haskellwiki/Functional_programming">function</a> 
+(or job) being sent to a heap of static data, the functions are sent to a message bus.</p>
+
+<h3 id="natural-selection">Natural selection as a subset of genetic algorithms</h3>
+
+<p>I make a distinction here between natural selection algorithms and standard genetic algorithms. Whereas 
+in traditional genetic systems, functional elements (in this case PEs) are allowed to perform 
+<a href="http://www.obitko.com/tutorials/genetic-algorithms/crossover-mutation.php">crossovers 
+and mutations</a>, I prefer to simplify the problem by removing the possibility of mutation from the system. 
+In their paper <a href="http://www.secse.net/publications/docs/sussex/hu06a.pdf">Genetic Algorithms: Artificial 
+Selection vs Natural Selection</a>, Xiao-Bing Hu and Ezequiel Di 
+Paolo make the point that while allowing a system to mutate, even within its smallest computation components, 
+may allow the system to improve to an optimal state over time, the act of random mutation will also produce 
+a number of functional elements which are completely unsuited to the problems they are attempting to solve. 
+These useless functional elements require processing time and memory usage just like any other functional 
+element, but produce little in the way of progress. Hu and Di Paolo argue that rather than allow a process 
+of pure "natural selection," they propose the use of "artificial selection." In their model, the engineer 
+would use artificial processes in order to "narrow down the search space of the specific sub-problem in 
+advance." Basically, if you don't allow the system to produce garbage, then it won't spend valuable time 
+and energy on useless functional elements.</p>
+
+<p>For the purposes of this post, I have separated the use of the term natural selection algorithm &mdash; the 
+process to determine which functional elements are allowed to reproduce and which are not &mdash; and genetic 
+algorithm &mdash; the process of crossover and mutation. If one simply concedes that a scientist, engineer, 
+or mathematician is usually the best person to develop new functional elements, and not a set of "stochastic" 
+mutations, than it is possible to envision a system where new functional elements are injected into a system 
+as they are developed, and the process of natural selection (based upon preset criteria) is the system by 
+which those new elements are tested, evaluated, and deployed.</p>
+
+<h3 id="putting-them-together">Putting them together</h3>
+
+<p>It really isn't difficult to see how these pieces fit together. If you consider that a processing element is 
+really a single functional unit, it is easy to develop a system where multiple types of processing elements are 
+developed to solve the same or similar problems. As PEs are developed outside of the scope of the actor framework 
+&mdash; which good design would dictate anyhow &mdash; and are then injected into the system 
+(<a href="http://www.osgi.org/About/Technology">OSGI</a>?), the PE 
+manager should control the replication of PEs based upon some predetermined criteria. If PEs are given an 
+expiration, and only the most effective are allowed to replicate, it is merely a matter of cycles before the 
+best PEs for different habitats remain within the system.</p>
+
+<p>The important part here is to recognize that not all PEs will be optimized for all habitats, even if 
+they are all developed to solve the same problem. Let me give a simple example. Consider designing a system to 
+predict water flow through a city's sewage system. While all PEs would have the directive to predict the 
+movement of water through the system, it isn't much of an intuitive leap to recognize that some PEs (PE<sub>1</sub>) 
+may be very good at understanding the flow of water through a flume, while other PEs (PE<sub>2</sub>) may be best 
+suited for pipes containing pumping mechanisms. In this scenario, the PEs marked PE<sub>1</sub> would continue to 
+reproduce when processing flumes, but those members of PE<sub>1</sub> which were assigned to pumps would cease 
+to replicate. Furthermore, if the PEs are given a time to live, eventually the members of PE<sub>1</sub> would die 
+out within the "pump habitat," while members of PE<sub>2</sub> would thrive. This model is clearly contrived, 
+and it should be fairly simple to determine that PE<sub>2</sub> should work best for pumps before injecting it 
+into the system, but in more complex systems (predictive modeling engines for weather, traffic, markets, etc.) this 
+allows for weaknesses within an algorithm to make themselves known without weeks/months/years of formal investigation.</p>
+
+<h3 id="the-key">The key is validation and feedback</h3>
+
+<p>You may have guessed that the weak point in this system is the mechanism to measure and validate the responses 
+from the individual PEs, and provide feedback into the model. In order for this to work there would have to be a 
+final validation element placed into the system with the responsibility of measuring truth. This can be 
+accomplished in a number of ways. The easiest would be to supply pre-calculated tracers to the system where the 
+"truth" is known prior to processing. These values can be pulled back out of the system by the validation element 
+and evaluated against the values produced by the operating PE. The closer the calculated result is to the truth, 
+the greater the probability that the PE will be allowed to reproduce. By feeding the results from the validation 
+element back into the PE manager, the manager can then assign a reproductive potential to the operating 
+processing element.</p>
+
+<p>There are of course systems where it would be impractical to attempt to supply enough pre-calculated information 
+for a useful validation. In these cases it is necessary to evaluate and assign potential points where calculations 
+should closely approximate reality. These may be trusted data sources, or where calculated values are easily 
+predicted within some standard deviation. Unfortunately this is an area that is complicated enough for its own 
+article.</p>
+
+<h3 id="messenger">Do not kill the messenger</h3>
+
+<p>There is still yet one more possibility to consider. Systems and conditions change over time. Processing elements 
+which were not suitable for a given habitat may become more suitable as the habitat or inputs change. If you allow 
+the natural selection process to kill off all unsuitable PEs there will be none left to reproduce as the habitat 
+changes. In this scenario, it may be best to consider the "life" of a PE as a component of the weight of its 
+calculations. Rather than kill off the undesirables, it is possible to simply reduce their effect on the 
+calculations in consideration to the higher value PEs. As the conditions change, the low value PEs may be 
+"re-introduced" into a habitat without intervention from a system administrator or engineer.</p>
+
+<h3 id="summary">Summary</h3>
+
+<p>I apologize if this post sounds more like stream of conscious rather than a well reasoned explanation. This is due 
+mostly to the fact that it was written in 15 minutes from the jumbled up ideas floating around in my brain. I am 
+currently working on an implementation of this algorithm for a very specific use case. Once this is done I promise 
+to post the results to this blog (not that anybody actually reads this thing).</p>

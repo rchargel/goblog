@@ -1,0 +1,75 @@
+<br/>
+<h3>Continuous Integration as the Next Step.</h3>
+
+<p>I have worked as a consultant for quite a few years, and have landed in the middle of a number of different 
+development shops, each with their own standards and tools. And some without standards or tools. For the most 
+part, the Java development team at my current client is doing a fantastic job.</p>
+
+<p>What do they already have working for them?</p>
+
+<ul>
+	<li>A code repository &hellip; <span class="highlight">&#10004;</span></li>
+	<li>A build framework &hellip; <span class="highlight">&#10004;</span></li>
+	<li>An artifact repository &hellip; <span class="highlight">&#10004;</span></li>
+	<li>A backlog to manage defects and enhancements &hellip; <span class="highlight">&#10004;</span></li>
+	<li>Separation of concerns between library and application code &hellip; <span class="highlight">&#10004;</span></li>
+	<li>Integration testing &hellip; <span class="highlight">&#10004;</span></li>
+	<li>Unit testing &hellip; <span class="highlight">&#10004;</span></li>
+</ul>
+
+<p>So with all of these things going right, why am I talking about Continuous Integration? 
+What will this give them that they don’t already have? And what is expected of them, if 
+they want to implement this correctly?</p>
+
+<ul class="table-of-contents"></ul>
+
+<h4 id="why-ci">Why CI?</h4>
+
+<p>Continuous Integration, or CI, is a mechanism to receive constant feedback about the status and quality 
+of a development project. It informs the development team when there is a problem, and provides assurance 
+to the team members who rely on common code that everything is available, stable, and safe to use.</p>
+
+<p>When a team member commits code into trunk on the repository, the CI system will compile, test, and deploy the 
+changes to the correct artifact repository. It will report and inform team members about failures, and will 
+track the overall health of a project. If the code has a compilation error, or a test failure, all interested 
+parties are immediately made aware (usually via email), and the problem commit is identified. In this way 
+problems can be solved, transparency is realized, blocking issues are avoided, and efficiencies are gained.</p>
+
+<h4 id="whats-the-catch">What’s the Catch?</h4>
+
+<p>There is always a catch when implementing new frameworks and tools. If the cost of implementation is too 
+onerous, than there is an opportunity to decide whether it is worth the hassle. Consider to the cost of 
+switching from Ant to Maven, or implementing unit tests. The benefits are enormous, and quickly realized, but 
+it would be a lie to say that it came without sacrifice. Maven robs Developers of their freedom to organize 
+their projects however they choose. Unit tests take time, and a considerable amount of skill, to write. In 
+comparison, continuous integration is a low cost addition to developer toolbox. The only requirements are 
+things that the development team should be doing anyways.</p>
+
+<p>The continuous integration solution should always manage the trunk of all common library projects. This 
+ensures that everyone has the latest stable version of the library code. Adding branches to the CI solution 
+may also be beneficial, if there are multiple developers working on the same branch.</p>
+
+<p>The trunk should always be the latest snapshot version of project. If a Maven POM file with a release 
+version (i.e. removing the -SNAPSHOT suffix) is committed into trunk, the developer has just removed the 
+“continuous” from their continuous integration solution. Most artifact repositories should only accept one 
+release build. This means that any subsequent builds of the same release will result in an error deploying 
+to the artifact repository.</p>
+
+<p>Developers should not commit broken code, or code with failing unit tests. This will just produce a broken 
+build, and the CI will start spamming all interested parties. The build should be compiled and tested before 
+the developer commits to the code repository. If the team members need to make a large number of changes 
+before safely committing the code, they may consider making those changes in a branch until they are ready 
+to merge into trunk.</p>
+
+<p>Never remove or skip tests. Unit tests are important; they ensure functionality and backwards compatibility. 
+Removing tests to get build to work is a game of kick-the-can. Sure the code builds in CI, but it will fail in 
+production. There are brittle tests out there that may need to be fixed, but the developers must be careful 
+not to change the spirit of the test.</p>
+
+<h4 id="practice">Put Process into Practice.</h4>
+
+<p>Practice makes perfect, and everybody breaks the build at some point. Continuous integration is not a tool 
+that managers should be using to measure the performance of developers. It is not a shaming device. Organizations 
+should try to have a little fun with it. I have worked for companies where the team member that broke the build 
+had to buy donuts for the rest of the team. In this way the team members bonded over breakfast, nobody got mad, 
+and build errors were quickly fixed.</p>

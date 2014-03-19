@@ -90,7 +90,7 @@ article {
    color: #fff;
    max-width: 1000px;
 }
-article a {
+article a, article span.highlight {
    text-decoration: none;
    color: #62cbe0;
 }
@@ -220,6 +220,7 @@ pre code {
    div.copy { float: right; text-align: right;}
    footer { height: 3em; }
    article nav { float: right; }
+   article header { clear: both; }
 }
 @media only screen and (min-width: 900px) {
    header.main figure { width: 50%; }
