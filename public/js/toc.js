@@ -36,23 +36,25 @@
 			}
 			
 			headers.each(function() {
-				var header = this, level = parseInt(header.localName.substring(1));
-				
-				if ($(header).attr('id') !== null) {
-					if (lastLevel === -1 || lastLevel === level) {
-						push(parent, $(header), level);
-					} else if (lastLevel < level) {
-						parent = parent.children[parent.children.length - 1];
-						push(parent, $(header), level);
-					} else {
-						parent = parent.parent;
-						while (parent.level >= level) {
+				if (this) {
+					var header = this, level = parseInt((header.localName || header.nodeName).substring(1));
+					
+					if ($(header).attr('id') !== null) {
+						if (lastLevel === -1 || lastLevel === level) {
+							push(parent, $(header), level);
+						} else if (lastLevel < level) {
+							parent = parent.children[parent.children.length - 1];
+							push(parent, $(header), level);
+						} else {
 							parent = parent.parent;
+							while (parent.level >= level) {
+								parent = parent.parent;
+							}
+							
+							push(parent, $(header), level);
 						}
-						
-						push(parent, $(header), level);
+						lastLevel = level;
 					}
-					lastLevel = level;
 				}
 			});
 			
