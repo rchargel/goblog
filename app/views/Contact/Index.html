@@ -34,7 +34,13 @@
        				<input type="hidden" name="recaptcha_response_field" value="manual_challenge">
     		</noscript>
 			
-			{{if eq .recaptcha_error "incorrect-captcha-sol"}}<span class="error">It seems the captcha was not completed correctly</span>{{end}}
+			{{if .recaptcha_error}}
+				{{if eq .recaptcha_error "incorrect-captcha-sol"}}
+					<span class="error">It seems the captcha was not completed correctly</span>
+				{{else}}
+					<span class="error">{{.recaptcha_error}}</span>
+				{{end}}
+			{{end}}
 		</div>
 		<p><button type="submit">Submit</button></p>
 	</form>
