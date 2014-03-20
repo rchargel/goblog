@@ -5,12 +5,13 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 )
 
 func NewRecaptcha() *Recaptcha {
-	private, _ := revel.Config.String("recaptcha.private")
-	public, _ := revel.Config.String("recaptcha.private")
+	private, _ := os.Getenv("RECAPTCHA_PRIVATE")
+	public, _ := revel.Config.String("recaptcha.public")
 	verify, _ := revel.Config.String("recaptcha.verify")
 
 	return &Recaptcha{public: public, private: private, verify: verify}
