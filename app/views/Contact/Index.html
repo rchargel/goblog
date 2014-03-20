@@ -24,7 +24,7 @@
 			<textarea tabindex="3" id="message" name="message" rows="5">{{.flash.message}}</textarea>
 			{{if .errors.message}}<span class="error">{{.errors.message.Message}}</span>{{end}}
 		</p>
-		<p>
+		<div>
 			<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k={{.captchaKey}}"></script>
 			
     		<noscript>
@@ -35,7 +35,7 @@
     		</noscript>
 			
 			{{if eq .recaptcha_error "incorrect-captcha-sol"}}<span class="error">It seems the captcha was not completed correctly</span>{{end}}
-		</p>
+		</div>
 		<p><button type="submit">Submit</button></p>
 	</form>
 </article>
