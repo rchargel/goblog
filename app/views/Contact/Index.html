@@ -1,0 +1,43 @@
+{{set . "title" "Contact Form"}}
+{{template "header.html" .}}
+
+<article>
+	<header>
+		<h2>Contact Form</h2>
+	</header>
+	<script type="text/javascript">
+	var RecaptchaOptions = { theme : 'blackglass', tabindex: 4 };
+	</script>
+	<form method="POST" autocomplete="off">
+		<p>
+			<label for="name">Your Name:</label><br />
+			<input tabindex="1" class="text-input" type="text" id="name" name="name" value="{{.flash.name}}"/>
+			{{if .errors.name}}<span class="error">{{.errors.name.Message}}</span>{{end}}
+		</p>
+		<p>
+			<label for="email">Your Email (optional):</label><br />
+			<input tabindex="2" class="text-input" type="text" id="email" name="email" value="{{.flash.email}}" />
+			{{if .errors.email}}<span class="error">{{.errors.email.Message}}</span>{{end}}
+		</p>
+		<p>
+			<label for="message">Message:</label><br />
+			<textarea tabindex="3" id="message" name="message" rows="5">{{.flash.message}}</textarea>
+			{{if .errors.message}}<span class="error">{{.errors.message.Message}}</span>{{end}}
+		</p>
+		<p>
+			<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k={{.captchaKey}}"></script>
+			
+    		<noscript>
+       			<iframe src="http://www.google.com/recaptcha/api/noscript?k={{.captchaKey}}"
+           			height="300" width="500" frameborder="0"></iframe><br>
+       				<textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+       				<input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+    		</noscript>
+			
+			{{if eq .recaptcha_error "incorrect-captcha-sol"}}<span class="error">It seems the captcha was not completed correctly</span>{{end}}
+		</p>
+		<p><button type="submit">Submit</button></p>
+	</form>
+</article>
+
+{{template "footer.html" .}}

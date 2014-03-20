@@ -15,6 +15,9 @@
 		{{range .moreStyles}}
 		<link rel="stylesheet" type="text/css" href="/public/{{.}}">
 		{{end}}
+		{{range .externalScripts}}
+		<script src="{{.}}" type="text/javascript" charset="utf-8"></script>
+		{{end}}
 		{{range .moreScripts}}
 		<script src="/public/{{.}}" type="text/javascript" charset="utf-8"></script>
 		{{end}}
@@ -26,11 +29,9 @@
 	<body>
 		<div class="container">
 		<header class="main">
-			<!-- if isUser and not text only -->
 			<figure>
 				<img src="/public/img/masthead_2.png" title="Z Carioca" alt="Z Carioca"/>
 			</figure>
-			<!-- end if isUser and not text only -->
 			<h1 id="logo">Z Carioca</h1>
 		</header>
 		<a href="#body-content" class="nav-skip">Skip Navigation</a>

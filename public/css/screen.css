@@ -33,6 +33,10 @@ figure img {
 .resume .experience {
 	padding-left: 3em;
 }
+.captcha {
+	position: absolute;
+	height: 100px;
+}
 *.main {
 	padding: 0;
 }
@@ -208,10 +212,20 @@ div.copy {
 pre code {
 	overflow: auto;
 }
+iframe {position: absolute; top: -9999px; left: -9999px};
+.text-input, textarea { width: 200px; }
+#recaptcha_privacy a { color: #62cbe0; }
+span.error {
+	display: block;
+	margin:0;
+	padding: 0;
+	color: red;
+}
 @media only screen and (min-width: 400px) {
 	header.main figure { width: 70%; }
 	section { padding-bottom: 5em; }
 	section { padding: 0 10px 6em 10px; }
+	.text-input, textarea  { width: 250px; }
 }
 @media only screen and (min-width: 640px) {
 	header.main figure { width: 50%; }
@@ -244,9 +258,14 @@ pre code {
 		position: absolute;
 		right: inherit;
 		padding: 0;
-		margin: -5px 0 0 0;
+		margin: -5px 0 0 -2em;
 		opacity: inherit;
+		background: #fff;
 	}
+	aside.main nav ul li:hover > ul a {
+		color: #4f4f4f;
+	}
+	aside.main nav ul li:hover > ul a:hover { color: #000; }
 	div.login, div.copy {
 		display: block;
 		width: 40%;
@@ -257,9 +276,11 @@ pre code {
 	footer { height: 3em; }
 	article nav { float: right; }
 	article header { clear: both; }
+	.text-input, textarea  { width: 300px; }
 }
 @media only screen and (min-width: 900px) {
 	header.main figure { width: 50%; }
 	section { padding: 0 20px 6em 20px; }
 	aside.main nav { padding: 0 0 0 15%; }
+	.text-input, textarea  { width: 400px; }
 }
