@@ -10,7 +10,7 @@ import (
 )
 
 func NewRecaptcha() *Recaptcha {
-	private, _ := os.Getenv("RECAPTCHA_PRIVATE")
+	private := os.Getenv("RECAPTCHA_PRIVATE")
 	public, _ := revel.Config.String("recaptcha.public")
 	verify, _ := revel.Config.String("recaptcha.verify")
 
