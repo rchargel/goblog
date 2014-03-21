@@ -54,10 +54,7 @@ func (c Contact) Send(name, email, message string, x, y int) revel.Result {
 		c.FlashParams()
 		return c.Redirect(Contact.Index)
 	} else {
-		err := domain.SendMail(name, email, message)
-		if err != nil {
-			fmt.Println(err)
-		}
+		go domain.SendMail(name, email, message)
 		return c.Render()
 	}
 }
