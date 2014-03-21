@@ -33,10 +33,6 @@ figure img {
 .resume .experience {
 	padding-left: 3em;
 }
-.captcha {
-	position: absolute;
-	height: 100px;
-}
 *.main {
 	padding: 0;
 }
@@ -212,9 +208,10 @@ div.copy {
 pre code {
 	overflow: auto;
 }
-iframe {position: absolute; top: -9999px; left: -9999px};
 .text-input, textarea { width: 200px; }
-#recaptcha_privacy a { color: #62cbe0; }
+img.captcha {
+	border: 2px solid #000;
+}
 span.error {
 	display: block;
 	margin:0;

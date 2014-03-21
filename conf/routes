@@ -15,6 +15,7 @@ GET     /blog                                   Blogs.List
 GET     /blog/:action                           Blogs.Show
 GET     /contact                                Contact.Index
 POST    /contact                                Contact.Send
+GET     /captcha.jpg                            Contact.RenderImg
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

@@ -1,25 +1,40 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/rchargel/goblog/app/domain"
 	"github.com/robfig/revel"
+	"strconv"
 )
 
 type Contact struct {
 	*revel.Controller
 }
 
-func (c Contact) Index() revel.Result {
-	captchaKey, found := revel.Config.String("recaptcha.public")
-	if !found {
-		return c.NotFound("No Contact")
-	}
-
-	recaptcha_error, _ := c.Flash.Data["recaptcha_error"]
-	return c.Render(captchaKey, recaptcha_error)
+func (c Contact) getCaptcha() domain.ImageCaptcha {
+	title := c.Session["captcha_title"]
+	images := c.Session["captcha_images"]
+	index, _ := strconv.ParseInt(c.Session["captcha_index"], 10, 32)
+	return domain.ImageCaptcha{Title: title, Images: images, Index: int(index)}
 }
 
-func (c Contact) Send(name, email, message, recaptcha_challenge_field, recaptcha_response_field string) revel.Result {
+func (c Contact) Index() revel.Result {
+	imageCaptcha := domain.NewCaptcha()
+	c.Session["captcha_title"] = imageCaptcha.Title
+	c.Session["captcha_images"] = imageCaptcha.Images
+	c.Session["captcha_index"] = fmt.Sprintf("%v", imageCaptcha.Index)
+
+	captcha_title := imageCaptcha.Title
+
+	return c.Render(captcha_title)
+}
+
+func (c Contact) RenderImg() revel.Result {
+	imageCaptcha := c.getCaptcha()
+	return imageCaptcha
+}
+
+func (c Contact) Send(name, email, message string, x, y int) revel.Result {
 	success := true
 	c.Validation.Required(name).Message("Please let me know your name")
 	c.Validation.Required(message).Message("Don't forget to include a message")
@@ -29,14 +44,12 @@ func (c Contact) Send(name, email, message, recaptcha_challenge_field, recaptcha
 		success = false
 	}
 
-	remote_ip := c.Request.RemoteAddr
-
-	recaptcha := domain.NewRecaptcha()
-	valid, err := recaptcha.Verify(remote_ip, recaptcha_challenge_field, recaptcha_response_field)
-	if !valid && err != nil {
-		c.Flash.Out["recaptcha_error"] = err.Error()
+	captcha := c.getCaptcha()
+	if !captcha.IsCorrect(x, y) {
+		c.Flash.Out["captcha_error"] = "Please click on the correct image"
 		success = false
 	}
+
 	if !success {
 		c.FlashParams()
 		return c.Redirect(Contact.Index)

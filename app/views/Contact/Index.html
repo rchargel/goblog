@@ -24,26 +24,25 @@
 			<textarea tabindex="3" id="message" name="message" rows="5">{{.flash.message}}</textarea>
 			{{if .errors.message}}<span class="error">{{.errors.message.Message}}</span>{{end}}
 		</p>
-		<div>
-			<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k={{.captchaKey}}"></script>
-			
-    		<noscript>
-       			<iframe src="http://www.google.com/recaptcha/api/noscript?k={{.captchaKey}}"
-           			height="300" width="500" frameborder="0"></iframe><br>
-       				<textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
-       				<input type="hidden" name="recaptcha_response_field" value="manual_challenge">
-    		</noscript>
-			
-			{{if .recaptcha_error}}
-				{{if eq .recaptcha_error "incorrect-captcha-sol"}}
-					<span class="error">It seems the captcha was not completed correctly</span>
-				{{else}}
-					<span class="error">{{.recaptcha_error}}</span>
-				{{end}}
-			{{end}}
+		<div id="captcha_widget">
+			Click the image '<span class="captcha_title">{{.captcha_title}}</span>' to submit.<br />
+			<img id="captcha" class="captcha" src="/captcha.jpg"/>
+			<input type="hidden" name="x"/>
+			<input type="hidden" name="y"/>
+			{{if .flash.captcha_error}}<span class="error">{{.flash.captcha_error}}</span>{{end}}
 		</div>
-		<p><button type="submit">Submit</button></p>
 	</form>
 </article>
 
+<script type="text/javascript">
+(function($) {
+	$(document).ready(function() {
+		$('#captcha').css({'cursor':'pointer'}).click(function(evt) {
+			$('input[name="x"]').val(evt.offsetX);
+			$('input[name="y"]').val(evt.offsetY);
+			$('form').submit();
+		});
+	})
+})(jQuery);
+</script>
 {{template "footer.html" .}}
