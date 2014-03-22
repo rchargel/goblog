@@ -78,5 +78,13 @@
 		"Abstract" : "What should your organization be looking for in a WordPress developer.",
 		"Active"   : true,
 		"File"     : "how-hard-is-it-to-develop-a-website-in-wordpress.html"
+	},
+	{
+		"Name"     : "Go: Is Golang a Viable Option for Large-Scale Project Development?",
+		"Date"     : "2014-03-21",
+		"Slug"     : "golang-viable-project-dev",
+		"Abstract" : "What are the advantages and disadvantages of Go (Golang) as a language for large-scale projects.",
+		"Active"   : true,
+		"File"     : "golang-alternative-project-dev.html"
 	}
 ]

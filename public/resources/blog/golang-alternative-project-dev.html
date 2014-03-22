@@ -1,0 +1,109 @@
+<p>I'll admit it. I just might be a Gopher (fan of Go). But is Go really ready for prime-time
+development? Instead of simply answering yes or no (which is an impossible task anyhow), I 
+am creating a list of things I see as the positives and negatives. You are all adults
+and can certainly make up your own minds as to the viability of the language for your
+own projects.
+</p>
+
+<ul class="table-of-contents"></ul>
+
+<h3 id="what-is-go">What is Go?</h3>
+
+<p>Go is an open source programming language developed at Google by programming legends
+Ken Thompson, Rob Pike, and Robert Griesemer. It seems to be derived from C, but with
+the addition of some support for dynamic-typing, and automatic memory management. The 
+language library is small, but provides most of the functionality required for everyday
+development tasks. Below is a simple go application.
+</p>
+
+<pre><code class="go">package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello World")
+
+    var message1 string
+    message1 = "Go is statically-typed"
+    message2 := "Even if by inference"
+
+    fmt.Println(message1)
+    fmt.Println(message2)
+	
+    // this won't compile: (mismatched types string and int)
+    fmt.Println(message1 + 5)
+	
+    // this will work, but the output will be rubbish
+    fmt.Println([]byte(message1)) // casting string to byte array.
+}</code></pre>
+
+<h3 id="what-i-like">What I Like</h3>
+
+<p>Like I said, I very well might be a Gopher. I enjoy coding in this language. It reminds
+me of those first days playing with Python. Learning a new programming language fun, not unlike
+learning to speak a human language. With each new language you start with syntax, then move on
+to grammar, and finally you learn how to <em>think</em> in that language. I might even venture
+to say that learning a new language is like falling in love. So how much of my gushing that is
+to ensue due to mere fatuation, and how much is from an honest admiration. I'd like to think 
+that I am an objective reporter. Also, for all the good things that I have to say about Go,
+there are plenty of negatives.</p>
+
+<h4 id="compiler">Go Compiler</h4>
+
+<p>The Go compiler is fast. Really really fast. If it takes a whole second to compile your
+app, there's probably something really wrong with your code. This allows the team at Google
+to do some really cool things. One of those things is the <a href="http://play.golang.org">Go 
+Playground</a>. This is a site that allows you to write test code into a textarea, hit the "Run"
+button and the web app sends your code to their server. The server compiles your code, runs it, 
+and returns the output back to you. This happens very fast; the code above compiled and ran, and 
+the full round-trip to and from the server took 108 milliseconds.
+</p>
+
+<h4 id="performance">Performance</h4>
+
+<p>Like C or C++, Go compiles to native code. There is no VM required, which is good and bad.
+Unlike C/C++, Go hides most of the nitty-gritty kernel level code from you. This includes
+scheduling tasks for multi-threaded code (more on this later) that was a nightmare to write 
+in the former languages. I'm not going to claim that Go is the mythical "write once run 
+anywhere" language, but it's pretty good. Unfortunately, this also means that you have to
+compile binaries for every architecure. Here's an <a href="https://coderwall.com/p/pnfwxg">article</a> 
+on how to cross-compile for other architectures. I have not tried this yet, so I can't speak
+for this article.</p>
+
+<p>So is Go as fast as C?. Well... no. Like Java, Go runs a garbage collector. If you're 
+generating a lot of object over really short periods, the garbage collector
+may slow things down. Here is a <a href="http://benchmarksgame.alioth.debian.org/u32/compare.php?lang=go">side 
+by side benchmark comparison of Go vs C on a single core x86 running Ubuntu</a>.</p>
+
+<p>Okay, so how does it compare with Java? Well, the same site does provide a
+<a href="http://benchmarksgame.alioth.debian.org/u32/benchmark.php?test=all&lang=go&lang2=java&data=u32">comparison
+between Go and Java performance</a>, and it appears that Go outperforms Java on some tasks, while the JVM
+still beats Go soundly at others. But these tests really don't account for anything practical. Here's a better
+question. How long does it take to start up a Java application container, like JBOSS, and initialize a Spring web
+application? So here's a real-world example. I originally developed this website in Grails (which is essentially a 
+Spring web application), and deployed it to Heroku. It took an average of 1 minute to spin up the container.
+I have since migrated the site to Go, and the average spin up time is less than 1 second (neither of these times
+include the time to spin up the host).</p>
+
+<p>There are still things you can do in Java and C that you just don't have access to in Go. There are tricks
+and gems hidden away in the JVM that allow you to do some really crazy performance tuning of your applications,
+but most developers will never use these. Go provides a simple language to build applications
+that perform well, without a having to understand the core components of the JVM.</p>
+
+<h4 id="channels">Go Channels</h4>
+
+<p>A channel in Go is essentially an in-memory blocking queue. These exist in Java (and other languages). That's 
+not really new or special. But Go's channels are just so easy to use. I went to a conference last year where a 
+presenter said that Go was a language built to solve concurrency problems. I'm not really convinced that's true, 
+as Go routines are not inherently thread-safe, but channels make it really easy to "share memory by communicating." 
+</p>
+
+<h3 id="what-needs-work">What Needs Work</h3>
+
+<h4 id="embedded-resources">Embedding Resources</h4>
+
+<h4 id="slices">Slices Behave Badly</h4>
+
+<h4 id="ides">Where is the IDE?</h4>
+
+<h4 id="deps">Dependencies</h4>
