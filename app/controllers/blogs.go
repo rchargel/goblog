@@ -18,12 +18,16 @@ func (c Blogs) List() revel.Result {
 }
 
 func (c Blogs) Show() revel.Result {
+	const dateFormat = "Jan. 1, 2006"
 	path := c.Request.RequestURI
 	action := path[strings.LastIndex(path, "/")+1:]
 	blog, prev, next := blogList.GetItem(action)
 	if blog != nil {
 		content := blog.GetContent()
-		return c.Render(blog, prev, next, content)
+		meta_description := blog.Abstract
+		meta_date := blog.Date.Time.Format(dateFormat)
+		meta_keywords := blog.Tags
+		return c.Render(blog, prev, next, content, meta_description, meta_date, meta_keywords)
 	} else {
 		return c.NotFound("Could not find blog page " + c.Action)
 	}

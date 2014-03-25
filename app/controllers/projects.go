@@ -23,7 +23,9 @@ func (c Projects) Show() revel.Result {
 	project := projectList.GetItem(action)
 	if project != nil {
 		content := project.GetContent()
-		return c.Render(project, content)
+		meta_description := project.Abstract
+		meta_keywords := project.Tags
+		return c.Render(project, content, meta_description, meta_keywords)
 	} else {
 		return c.NotFound("Could not find page " + c.Action)
 	}

@@ -18,6 +18,7 @@ type ProjectItem struct {
 	Slug     string
 	Abstract string
 	File     string
+	Tags     string
 	Active   bool
 }
 

@@ -98,12 +98,167 @@ presenter said that Go was a language built to solve concurrency problems. I'm n
 as Go routines are not inherently thread-safe, but channels make it really easy to "share memory by communicating." 
 </p>
 
+<p>Here is a simple example.  When the <code>printWordMap</code> function is allowed to run as part of the main thread. it will 
+print the output of the generated word map. However, if you make that function also run in a go routine, the main method
+will print an empty (or partially empty map) and exit the application. Closing the channel at the end of the <code>reaWords</code>
+function, does not actually change resource allocations. It is only used to inform any reading threads that they should not expect
+any more data to be pushed through the channel, terminating the for loop in the <code>printWordMap</code> function.</p>
+
+<pre><code class="go">package main
+
+import (
+    "bufio"
+    "fmt"
+    "io"
+    "strings"
+)
+
+func main() {
+    channel := make(chan string, 1) // buffer of one
+    wordMap := make(map[string]int) // a simple map
+    // start go thread
+    go readWords(channel)
+    printWordMap(channel, wordMap)
+    // try it this way instead
+    // go printWordMap(channel, wordMap)
+    fmt.Println(wordMap)
+    fmt.Println("Main Thread Complete, exiting program")
+}
+
+func printWordMap(channel chan string, wordMap map[string]int) {
+    for word := range channel {
+        wordMap[word]++
+    }
+}
+
+func readWords(channel chan string) {
+    var contents = `Some large amount of text should go here. Or better yet, a file should be opened and read.`
+    reader := strings.NewReader(contents)
+    bufferedReader := bufio.NewReader(reader)
+    for {
+        line, _, err := bufferedReader.ReadLine(); 
+        if err == io.EOF {
+            break;
+        }
+        for _, word := range strings.Fields(string(line)) {
+            channel &lt;- strings.ToLower(word)
+        }
+    } 
+    close(channel)
+}</code></pre>
+
+<p>Very simple multi-threading with cross-thread communication. Not a lot of boiler plate code. 
+Here is a <a href="http://play.golang.org/p/Cm6paIAcY_">link to this app in the Go Playground</a>.</p>
+
 <h3 id="what-needs-work">What Needs Work</h3>
+
+<p>There's plenty more that can be said for all of the great features of Go, but others have written plenty on that subject.  
+Now let's talk a little about some of the problems I have run found. What should make you think twice about
+using this language for your own applications.</p>
 
 <h4 id="embedded-resources">Embedding Resources</h4>
 
+<p>Okay, this first problem is more of an annoyance than a real problem, as there are plenty of 
+work-arounds.  In Java, if you want to embed a properties file or any other configuration
+file this isn't a problem. It gets packaged into the jar, and can be read out of the 
+classpath.</p>
+
+<p>This is not really possible with Go. The binaries cannot contain resource files. There is a 
+package called <a href="https://github.com/jteeuwen/go-bindata">go-bindata</a> which can compile 
+resources as binary data, but it actually just converts the data into a byte array and packages
+that array as a code.  The worst part is, the resource data must be completely loaded into memory
+before the your code can run. This means that if the data is large enough, it can take an insanely 
+long time for your application to run; so much for performance.</p>
+
+<p>Like I said, there are work-arounds for this. If you know the file layout, you can simply
+read your resource files directly out of the filesystem. Your Go application can read environment
+variables to figure out where resource files should be loaded, or you can simply deploy your resource 
+files in the same directory as your application.</p>
+
+<p>This is an inconvenience, but not a deal-breaker.</p>
+
 <h4 id="slices">Slices Behave Badly</h4>
 
-<h4 id="ides">Where is the IDE?</h4>
+<p>A slice is a little bit like a Vector or ArrayList in Java. The problem comes when you are 
+working with multiple slices backed by the same array.  I won't go into too much detail about
+this particular quirk, as my friend Keith Gregory has already covered this one in his 
+<a href="http://blog.kdgregory.com/2013/12/learning-go-slices.html">blog post from December of last
+year</a>.</p>
+
+<p>The gist is that a slice will continue to be backed by the same array, until there is no more room
+within that array. At this point it will create a copy of the array. If you are working with multiple
+slices, all backed by the same array, but you are appending values to one of those slices. Your appended
+values will also appear on the other slices. So far that makes sense as you are modifying the same
+array. However, once you reach the array's capacity, the Go will create a new array, and associate that
+array to the slice you are working with, and <em>only</em> that slice. You have now lost the association
+to the other slices. This can be confusing for a developer, and cause serious bugs if you don't know what
+you're doing.</p>
+
+<h4 id="implicit-interfaces">Implicit Interfaces</h4>
+
+<p>Golang does have the concept of interfaces, however their implementation is a little strange. Any class 
+you write implements a known interface, if it has all of the required method signatures of that interface.
+There is <em>no requirement</em> that a class explicitly declares an interface.  This means that I can write
+a class call today, and five years later somebody creates an interface with the same, or with a partial list 
+of my method signatures. Now, without any action from me, my class that I wrote five years ago automatically
+implements the interface defined today. The new developer can cast my old class to his new interface, without
+writing any kind of adaptors.</p>
+
+<p>Some of you might be thinking, that's really cool. And hey, I can totally see where that kind of thing might
+come in handy. However, there is the possibility that this could lead to unexpected results. Let's say I'm writing
+a simple chess game and I define the following class:</p>
+
+<pre><code class="go">package chess
+
+type ChessPiece struct {
+   Position PositionOnBoard // defined elsewhere
+}
+
+func (c ChessPiece) MoveTo(row, column string) error {
+   ...
+}</code></pre>
+
+<p>A simple enough class. Perhaps the <code>moveTo()</code> function uses a graphics library to 
+render the chess piece moving across the screen.  Now somebody a year from now creates the following interface:</p>
+
+<pre><code class="go">type FileSystem interface {
+    MoveTo(oldPath, newPath string) error
+}</code></pre>
+
+<p>Now my ChessPiece class is automatically also a FileSystem.  This is odd, and theoretically someone
+could attempt to use my ChessPiece as a FileSystem and get some pretty strange results.  Now, I'll admit
+that this scenario is rather contrived. It's unlikely that somebody would load my chess library into an 
+application that would need the FileSystem interface (unless they are EMACS developers), but there are
+scenarios where less divergent, but equally problamatic, pairing could cause problems for developers.</p>
+
+<p>This is still not a deal-breaker for me.  It's not the language developers' responsibility to keep 
+people from shooting themselves in the foot.  But it's something that nobody seems to be talking much about,
+but something that Golang users should really keep in mind.</p>
 
 <h4 id="deps">Dependencies</h4>
+
+<p>Google had an interesting idea when they developed Go's dependency management framework. Rather, then 
+download a binary or have some configuration file, simply include the URL of the source repository as the 
+import statement. The developer will then call the <code>go get &lt;url_of_repo&gt;</code> to fetch that
+dependency, and all of its transitive dependencies. So if you are writing the code below:</p>
+
+<pre><code class="go">package db
+
+import (
+    "github.com/jinzhu/gorm"
+    "fmt"
+)
+
+func OpenDB() gorm.DB {
+    db, err := gorm.Open("postgres", "user_info_here")
+	
+    if err != nil {
+        panic(fmt.Sprintf("Got error '%v' when connecting to the database", err))
+    }
+    return db
+}</code></pre>
+
+<p>You would simply call "<code>go get github.com/jinzhu/gorm</code>" before compiling your code, and 
+Go will fetch the source from GitHub (also works with Mercurial) and place it into your Go packages.</p>
+
+<p>Sounds kind of cool at first. </p>

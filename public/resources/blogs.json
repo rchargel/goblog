@@ -5,6 +5,7 @@
 		"Slug"     : "protocol-buffers-vs-avro",
 		"Abstract" : "A comparison of Google's Protocol Buffers and Apache's Avro for serializing/unserializing Java objects.",
 		"Active"   : true,
+		"Tags"     : "protocol buffers, avro, google, apache, comparison, programming, software",
 		"File"     : "protocol-buffers-vs-avro.html"
 	},
 	{
@@ -13,6 +14,7 @@
 		"Slug"     : "on-the-question-of-interviews",
 		"Abstract" : "Trials and tribulations of an interviewer.",
 		"Active"   : true,
+		"Tags"     : "interview, interviews, question, questions, software, programming",
 		"File"     : "on-the-question-of-interviews.html"
 	},
 	{
@@ -21,6 +23,7 @@
 		"Slug"     : "why-ubuntu-doesn-t-suck",
 		"Abstract" : "A message to the haters.",
 		"Active"   : true,
+		"Tags"     : "ubuntu, linux, rant",
 		"File"     : "why-ubuntu-doesn-t-suck.html"
 	},
 	{
@@ -29,6 +32,7 @@
 		"Slug"     : "formatting-xml-in-vim",
 		"Abstract" : "A Linux trick to simply format XML content with VI(M).",
 		"Active"   : true,
+		"Tags"     : "linux, vi, vim, xml, formatting, format",
 		"File"     : "formatting-xml-in-vim.html"
 	},
 	{
@@ -37,6 +41,7 @@
 		"Slug"     : "evolutionary-algorithms-in-an-actor-model",
 		"Abstract" : "An attempt to test some theories about evolutionary algorithms within the framework of an Actors Model.",
 		"Active"   : true,
+		"Tags"     : "evelutionary, algorithms, actors, software, programming",
 		"File"     : "evolutionary-algorithms-in-an-actor-model.html"
 	},
 	{
@@ -45,6 +50,7 @@
 		"Slug"     : "using-google-closure-in-the-command-line",
 		"Abstract" : "Another Linux trick to setup the Google's Closure Javascript compiler into the command-line.",
 		"Active"   : true,
+		"Tags"     : "linux, command, command-line, cli, closure, javascript, css",
 		"File"     : "using-google-closure-in-the-command-line.html"
 	},
 	{
@@ -53,6 +59,7 @@
 		"Slug"     : "formatting-json-in-vim",
 		"Abstract" : "Neat little Linux trick to make JSON formatting easy in VI(M).",
 		"Active"   : true,
+		"Tags"     : "vi, vim, json, format, formatting, linux",
 		"File"     : "formatting-json-in-vim.html"
 	},
 	{
@@ -61,6 +68,7 @@
 		"Slug"     : "java-not-dead-yet",
 		"Abstract" : "A short post on the future of java and it's viability for the future.",
 		"Active"   : true,
+		"Tags"     : "java, dead, language, future",
 		"File"     : "java-not-dead-yet.html"
 	},
 	{
@@ -69,6 +77,7 @@
 		"Slug"     : "youre-doing-everything-right-but",
 		"Abstract" : "Continuous integration as the next step.",
 		"Active"   : true,
+		"Tags"     : "continuous integration, bamboo, jenkins, hudson",
 		"File"     : "youre-doing-everything-right-but.html"
 	},
 	{
@@ -77,6 +86,7 @@
 		"Slug"     : "how-hard-is-it-to-develop-a-website-in-wordpress",
 		"Abstract" : "What should your organization be looking for in a WordPress developer.",
 		"Active"   : true,
+		"Tags"     : "wordpress, development, website, web, hiring, employee",
 		"File"     : "how-hard-is-it-to-develop-a-website-in-wordpress.html"
 	},
 	{
@@ -85,6 +95,7 @@
 		"Slug"     : "golang-viable-project-dev",
 		"Abstract" : "What are the advantages and disadvantages of Go (Golang) as a language for large-scale projects.",
 		"Active"   : true,
+		"Tags"     : "Go, Golang, large-scale, project, development, comparison",
 		"File"     : "golang-alternative-project-dev.html"
 	}
 ]

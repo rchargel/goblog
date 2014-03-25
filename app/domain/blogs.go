@@ -26,6 +26,7 @@ type BlogItem struct {
 	Date     Date
 	Slug     string
 	Abstract string
+	Tags     string
 	File     string
 	Active   bool
 }

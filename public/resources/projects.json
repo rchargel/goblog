@@ -4,13 +4,15 @@
 		"Slug"     : "carvalho-good-pllc",
 		"Abstract" : "A commercial website built on the JSON Wordpress Theme.",
 		"Active"   : true,
+		"Tags"     : "website, architecture, json, wordpress",
 		"File"     : "carvalhogood.html"
 	},
 	{
 		"Name"     : "ZiLCh",
 		"Slug"     : "zilch",
-		"Abstract" : "Zipcode Lookup Channel. A REST-like API built in Go to lookup zip codes.",
+		"Abstract" : "Zipcode Lookup Channel. A REST-like API built in Go to lookup zip codes and postal codes from around the globe.",
 		"Active"   : true,
+		"Tags"     : "zipcode, postal, codes, rest, javascript, lookup",
 		"File"     : "zilch.html"
 	},
 	{
@@ -18,6 +20,7 @@
 		"Slug"     : "json-wordpress-theme",
 		"Abstract" : "A JSON theme for Wordpress. Turns your Wordpress server into a series of AJAX calls.",
 		"Active"   : true,
+		"Tags"     : "json, wordpress, javascript, theme",
 		"File"     : "jsonwordpress.html"
 	},
 	{
@@ -25,6 +28,7 @@
 		"Slug"     : "spring-configuration-library-java",
 		"Abstract" : "Simplify the development of applications by removing the common boiler-plate code used to read and initialize project properties.",
 		"Active"   : true,
+		"Tags"     : "spring, java, configuration, annotations, software, programming",
 		"File"     : "springconfig.html"
 	},
 	{
@@ -32,6 +36,7 @@
 		"Slug"     : "xebra-radiology-workstation",
 		"Abstract" : "An open source, cross-platform, thin client and server for web-based distribution and clinical review of medical imaging results.",
 		"Active"   : true,
+		"Tags"     : "medical, radiology, software, java, swing",
 		"File"     : "xebra.html"
 	},
 	{
@@ -39,6 +44,7 @@
 		"Slug"     : "country-state-lookup-rest-api",
 		"Abstract" : "A REST-like API to lookup information on countries, states, and languages.",
 		"Active"   : false,
+		"Tags"     : "json, rest, javascript, software, programming, country, state, province, language",
 		"File"     : "csl.html"
 	}
 ]
