@@ -7,7 +7,7 @@ own projects.
 
 <ul class="table-of-contents"></ul>
 
-<h3 id="what-is-go">What is Go?</h3>
+<h3 id="what-is-go">1 What is Go?</h3>
 
 <p>Go is an open source programming language developed at Google by programming legends
 Ken Thompson, Rob Pike, and Robert Griesemer. It seems to be derived from C, but with
@@ -37,7 +37,7 @@ func main() {
     fmt.Println([]byte(message1)) // casting string to byte array.
 }</code></pre>
 
-<h3 id="what-i-like">What I Like</h3>
+<h3 id="what-i-like">2 What I Like</h3>
 
 <p>Like I said, I very well might be a Gopher. I enjoy coding in this language. It reminds
 me of those first days playing with Python. Learning a new programming language fun, not unlike
@@ -48,7 +48,7 @@ to ensue due to mere fatuation, and how much is from an honest admiration. I'd l
 that I am an objective reporter. Also, for all the good things that I have to say about Go,
 there are plenty of negatives.</p>
 
-<h4 id="compiler">Go Compiler</h4>
+<h4 id="compiler">2.1 Go Compiler</h4>
 
 <p>The Go compiler is fast. Really really fast. If it takes a whole second to compile your
 app, there's probably something really wrong with your code. This allows the team at Google
@@ -59,7 +59,7 @@ and returns the output back to you. This happens very fast; the code above compi
 the full round-trip to and from the server took 108 milliseconds.
 </p>
 
-<h4 id="performance">Performance</h4>
+<h4 id="performance">2.2 Performance</h4>
 
 <p>Like C or C++, Go compiles to native code. There is no VM required, which is good and bad.
 Unlike C/C++, Go hides most of the nitty-gritty kernel level code from you. This includes
@@ -90,7 +90,7 @@ and gems hidden away in the JVM that allow you to do some really crazy performan
 but most developers will never use these. Go provides a simple language to build applications
 that perform well, without a having to understand the core components of the JVM.</p>
 
-<h4 id="channels">Go Channels</h4>
+<h4 id="channels">2.3 Go Channels</h4>
 
 <p>A channel in Go is essentially an in-memory blocking queue. These exist in Java (and other languages). That's 
 not really new or special. But Go's channels are just so easy to use. I went to a conference last year where a 
@@ -150,13 +150,13 @@ func readWords(channel chan string) {
 <p>Very simple multi-threading with cross-thread communication. Not a lot of boiler plate code. 
 Here is a <a href="http://play.golang.org/p/Cm6paIAcY_">link to this app in the Go Playground</a>.</p>
 
-<h3 id="what-needs-work">What Needs Work</h3>
+<h3 id="what-needs-work">3 What Needs Work</h3>
 
 <p>There's plenty more that can be said for all of the great features of Go, but others have written plenty on that subject.  
 Now let's talk a little about some of the problems I have run found. What should make you think twice about
 using this language for your own applications.</p>
 
-<h4 id="embedded-resources">Embedding Resources</h4>
+<h4 id="embedded-resources">3.1 Embedding Resources</h4>
 
 <p>Okay, this first problem is more of an annoyance than a real problem, as there are plenty of 
 work-arounds.  In Java, if you want to embed a properties file or any other configuration
@@ -177,24 +177,7 @@ files in the same directory as your application.</p>
 
 <p>This is an inconvenience, but not a deal-breaker.</p>
 
-<h4 id="slices">Slices Behave Badly</h4>
-
-<p>A slice is a little bit like a Vector or ArrayList in Java. The problem comes when you are 
-working with multiple slices backed by the same array.  I won't go into too much detail about
-this particular quirk, as my friend Keith Gregory has already covered this one in his 
-<a href="http://blog.kdgregory.com/2013/12/learning-go-slices.html">blog post from December of last
-year</a>.</p>
-
-<p>The gist is that a slice will continue to be backed by the same array, until there is no more room
-within that array. At this point it will create a copy of the array. If you are working with multiple
-slices, all backed by the same array, but you are appending values to one of those slices. Your appended
-values will also appear on the other slices. So far that makes sense as you are modifying the same
-array. However, once you reach the array's capacity, the Go will create a new array, and associate that
-array to the slice you are working with, and <em>only</em> that slice. You have now lost the association
-to the other slices. This can be confusing for a developer, and cause serious bugs if you don't know what
-you're doing.</p>
-
-<h4 id="implicit-interfaces">Implicit Interfaces</h4>
+<h4 id="implicit-interfaces">3.2 Implicit Interfaces</h4>
 
 <p>Golang does have the concept of interfaces, however their implementation is a little strange. Any class 
 you write implements a known interface, if it has all of the required method signatures of that interface.
@@ -235,7 +218,24 @@ scenarios where less divergent, but equally problamatic, pairing could cause pro
 people from shooting themselves in the foot.  But it's something that nobody seems to be talking much about,
 but something that Golang users should really keep in mind.</p>
 
-<h4 id="deps">Dependencies</h4>
+<h4 id="slices">3.3 Slices Behave Badly</h4>
+
+<p>A slice is a little bit like a Vector or ArrayList in Java. The problem comes when you are 
+working with multiple slices backed by the same array.  I won't go into too much detail about
+this particular quirk, as my friend Keith Gregory has already covered this one in his 
+<a href="http://blog.kdgregory.com/2013/12/learning-go-slices.html">blog post from December of last
+year</a>.</p>
+
+<p>The gist is that a slice will continue to be backed by the same array, until there is no more room
+within that array. At this point it will create a copy of the array. If you are working with multiple
+slices, all backed by the same array, but you are appending values to one of those slices. Your appended
+values will also appear on the other slices. So far that makes sense as you are modifying the same
+array. However, once you reach the array's capacity, the Go will create a new array, and associate that
+array to the slice you are working with, and <em>only</em> that slice. You have now lost the association
+to the other slices. This can be confusing for a developer, and cause serious bugs if you don't know what
+you're doing.</p>
+
+<h4 id="deps">3.4 Dependencies</h4>
 
 <p>Google had an interesting idea when they developed Go's dependency management framework. Rather, then 
 download a binary or have some configuration file, simply include the URL of the source repository as the 
@@ -261,4 +261,37 @@ func OpenDB() gorm.DB {
 <p>You would simply call "<code>go get github.com/jinzhu/gorm</code>" before compiling your code, and 
 Go will fetch the source from GitHub (also works with Mercurial) and place it into your Go packages.</p>
 
-<p>Sounds kind of cool at first. </p>
+<p>Sounds kind of cool at first. However, it's important to remember that you are fetching the head 
+revision of master. You're using the development branch of someone else's code as your production library.
+If they check in a change that is not backwards compatible, you will have a broken build. If they delete 
+or move the repository, you will have a broken build. You as the developer 
+cannot define that you want to use version "X" of the dependency, which means that you do not have 
+reproducable builds.</p>
+
+<p>This, in my opinion, is the single greatest flaw of the Golang build process. In order to "fix" this problem 
+some developers have commited copies of the third party libraries that they use into their own repositories. 
+This akin to checking in Jar files into your code repositories. It works, but it is really ugly.</p>
+
+<p>In order to fix this problem, Google will need to add some kind of versioning mechanism. This mechanism
+must get the required libraries and their versions out of the source code, whether that's from the import
+statement alone, or there is some additional configuration file. Perhaps something could be built to wrap the 
+current build process.  Perhaps they could develop a proxy that intercepted the the <code>go get</code> request 
+and pulled the required version out of the a config file in the source code. This proxy could act like a Maven
+repository. Taking that to the next level, it would be nice to have something like Maven Central, where there
+is a list of open-source projects with versions that are managed by some central network. This not only 
+allows for versioning, but also means that reposities won't disappear or be moved, at least not within the same
+release version.  It also means that there are actual releases; making available a tested and vetted version of 
+the application or library.</p>
+
+<h3 id="last-thoughts">4 Last Thoughts</h3>
+
+<p>There's plenty more that could be said both for and against the use of Go for your projects. I think the
+<a href="#deps">dependency issue</a> may be a deal-breaker for my own projects, however different developers
+and projects have different requirements.  It is certainly fast and simple to build projects in Golang, but 
+I could say the same thing about Groovy. Golang has channels to simplify communication between threads, but so 
+does Closure (another JVM language).  Golang is fun, and I like using it, but it's also a young language (Go 1.0 was 
+released on March 28, 2012). It still has some growing pains to get through. If Google decides that they want the 
+language to become widely adopted, they will have to fix the dependency issue.  If they don't, it will never become
+an enterprise language (I know, how uncool).  If they do fix it, there could be a serious third-party contender for
+the role of most popular programming language, which has been a two-man race between 
+<a href="http://www.tiobe.com/index.php/content/paperinfo/tpci/index.html">Java and C for the past 12 years</a>.</p>
