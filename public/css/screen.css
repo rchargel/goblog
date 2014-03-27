@@ -57,44 +57,30 @@ h1#logo {
 	top: -99999px;
 	left: -99999px;
 }
-aside.main nav {
-	padding-left: 0px;
-}
-aside.main nav ul ul {
-	display: none;
-	font-size: 1em;
-	padding: 0;
-}
-aside.main nav ul li:hover > ul {
+aside.main { padding: 0; margin: 0; }
+aside.main nav { padding: 0; margin: 0; }
+aside.main a {
 	display: block;
-	position: absolute;
-	right: 3em;
-	background: #4d4d4d;
-	color: #fff;
-	border: 3px solid #62cbe0;
-	border-radius: 10px;
-	opacity: 0.95;
+	text-decoration: none;
+	color: #4f4f4f;
+	padding: 12px 12px;
 }
-aside.main nav ul {
+aside.main a:hover, aside.main a.active { color: #000; }
+aside.main ul {
+	padding: 0;
+	margin: 0;
 	font-size: 1.2em;
+	line-height: 1;
 	list-style: none;
 	position: relative;
 }
-aside.main nav a {
+aside.main ul li {
 	display: block;
+	padding: 0;
+	margin: 0;
 	text-align: right;
-	line-height: 2;
-	padding-right: 10px;
-	text-decoration: none;
-	color: #4f4f4f;
 }
-aside.main nav a:hover, aside.main nav a.active { color: #000; }
-aside.main nav ul li:hover > ul a {
-	padding: 0.35em 1.25em;
-	text-align: center;
-	color: #c9c9c9;
-}
-aside.main nav ul li:hover > ul a:hover, aside.main nav ul li:hover > ul a.active { color: #fff; }
+aside.main ul ul { font-size: 1em; }
 footer {
 	position: absolute;
 	line-height: 1;
@@ -226,43 +212,55 @@ span.error {
 }
 @media only screen and (min-width: 640px) {
 	header.main figure { width: 50%; }
-	aside.main {
-		padding: 0px 0 0px 0;
-		margin-bottom: 5%;
+	aside.main { 
+		margin-bottom: 5%; 
+		background: linear-gradient(top, #62cbe0 0%, #fff 15%, #fff 85%, #62cbe0 100%);
+		background: -moz-linear-gradient(top, #62cbe0 0%, #fff 15%, #fff 85%, #62cbe0 100%);
+		background: -webkit-linear-gradient(top, #62cbe0 0%, #fff 15%, #fff 85%, #62cbe0 100%);
 	}
-	aside.main nav {
-		padding: 0 0 0 20%;
+	aside.main nav { 
+		padding: 0 0 0 20%; 
 		position: relative;
 		z-index: 10;
 	}
-	aside.main nav ul {
+	aside.main ul {
+		display: block;
 		padding: 0;
 		margin: 0;
 	}
-	aside.main nav a { padding: 0; display: inline; }
-	aside.main nav ul:after {
-		content: ""; clear: both; display: block;
-	}
-	aside.main nav li {
-		width: 25%;
+	aside.main ul:after { content: ""; clear: both; display: block; }
+	aside.main a {
 		padding: 5px 15px;
-		margin:  5px 0;
-		text-align: center;
-		max-width: 110px;
-		display: inline;
+		color: #000;
 	}
-	aside.main nav ul li:hover > ul {
-		position: absolute;
-		right: inherit;
+	aside.main ul {}
+	aside.main ul li {
+		float: left;
 		padding: 0;
-		margin: -5px 0 0 -2em;
-		opacity: inherit;
-		background: #fff;
+		margin: 0;
+		background: none;
 	}
-	aside.main nav ul li:hover > ul a {
-		color: #4f4f4f;
+	aside.main ul li:hover, aside.main ul li.active { 
+		background: #62cbe0;
+		background: linear-gradient(top, #62cbe0 0%, #4fa2b3 50%, #62cbe0 100%);
+		background: -webkit-linear-gradient(top, #62cbe0 0%, #4fa2b3 50%, #62cbe0 100%);
+		background: -moz-linear-gradient(top, #62cbe0 0%, #4fa2b3 50%, #62cbe0 100%);
 	}
-	aside.main nav ul li:hover > ul a:hover { color: #000; }
+	aside.main ul ul { display: none; }
+	aside.main ul ul li {
+		float: none;
+		background: #4fa2b3;
+		border-top: 1px solid #62cbe0;
+	}
+	aside.main ul ul li:hover, aside.main ul ul li.active {
+		background: #62cbe0;
+	}
+	aside.main ul ul a { padding: 8px 25px; }
+	aside.main li:hover ul {
+		position: absolute;
+		display: block;
+		border-top: 2px solid #62cbe0;
+	}
 	div.login, div.copy {
 		display: block;
 		width: 40%;
