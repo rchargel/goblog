@@ -28,7 +28,8 @@ type App struct {
 }
 
 func (c App) Index() revel.Result {
-	return c.Render()
+	tab := "index"
+	return c.Render(tab)
 }
 
 func (c App) Robots() revel.Result {
@@ -53,5 +54,6 @@ func (c App) Bookmarks() revel.Result {
 	} else {
 		panic(err)
 	}
-	return c.Render(links)
+	tab := "bookmarks"
+	return c.Render(links, tab)
 }

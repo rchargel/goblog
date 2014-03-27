@@ -1,4 +1,26 @@
 (function($) {
+	$.fn.searchBox = function() {
+		this.each(function() {
+			var textbox = $(this),
+			    bodyArticle = $('#body-content'),
+				searchArticle = $('#search-section'),
+				url = '/search';
+				
+			textbox.bind('keyup', function() {
+				if (textbox.val().length > 2) {
+					searchArticle.load(url, {terms: textbox.val()}, function() {
+						bodyArticle.hide();
+						searchArticle.show();
+					});
+				} else {
+					bodyArticle.show();
+					searchArticle.hide();
+				}
+			});
+			textbox.triggerHandler('keyup');
+		});
+		return this;
+	};
 	$.fn.toc = function() {
 		this.each(function() {
 			var ul = $(this), headers = ul.nextAll(":header"), lastLevel = -1, toc = {
@@ -68,5 +90,6 @@
 		if (toc.size() > 0) {
 			toc.toc();
 		}
+		$('.searchbox').searchBox();
 	});
 })(jQuery);

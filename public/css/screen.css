@@ -85,19 +85,19 @@ footer {
 	position: absolute;
 	line-height: 1;
 	font-size: 0.85em;
-	height: 5em;
+	height: 4em;
 	bottom: 0;
 	width: 100%;
 	background-color: #fff;
 	border-top: 3px solid #62cbe0;
 }
 section {
-	padding: 0 5px 6em 5px;
+	padding: 0 5px 7em 5px;
+	max-width: 1000px;
 }
 article {
 	line-height: 1.4;
 	color: #fff;
-	max-width: 1000px;
 }
 article a, article span.highlight {
 	text-decoration: none;
@@ -167,6 +167,10 @@ article nav a:hover, article nav a:active {
 	display: block;
 	font-size: 80%;
 }
+.blog-item .score {
+	display: block;
+	font-size: 80%;
+}
 .blog-roll-details {
 	padding-left: 1em;
 }
@@ -204,13 +208,30 @@ span.error {
 	padding: 0;
 	color: red;
 }
+.search-results {
+	margin: 0 0 2em 0;
+}
+#content-search {
+	color: #fff;
+	position: absolute;
+	right: 5px;
+	bottom: 4em;
+}
+.searchbox { width: 6em; }
 @media only screen and (min-width: 400px) {
 	header.main figure { width: 70%; }
-	section { padding-bottom: 5em; }
 	section { padding: 0 10px 6em 10px; }
 	.text-input, textarea  { width: 250px; }
+	.searchbox { width: 9em; }
 }
 @media only screen and (min-width: 640px) {
+	#content-search {
+		bottom: inherit;
+		top: 20px;
+		right: 20px;
+	}
+	.searchbox { width: 13em; }
+	.score { float: right; }
 	header.main figure { width: 50%; }
 	aside.main { 
 		margin-bottom: 5%; 

@@ -1,0 +1,40 @@
+
+<article>	
+	<header>
+		<h2>Search Results</h2>
+	</header>
+	<p><strong>Term: </strong>{{.terms}}</p>
+	{{ if .searchResults.BlogResults}}
+	<div class="search-results">
+	<h4>Blogs</h4>
+	{{ range .searchResults.BlogResults }}
+	<div class="blog-item">
+		<header>
+			<a href="{{.Link}}">{{.Name}}</a>
+			<span class="score">Score: {{.Score}}</span>
+			<time>{{date .Date}}</time>
+		</header>
+		<div class="blog-roll-details">
+			<p>{{.Abstract}}</p>
+		</div>
+	</div>
+	{{end}}
+	</div>
+	{{end}}
+	{{ if .searchResults.ProjectResults}}
+	<div class="search-results">
+	<h4>Projects</h4>
+	{{ range .searchResults.ProjectResults }}
+	<div class="blog-item">
+		<header>
+			<a href="{{.Link}}">{{.Name}}</a>
+			<span class="score">Score: {{.Score}}</span>
+		</header>
+		<div class="blog-roll-details">
+			<p>{{.Abstract}}</p>
+		</div>
+	</div>
+	{{end}}
+	</div>
+	{{end}}
+</article>

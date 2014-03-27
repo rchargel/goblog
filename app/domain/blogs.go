@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"regexp"
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -29,6 +31,7 @@ type BlogItem struct {
 	Tags     string
 	File     string
 	Active   bool
+	Index    map[string]int
 }
 
 type BlogItemByDate []BlogItem
@@ -70,6 +73,32 @@ func (b *BlogItem) GetContent() string {
 	}
 }
 
+func indexBlogItem(b BlogItem) BlogItem {
+	badChars, _ := regexp.Compile("[^\\w|\\s]")
+	htmlChars, _ := regexp.Compile("<[^>]+>")
+	content := badChars.ReplaceAllString(htmlChars.ReplaceAllString(b.GetContent(), ""), "")
+	keys := badChars.ReplaceAllString(b.Name+" "+b.Tags+" "+b.Abstract, "")
+	index := make(map[string]int)
+	for _, word := range strings.Fields(content) {
+		if len(word) > 3 {
+			index[strings.ToLower(word)]++
+		}
+	}
+	for _, word := range strings.Fields(keys) {
+		index[strings.ToLower(word)]++
+	}
+	return BlogItem{
+		Name:     b.Name,
+		Date:     b.Date,
+		Slug:     b.Slug,
+		Abstract: b.Abstract,
+		Tags:     b.Tags,
+		File:     b.File,
+		Active:   b.Active,
+		Index:    index,
+	}
+}
+
 func (c *BlogList) init() {
 	if len(c.items) == 0 {
 		fmt.Println("INITIALIZE BLOG")
@@ -92,6 +121,14 @@ func (c *BlogList) init() {
 		}
 		sort.Sort(BlogItemByDate(blogs))
 		c.items = blogs
+	}
+}
+
+func (c *BlogList) Index() {
+	for i, item := range c.items {
+		if item.Active {
+			c.items[i] = indexBlogItem(item)
+		}
 	}
 }
 

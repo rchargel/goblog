@@ -2,6 +2,7 @@
 			{{template "debug.html" .}}
  		{{end}}
 			</section>
+			<section id="search-section"></section>
 			<footer>
 				<figure>
 					<img src="/public/img/footer.png"/>
@@ -9,5 +10,8 @@
 				<div class="copy">&copy; 2013 - ZCarioca.net.  All rights reserved</div>
 			</footer>
 		</div>
+		<script type="text/javascript">
+		$('#nav-{{.tab}}').addClass('active');
+		</script>
 	</body>
 </html>

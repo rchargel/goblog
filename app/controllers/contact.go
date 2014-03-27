@@ -25,8 +25,9 @@ func (c Contact) Index() revel.Result {
 	c.Session["captcha_index"] = fmt.Sprintf("%v", imageCaptcha.Index)
 
 	captcha_title := imageCaptcha.Title
+	tab := "contact"
 
-	return c.Render(captcha_title)
+	return c.Render(captcha_title, tab)
 }
 
 func (c Contact) RenderImg() revel.Result {

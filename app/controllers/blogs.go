@@ -14,7 +14,8 @@ type Blogs struct {
 
 func (c Blogs) List() revel.Result {
 	blogs := blogList.GetFilteredList()
-	return c.Render(blogs)
+	tab := "blog"
+	return c.Render(blogs, tab)
 }
 
 func (c Blogs) Show() revel.Result {
@@ -22,12 +23,13 @@ func (c Blogs) Show() revel.Result {
 	path := c.Request.RequestURI
 	action := path[strings.LastIndex(path, "/")+1:]
 	blog, prev, next := blogList.GetItem(action)
+	tab := "blog"
 	if blog != nil {
 		content := blog.GetContent()
 		meta_description := blog.Abstract
 		meta_date := blog.Date.Time.Format(dateFormat)
 		meta_keywords := blog.Tags
-		return c.Render(blog, prev, next, content, meta_description, meta_date, meta_keywords)
+		return c.Render(tab, blog, prev, next, content, meta_description, meta_date, meta_keywords)
 	} else {
 		return c.NotFound("Could not find blog page " + c.Action)
 	}

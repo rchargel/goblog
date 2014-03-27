@@ -14,18 +14,20 @@ type Projects struct {
 
 func (c Projects) List() revel.Result {
 	projects := projectList.GetFilteredList()
-	return c.Render(projects)
+	tab := "projects"
+	return c.Render(projects, tab)
 }
 
 func (c Projects) Show() revel.Result {
 	path := c.Request.RequestURI
 	action := path[strings.LastIndex(path, "/")+1:]
 	project := projectList.GetItem(action)
+	tab := "projects"
 	if project != nil {
 		content := project.GetContent()
 		meta_description := project.Abstract
 		meta_keywords := project.Tags
-		return c.Render(project, content, meta_description, meta_keywords)
+		return c.Render(tab, project, content, meta_description, meta_keywords)
 	} else {
 		return c.NotFound("Could not find page " + c.Action)
 	}

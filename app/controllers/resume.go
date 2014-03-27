@@ -147,7 +147,8 @@ func (c Resume) Index() revel.Result {
 	} else {
 		panic(err)
 	}
-	return c.Render(resume)
+	tab := "resume"
+	return c.Render(resume, tab)
 }
 
 func (c Resume) Pdf() revel.Result {

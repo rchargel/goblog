@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"regexp"
 	"sort"
+	"strings"
 )
 
 type ProjectList struct {
@@ -20,6 +22,7 @@ type ProjectItem struct {
 	File     string
 	Tags     string
 	Active   bool
+	Index    map[string]int
 }
 
 type ProjectItemByName []ProjectItem
@@ -94,4 +97,37 @@ func (l ProjectItemFilterActive) Filter() []ProjectItem {
 		}
 	}
 	return newList
+}
+
+func indexProjectItem(b ProjectItem) ProjectItem {
+	badChars, _ := regexp.Compile("[^\\w|\\s]")
+	htmlChars, _ := regexp.Compile("<[^>]+>")
+	content := badChars.ReplaceAllString(htmlChars.ReplaceAllString(b.GetContent(), ""), "")
+	keys := badChars.ReplaceAllString(b.Name+" "+b.Tags+" "+b.Abstract, "")
+	index := make(map[string]int)
+	for _, word := range strings.Fields(content) {
+		if len(word) > 3 {
+			index[strings.ToLower(word)]++
+		}
+	}
+	for _, word := range strings.Fields(keys) {
+		index[strings.ToLower(word)]++
+	}
+	return ProjectItem{
+		Name:     b.Name,
+		Slug:     b.Slug,
+		Abstract: b.Abstract,
+		File:     b.File,
+		Tags:     b.Tags,
+		Active:   b.Active,
+		Index:    index,
+	}
+}
+
+func (c *ProjectList) Index() {
+	for i, item := range c.items {
+		if item.Active {
+			c.items[i] = indexProjectItem(item)
+		}
+	}
 }

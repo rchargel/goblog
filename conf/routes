@@ -16,6 +16,8 @@ GET     /blog/:action                           Blogs.Show
 GET     /contact                                Contact.Index
 POST    /contact                                Contact.Send
 GET     /captcha.jpg                            Contact.RenderImg
+GET     /search                                 Search.Search
+POST    /search                                 Search.Search
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
