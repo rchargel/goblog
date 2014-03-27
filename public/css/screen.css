@@ -217,6 +217,10 @@ span.error {
 	right: 5px;
 	bottom: 4em;
 }
+div.contact { 
+	border-top: 1px dotted #62cbe0;
+	text-align: center;
+}
 .searchbox { width: 6em; }
 @media only screen and (min-width: 400px) {
 	header.main figure { width: 70%; }
