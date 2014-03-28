@@ -144,7 +144,7 @@ func (c *BlogList) GetItem(slug string) (*BlogItem, string, string) {
 			if i > 0 {
 				n := i - 1
 				for {
-					if n == 0 {
+					if n == -1 {
 						next = ""
 						break
 					}
