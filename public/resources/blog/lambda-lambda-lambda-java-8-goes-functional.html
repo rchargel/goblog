@@ -94,10 +94,13 @@ method, regardless of how many parameters taken in that method.</p>
         System.out.println(o.operation(numbers));
     }
     public static final void main(String ... args) {
-        Operator addition = n -> Arrays.asList(n).stream().mapToInt(a -> a.intValue()).sum();
-        Operator product = n -> Arrays.asList(n).stream().mapToInt(a -> a.intValue()).reduce((a, b) -> a * b).getAsInt();
+        Operator addition = n -> Arrays.asList(n).stream().mapToInt(a -> a).sum();
+        Operator product = n -> Arrays.asList(n).stream().mapToInt(a -> a).reduce((a, b) -> a * b).getAsInt();
 
         new Calculator().calculate(addition, 1, 2);
         new Calculator().calculate(product, 1, 2, 3, 4, 5);
     }
 }</code></pre>
+
+<p>For my next post I'll talk about mixins and how the new multiple inheritence 
+works in Java 8 (and how they solve the diamond problem).</p>
