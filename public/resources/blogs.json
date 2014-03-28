@@ -97,5 +97,14 @@
 		"Active"   : true,
 		"Tags"     : "Go, Golang, go vs java, golang vs java, large-scale, project, development, comparison, channels",
 		"File"     : "golang-alternative-project-dev.html"
+	},
+	{
+		"Name"     : "Lambda Lambda Lambda: Java 8 Goes Functional",
+		"Date"     : "2014-03-28",
+		"Slug"     : "lambda-lambda-lambda-java-8-goes-functional",
+		"Abstract" : "One of the new features in Java 8 is the Lambda. While Closure and Scala are already well established Functional Programming languages in the JVM family, this is a step towards bringing Java into the latest evolution of software design.",
+		"Active"   : true,
+		"Tags"     : "java, java 8, functional programming, lambda, lambdas, programming, software",
+		"File"     : "lambda-lambda-lambda-java-8-goes-functional.html"
 	}
 ]

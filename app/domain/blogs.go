@@ -142,10 +142,32 @@ func (c *BlogList) GetItem(slug string) (*BlogItem, string, string) {
 		if item.Slug == slug {
 			var prev, next string
 			if i > 0 {
-				next = c.items[i-1].Slug
+				n := i - 1
+				for {
+					if n == 0 {
+						next = ""
+						break
+					}
+					if c.items[n].Active {
+						next = c.items[n].Slug
+						break
+					}
+					n -= 1
+				}
 			}
 			if i < (len(c.items) - 1) {
-				prev = c.items[i+1].Slug
+				p := i + 1
+				for {
+					if p == len(c.items) {
+						prev = ""
+						break
+					}
+					if c.items[p].Active {
+						prev = c.items[p].Slug
+						break
+					}
+					p += 1
+				}
 			}
 			return &item, prev, next
 		}

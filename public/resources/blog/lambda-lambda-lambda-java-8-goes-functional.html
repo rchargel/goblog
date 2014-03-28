@@ -1,0 +1,103 @@
+<p>Java 8 was <a href="http://openjdk.java.net/projects/jdk8/">released on 
+March 18, 2014</a>. There are many cool new features to the language in this 
+release, however talking about each of them would take much more time than I 
+can allot to a single post. So I am focusing on one of my favorite new features,
+the lambda.</p>
+
+<p>When Java 7 was first proposed, there was a lot of talk about including 
+closures into the spec. Unfortunately, the rumors turned out to be false, and 
+Java 7 was released closure free.<p>
+
+<p>While technically not a closure, the lambda feature introduced in Java 8, 
+is a major leap forward. So, what is the difference between a lambda and a 
+closure? It may be easiest to think of a lambda as a type of closure. In Java 
+8, the lambda is essentially a less verbose way of defining an anonymous inner
+class. When you think about it, an anonymous inner class is itself a closure.
+The only real difference is that you must define the entire class as a method
+of defining a single function.  Lambdas work exactly the same way, except 
+without the need for all that verbosity.  So let's take a look at a simple 
+lambda expression.  Let's say you wanted to filter a given collection of 
+<code>Employee</code> for those employees in a given department.  You might 
+start with code that looks like this:</p>
+
+<pre><code class="java">Collection&lt;Employee&gt; employees = ...
+final String department = "IT";
+// create an anonymous inner class for Predicate
+CollectionUtils.filter(employees, new Predicate&lt;Employee&gt;() {
+    @Override
+    public boolean evaluate(Employee employee) {
+        return employee.getDepartment().equals(department);
+    }
+});</code></pre>
+
+<p>Not so hard, but still, it seems a little tiresome to build an entire 
+Predicate class, just to filter a collection. So here's another approach:</p>
+
+<pre><code class="java">Collection&lt;Employee&gt; employees = ...
+final String department = "IT";
+// lambda for Predicate
+CollectionUtils.filter(employees, e -> e.getDepartment().equals(department));</code></pre>
+
+<p>Wasn't that so much nicer?  The lambda expression will get converted by the 
+compiler into an instance of the anonymous inner class.  Nothing crazy is 
+happening here. You are just implementing the interface Predicate with a single
+line of code. This works because Predicate is a very simple interface with a 
+single method, and Java is littered with just that type of interface.  This also
+means that you could define a reference of Predicate using a lambda, and pass it around.</p>
+
+<pre><code class="java">Collection&lt;Employee&gt; employees = ...
+final String department = "IT";
+Predicate itDepartment = e -> e.getDepartment().equals(department);
+CollectionUtils.filter(employees, itDepartment);</code></pre>
+
+<p>Of course if you're really going for Java 8, you probably should just use 
+the <a href="http://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html">Stream 
+API</a>:
+
+<pre><code class="java">Collection&lt;Employee&gt; employees = ...
+final String department = "IT";
+// lambda for stream
+employees.stream().filter(e -> e.getDepartment().equals(department));</code></pre>
+
+<p>So, you'll probably notice that the lambda expression was able to access the
+local variable <code>department</code>, but just like an anonymous inner class, 
+the local variable must be <code>final</code> or effectively final.  This is where
+lambdas differentiate from true closures. A closure is not a pure function, as it
+has side effects. It fully encloses the scope of the calling function and can 
+modify the value of local variables; lambdas cannot do this.</p>
+
+<p>One more thing about lambdas, they can implement any interface with a single 
+method, regardless of how many parameters taken in that method.</p>
+
+<pre><code class="java">public class Calculator {
+    interface Operator {
+        int operation(int a, int b, int c);
+    }
+    public void calculate(int a, int b, int c, Operator o) {
+        System.out.println(o.operation(a, b, c));
+    }
+    public static final void main(String ... args) {
+        Operator addition = (a,b,c) -> a + b + c;
+        Operator product = (a,b,c) -> a * b * c;
+        new Calculator().calculate(1, 2, 3, addition);
+        new Calculator().calculate(1, 2, 3, product);
+    }
+}</code></pre>
+
+<p>I do mean any number of parameters.</p>
+
+<pre><code class="java">public class Calculator {
+    interface Operator {
+        Integer operation(Integer ... numbers);
+    }
+    public void calculate(Operator o, Integer ... numbers) {
+        System.out.println(o.operation(numbers));
+    }
+    public static final void main(String ... args) {
+        Operator addition = n -> Arrays.asList(n).stream().mapToInt(a -> a.intValue()).sum();
+        Operator product = n -> Arrays.asList(n).stream().mapToInt(a -> a.intValue()).reduce((a, b) -> a * b).getAsInt();
+
+        new Calculator().calculate(addition, 1, 2);
+        new Calculator().calculate(product, 1, 2, 3, 4, 5);
+    }
+}</code></pre>
