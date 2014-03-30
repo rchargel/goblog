@@ -103,4 +103,25 @@ method, regardless of how many parameters taken in that method.</p>
 }</code></pre>
 
 <p>For my next post I'll talk about mixins and how the new multiple inheritence 
-works in Java 8 (and how they solve the diamond problem).</p>
+works in Java 8 (and how they solve the diamond problem). Here's a sneak preview:</p>
+
+<pre><code class="java">public class Calculator {
+    interface Operator {
+        int apply(int a, int b);
+
+        // is this an implemented method in an interface?
+        default Integer operation(Integer ... numbers) {
+            return java.util.Arrays.asList(numbers).stream().mapToInt(a -> a).reduce((a, b) -> apply(a, b)).getAsInt();
+        }
+    }
+    public void calculate(Operator o, Integer ... numbers) {
+        System.out.println(o.operation(numbers));
+    }
+    public static final void main(String ... args) {
+        Operator addition = (a, b) -> a + b;
+        Operator product = (a, b) -> a * b;
+
+        new Calculator().calculate(addition, 1, 2);
+        new Calculator().calculate(product, 1, 2, 3, 4, 5);
+    }
+}</code></pre>
