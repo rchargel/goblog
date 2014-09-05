@@ -3,7 +3,7 @@ package domain
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/robfig/revel"
+	"github.com/revel/revel"
 	"image"
 	"image/draw"
 	"image/jpeg"

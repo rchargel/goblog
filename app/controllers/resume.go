@@ -3,7 +3,7 @@ package controllers
 import (
 	"code.google.com/p/gofpdf"
 	"encoding/xml"
-	"github.com/robfig/revel"
+	"github.com/revel/revel"
 	"io"
 	"net/http"
 	"os"

@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/robfig/revel"
+	"github.com/revel/revel"
 	"strings"
 )
 
@@ -24,8 +24,8 @@ func init() {
 
 	// register startup functions with OnAppStart
 	// ( order dependent )
-	// revel.OnAppStart(InitDB())
-	// revel.OnAppStart(FillCache())
+	// revel.OnAppStart(InitDB)
+	// revel.OnAppStart(FillCache)
 }
 
 // TODO turn this into revel.HeaderFilter
@@ -33,7 +33,6 @@ func init() {
 // not sure if it can go in the same filter or not
 var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
 	// Add some common security headers
-	SetMimeType(c)
 	c.Response.Out.Header().Add("X-Frame-Options", "SAMEORIGIN")
 	c.Response.Out.Header().Add("X-XSS-Protection", "1; mode=block")
 	c.Response.Out.Header().Add("X-Content-Type-Options", "nosniff")

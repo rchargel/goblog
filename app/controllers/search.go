@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/rchargel/goblog/app/domain"
-	"github.com/robfig/revel"
+	"github.com/revel/revel"
 )
 
 var indexer = domain.NewIndexer()

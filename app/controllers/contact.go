@@ -3,7 +3,7 @@ package controllers
 import (
 	"fmt"
 	"github.com/rchargel/goblog/app/domain"
-	"github.com/robfig/revel"
+	"github.com/revel/revel"
 	"strconv"
 )
 
