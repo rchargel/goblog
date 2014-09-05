@@ -51,7 +51,7 @@
 	<section>
 		<h3>What Revel Doesn't Have</h3>
 		
-		<p style="text-align: left;">Revel does <em>not</em> have an ORM. While there are plenty of ORMs 
+		<p class="left">Revel does <em>not</em> have an ORM. While there are plenty of ORMs 
 		for Go that you could plugin, Heroku's database support is such
 		that it may make more sense to simply avoid using a database.</p>
 	</section>
@@ -79,12 +79,215 @@
 </section>
 <section>
 	<section>
+		<h1>Configuring Go</h1>
+		<p class="left">
+			How Go is installed dependes upon on your platform. 
+			The instructions can be found here: <a href="https://golang.org/doc/install" target="_blank">https://golang.org/doc/install</a>.
+		</p>
+		<p class="left">
+			Once Go is installed, there is some additional configuration that is required. The Go compiler and 
+			tools revolve around an environment variable <code>GOPATH</code>. 
+		</p>
+	</section>
+	<section>
+		<h2>Setup Environment</h2>
+		<ol>
+			<li>Create a workspace directory, and set <code>GOPATH</code>.
+			<pre><code class="brush: bash">mkdir -p ~/GO/workspace
+echo 'export GOPATH="~/GO/workspace"' >> ~/.bash_profile
+echo 'export PATH="$PATH:$GOPATH/bin"' >> ~/.bash_profile
+source ~/.bash_profile</code></pre>
+			</li>
+			<li>Create Go workspace file structure.
+			<pre><code class="brush: bash">mkdir ~/GO/workspace/bin # contains compiled executables
+mkdir ~/GO/workspace/pkg # contains package objects
+mkdir ~/GO/workspace/src # contains source code</code></pre>
+			</li>
+		</ol>
+	</section>
+	<section>
+		<h2>Understanding the Source Directory</h1>
+		
+		<p class="left">Project source code is stored in its package directories. These directories are defined
+		by the repostories. If you have a project located in GitHub,
+		your directory structure will likely look something like this:</p>
+		<pre><code class="brush: bash">./src/
+    github.com/
+        username/
+            project_name/
+                projectfile.go</code></pre>
+	</section>
+</section>
+<section>
+	<section>
 		<h1>Installing Revel</h1>
 		
-		<p>
-			The Revel website on GitHub has an <a href="http://revel.github.io/tutorial/gettingstarted.html" target="_blank">excellent
-			tutorial</a> on how to install the Revel framework.
+		<p class="left">
+			Once Go is installed and the environment directories are configured, installing revel is simple.
 		</p>
+	</section>
+	<section>
+		<h2>Install the Revel Framework</h2>
+		
+		<ol>
+			<li>Install the framework:
+			<pre><code class="brush: bash">go get github.com/revel/revel</code></pre>
+			<p class="left">This can be called from any directory, Go will 
+			manage the packages and directory structure.</p></li>
+			<li>Install the command-line tools:
+			<pre><code class="brush: bash">go get github.com/revel/cmd/revel</code></pre>
+			</li>
+		</ol>
+	</section>
+</section>
+<section>
+	<section>
+		<h1>Create Your Webapp</h1>
+	
+		<pre><code class="brush: bash">revel new github.com/username/webapp
+revel run github.com/username/webapp dev 9000 # mode port
+</code></pre>
+		<p class="left">Go to <a href="http://localhost:9000/" target="_blank">http://localhost:9000/</a> 
+		and you should see something like "It Works!".</p>
+	</section>
+	<section>
+		<h2>Where are My Files?</h2>
+		
+		<p class="left">The webapp will be created in the GOPATH source directory at:</p>
+		<pre><code class="brush: bash">$GOPATH/src/github.com/username/webapp/.</code></pre>
+	</section>
+	<section>
+		<h2>Webapp Structure</h2>
+		
+		<p class="left">
+		There are a few types of files that make up a Revel webapp.
+		</p>
+		
+		<ul>
+			<li><strong>Routes</strong>: managed in the file <code>./conf/routes</code>.
+			<li><strong>Controllers</strong>: managed in <code>./app/controllers/</code>.
+			<li><strong>Views</strong>: managed in <code>./app/views/</code>.
+		</ul>
+	</section>
+	<section>
+		<h2>Routes</h2>
+		
+		<p class="left">
+			Routes work as expected. A route can have one of two modes <code>GET</code> and <code>POST</code>.
+			The following is an example route.
+		</p>
+		<pre><code class="brush: go">//MODE    PATH       CONTROLLER.FUNCTION
+GET       /          App.Index
+GET       /contact   Contact.Index
+POST      /contact   Contact.Send</code></pre>
+		<p class="left">When the user goes to the root of the webapp, the App controller's Index() method
+		is called.</p>
+	</section>
+	<section>
+		<h2>Controllers</h2>
+		
+		<p class="left">
+		Controller methods must return instances of type <code>revel.Result</code>. 
+		</p>
+		
+		<pre><code class="brush: go">type App struct {
+    *revel.Controller
+}
+func (c App) Index() revel.Result {
+    title := "My Page Title"
+    message := "Hello, World!"
+    return c.Render(title, message)
+}</code></pre>
+	</section>
+	<section>
+		<h2>Controllers (Cont...)</h2>
+		<p class="left">Variables are passed to views through named variables in the controller. These
+		variables are used in the view via reflection.</p>
+		<pre><code class="brush: go">func (c App) Index() revel.Result {
+    // a variable called 'tab' will be available in the view
+    title := "My Page Title"
+    // a variable called 'message' will be available in the view
+    message := "Hello, World!"
+	
+    // order of parameters does not matter
+    return c.Render(title, message)
+	
+    // this is not allowed because the variable has no name
+    // return c.Render("put text directly in render function")
+}</code></pre>
+	</section>
+	<section>
+		<h2>Controllers (Cont...)</h2>
+		<p class="left">It is also possible to render content without a view by implementing the <code>revel.Result</code>
+		interface.</p>
+		<pre><code class="brush: go">type Robot string
+// outputs the follow:
+/*
+User-Agent: *
+Allow: /
+*/
+func (r Robot) Apply(req *revel.Request, resp *revel.Response) {
+    resp.Out.Header().Set("Content-Type", "text/plain")
+    resp.Out.Write([]byte("User-Agent: *\n"))
+    resp.Out.Write([]byte("Allow: "))
+    resp.Out.Write([]byte(r))
+    resp.Out.Write([]byte("\n"))
+}
+func (c App) Robot() revel.Result {
+    return Robot("/")
+}</code></pre>
+	</section>
+	<section>
+		<h2>Views</h2>
+		
+		<p class="left">Views are found in a directory named for the controller. They are <code>HTML</code>
+		fragments with templating, and are named after the method that invokes them.</p>
+		
+		<p class="left">Given the method <code>App.Index()</code>, there should be view located at:</p>
+		<pre><code class="brush: bash">./app/views/App/Index.html</code></pre>
+	</section>
+	<section>
+		<h2>Views (Cont...)</h2>
+		<p class="left">Here is a simple view:</p>
+		<pre><code class="brush: html">&lt;!-- Two Variables Defined in App.Index():
+title
+message
+--&gt;
+{{set . "title" .title}} &lt;!-- from App.Index() --&gt;
+{{template "header.html" .}}
+
+{{if .message}}
+  &lt;p&gt{{.message}}&lt;/p&gt &lt;!-- from App.Index() --&gt;
+{{else}}
+  &lt;p&gtDefault Message&lt;/p&gt
+{{end}}
+
+{{template "footer.html" .}}</code></pre>
+	</section>
+	<section>
+		<h2>Views (Cont...)</h2>
+		
+		<p class="left">Complex objects can also be passed into views.</p>
+		
+		<pre><code class="brush: html">{{set . "title" .pageObj.Title}}
+{{template "header.html" .}}
+
+&lt;ol&gt
+  &lt;!-- Item has properties "Link" and "Name" --&gt
+  {{range .pageObj.Items}}
+    &lt;li&gt&lt;a href="{{.Link}}">{{.Name}}&lt;/a&gt&lt;/li&gt &lt;!-- implicit "this" --&gt
+  {{end}}
+&lt;/ol&gt
+
+{{template "footer.html" .}}</code></pre>
+	</section>
+</section>
+<section>
+	<section>
+		<h1>Deploying to Heroku</h1>
+	</section>
+	<section>
+		<h2>Setting Up Git Repository</h2>
 	</section>
 </section>
 <section>
