@@ -1,0 +1,93 @@
+<section>
+	<h1>Deploying a Golang Website using Revel and Heroku</h1>
+</section>
+<section>
+	<section>
+		<h2>Why?</h2>
+		
+		<ul>
+			<li>Why use Heroku?</li>
+			<li>Why use Go?</li>
+			<li>Why use Revel</li>
+			<li>What are my alternatives?</li>
+		</ul>
+	</section>
+	<section>
+		<h3>Why Use Heroku?</h3>
+		
+		<ul>
+			<li>It is <en>FREE</em>.
+			<li>It is easy to manage.</li>
+			<li>There is no requirement that you use platform specific APIs (see Google Application Engine).</li>
+		</ul>
+	</section>
+	<section>
+		<h3>Some Caveats</h3>
+		
+		<ul>
+			<li>Heroku's database support is very limited, until you start paying a lot of money.</li>
+			<li>If your server isn't hit frequently, the server will spin down. (However Go's spinup times are sub 1 second).</li>
+		</ul>
+	</section>
+	<section>
+		<h3>Why Use Go?</h3>
+		
+		<ul>
+			<li>It compiles to native code, and is highly performant.</li>
+			<li>The compiler is screaming fast.</li>
+			<li>Frankly, it's just a fun, really easy to use language.</li>
+			<li><a href="/blog/golang-viable-project-dev">See my blog post on the issue for more info</a>.</li>
+		</ul>
+	</section>
+	<section>
+		<h3>Why Use Revel?</h3>
+		<ul>
+			<li>Golang rapid web development framework.</li>
+			<li>Very similar to <a href="http://rubyonrails.org" target="_blank">Rails</a> 
+			or <a href="https://grails.org" target="_blank">Grails</a>.</li>
+			<li>Allows for more complex routing than the standard http server for Go.</li>
+		</ul>
+	</section>
+	<section>
+		<h3>What Revel Doesn't Have</h3>
+		
+		<p style="text-align: left;">Revel does <em>not</em> have an ORM. While there are plenty of ORMs 
+		for Go that you could plugin, Heroku's database support is such
+		that it may make more sense to simply avoid using a database.</p>
+	</section>
+	<section>
+		<h3>What Are the Alternatives?</h3>
+		
+		<ul>
+			<li>You could pay to host your own server and use any technology you like.</li>
+			<li>You could deploy a website on <a href="http://wix.com" target="_blank">Wix.com</a>, but where's the fun in that.</li>
+			<li>You could use a Java host like <a href="http://cloudbees.com" target="_blank">Cloudbees</a>, but that also 
+			spins down your server, and Tomcat + JVM spinup times are much much longer.</li>
+			<li>You could use a WordPress host, but you have fewer options and less control.</li>
+		</ul>
+	</section>
+</section>
+<section>
+	<h1>What You Need</h1>
+
+	<ul>
+		<li>You will need to install <a href="http://golang.org" target="_blank">Go</a>.</li>
+		<li>You will need a <a href="http://heroku.com" target="_blank">Heroku</a> account, and have the Heroku command line utility.</li>
+		<li>You will also need the <a href="http://git-scm.com" target="_blank">Git</a> and 
+		<a href="http://mercurial.selenic.com" target="_blank">Mercurial</a> command-line utilities.</li>
+	</ul>
+</section>
+<section>
+	<section>
+		<h1>Installing Revel</h1>
+		
+		<p>
+			The Revel website on GitHub has an <a href="http://revel.github.io/tutorial/gettingstarted.html" target="_blank">excellent
+			tutorial</a> on how to install the Revel framework.
+		</p>
+	</section>
+</section>
+<section>
+	<h1>Contact Me</h1>
+	<p>Feel free to <a href="/contact">contact me</a> with any questions or comments.</p>
+</section>

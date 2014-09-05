@@ -106,5 +106,14 @@
 		"Active"   : true,
 		"Tags"     : "java, java 8, functional programming, lambda, lambdas, programming, software",
 		"File"     : "lambda-lambda-lambda-java-8-goes-functional.html"
+	},
+	{
+		"Name"     : "Deploying a Golang Website using Revel and Heroku",
+		"Date"     : "2014-09-04",
+		"Slug"     : "deploying-a-go-website-with-heroku-and-revel",
+		"Abstract" : "This is a slide show presentation explaining how to simply and easily deploy a website developed in Golang with the Revel framework onto the Heroku platform.",
+		"Active"   : true,
+		"Tags"     : "go, golang, heroku, revel, programming, software, web",
+		"File"     : "deploying-a-go-website-with-heroku-and-revel.html"
 	}
 ]
