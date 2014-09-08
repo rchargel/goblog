@@ -281,6 +281,16 @@ message
 
 {{template "footer.html" .}}</code></pre>
 	</section>
+	<section>
+		<h2>Public Directory</h2>
+		<p class="left">Static files get deployed to the <code>./public/</code> directory. 
+		In this directory there are three sub-directories:</p>
+		<ul>
+			<li>css</li>
+			<li>js</li>
+			<li>img</li>
+		</ul>
+	</section>
 </section>
 <section>
 	<section>
@@ -288,7 +298,50 @@ message
 	</section>
 	<section>
 		<h2>Setting Up Git Repository</h2>
+		<pre><code class="brush: bash">git init
+git add .
+git commit -m "First Commit - YAY!!"</code></pre>
 	</section>
+	<section>
+		<h2>Deploy to Heroku</h2>
+		<pre><code class="brush: bash">heroku login
+# enter your username/password
+heroku create -b https://github.com/revel/heroku-buildpack-go-revel.git
+# adds the "heroku" origin to your git repository
+# and sets up the Revel buildpack
+git push heroku master</code></pre>
+	</section>
+	<section>
+		<h2>Deploy to Heroku (Cont...)</h2>
+		<p class="left">You should see something like:</p>
+		<pre><code class="brush: bash">-----> Fetching custom git buildpack... done
+-----> Revel app detected
+-----> Installing Go 1.1... done
+       Installing Virtualenv... done
+       Installing Mercurial... done
+       Installing Bazaar... done
+-----> Running: go get -tags heroku ./...
+-----> Discovering process types
+       Procfile declares types -> (none)
+       Default types for Revel -> web
+
+-----> Compiled slug size: 33.3MB
+-----> Launching... done, v5
+       http://pure-sunrise-3607.herokuapp.com deployed to Heroku</code></pre>
+	</section>
+	<section>
+		<h2>Test Your Webapp</h2>
+		<p class="left">Just navigate to the URL provided by Heroku. In the example above, 
+		that would be <code>http://pure-sunrise-3607.herokuapp.com</code>.
+	</section>
+	<section>
+		<h2>Making Changes</h2>
+		<p class="left">Any time you push to the master branch on heroku, your
+		application will be automatically rebuilt, and redeployed.</p>
+	</section>
+</section>
+<section>
+	<h1>C'est Tout</h1>
 </section>
 <section>
 	<h1>Contact Me</h1>
