@@ -222,6 +222,17 @@ div.contact {
 	text-align: center;
 }
 .searchbox { width: 6em; }
+a.button {
+	background-color: #62cbe0;
+	color: #4d4d4d;
+	padding: 5px 12px;
+	margin: 0em;
+	line-height: 2.5em;
+	border-radius: 5px;
+}
+a.button:hover, a.button:active {
+	box-shadow: 2px 3px #2d2d2d;
+}
 @media only screen and (min-width: 400px) {
 	header.main figure { width: 70%; }
 	section { padding: 0 10px 6em 10px; }
