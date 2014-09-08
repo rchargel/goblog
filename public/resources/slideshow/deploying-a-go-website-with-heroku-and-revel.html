@@ -294,6 +294,134 @@ message
 </section>
 <section>
 	<section>
+		<h1>Contact Form</h1>
+		<p style="font-weight: bold">A Simple Example</p>
+	</section>
+	<section>
+		<h2>Creating a Controller</h2>
+		<ol>
+			<li>Create a <code>contact.go</code> file in the <code>app/controllers</code> directory.</li>
+			<li>Define <code>Contact</code> controller.
+			<pre><code class="brush: go">package controllers
+			
+import (
+	"fmt"
+	"github.com/revel/revel"
+	"os"
+)
+
+type Contact struct {
+	*revel.Controller
+}</code></pre>
+			</li>
+		</ol>
+	</section>
+	<section>
+		<ol start="3">
+			<li>Add method to return the index page for the <code>Contact</code> controller.
+			<pre><code class="brush: go">...
+func (c Contact) Index() revel.Result {
+	return c.Render()
+}</code></pre></li>
+		</ol>
+	</section>
+	<section>
+		<h2>Create Contact Form</h2>
+		<ol start="4">
+			<li>Create directory <code>Contact</code> in the <code>app/views</code> directory.</li>
+			<li>Add an <code>Index.html</code> file to this directory.
+			<pre><code class="brush: html">{{set . "title" "Contact Form"}}
+{{template "header.html" .}}
+&lt;form method="POST" autocomplete="off"&gt;
+  &lt;p&gt;
+    &lt;label for="name"&gt;Name:<&lt;/label&gt;&lt;br/&gt;
+    &lt;input type="text" id="name" name="name"/&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;label for="email"&gt;Email:<&lt;/label&gt;&lt;br/&gt;
+    &lt;input type="text" id="email" name="email"/&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;label for="message"&gt;Message:<&lt;/label&gt;&lt;br/&gt;
+    &lt;textarea id="message" name="message"&gt;&lt;/textarea&gt;
+  &lt;/p&gt;
+  &lt;input type="submit" value="Submit"/&gt;
+&lt;/form&gt;
+{{template "footer.html" .}}</code></pre></li>
+		</ol>
+	</section>
+	<section>
+		<h2>Add Post Action to Controller</h2>
+		<ol start="5">
+			<li>Add the <code>Send</code> method to the <code>contact.go</code> controller. &nbsp;&nbsp;
+			<pre><code class="brush: go">...
+// "name", "email", "message" are the names of the request params
+func (c Contact) Send(name, email, message string) revel.Result {
+	// validate form - "email not required"
+	c.Validation.Required(name).Message("Required field")
+	c.Validation.Required(message).Message("Required field")
+	if c.Validation.HasErrors() {
+		c.Validation.Keep()
+		c.FlashParams()
+		return c.Redirect(Contact.Index)
+	} else {
+		// run in background thread
+		go c.sendMail(name, email, message)
+		return c.Render()
+	}
+}</code></pre>
+		</ol>
+	</section>
+	<section>
+		<ol start="6">
+			<li>Create the <code>sendMail(...)</code> function as a private function. This will keep it from 
+			being invoked outside the scope of this controller.
+			<pre><code class="brush: go">...
+// lowercase name = private
+func (c Contact) sendMail(name, email, message string) error {
+	emailUsername := os.Getenv("EMAIL_USERNAME")
+	emailPassword := os.Getenv("EMAIL_PASSWORD")
+	emailTo := os.Getenv("EMAIL_DESTINATION")
+	emailServer, _ := revel.Config.String("email.server")
+	emailPort, _ := revel.Config.Int("email.port")
+	
+	// invoke later
+	fmt.Sprintf("Email Username: \t%s\n", emailUsername)
+	fmt.Sprintf("Email To: \t%s\n", emailTo)
+	fmt.Sprintf("Email Server: \t%s:%s\n", emailServer, emailPort)
+}</code></pre></li>
+		<ol>
+	</section>
+	<section>
+		<ol start="7">
+			<li>Create the <code>Send.html</code> page in the directory 
+			<code>app/views/Contact</code>, as a response page.
+			<pre><code class="brush: html">{{set . "title" "Contact Form"}}
+{{template "header.html" .}}
+
+&lt;p&gt;Your message has been sent.&lt;br/&gt;
+Thank you for your interest.&lt;/p&gt;
+
+{{template "footer.html" .}}</code></pre></li>
+		</ol>
+	</section>
+	<section>
+		<h2>Add Routes</h2>
+		<ol start="8">
+			<li>Add routes to your contact form and response page to the 
+			<code>conf/routes</code> file.
+			<pre><code class="brush: go">...
+GET     /contact                Contact.Index
+POST    /contact                Contact.Send
+...</code></pre></li>
+			<li>Navigate to <code>http://localhost:9000/contact</code> to test 
+			your contact page. If you are still running Revel in the default "Dev" 
+			mode, this will not require a restart.</code>
+		</ol>
+	</section>
+</section>
+<section>
+	<section>
 		<h1>Deploying to Heroku</h1>
 	</section>
 	<section>
