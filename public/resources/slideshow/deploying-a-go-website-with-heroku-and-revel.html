@@ -386,14 +386,24 @@ func (c Contact) sendMail(name, email, message string) error {
 	emailPort, _ := revel.Config.Int("email.port")
 	
 	// invoke later
-	fmt.Sprintf("Email Username: \t%s\n", emailUsername)
-	fmt.Sprintf("Email To: \t%s\n", emailTo)
-	fmt.Sprintf("Email Server: \t%s:%s\n", emailServer, emailPort)
+	fmt.Sprintf("Email Username: \t%v\n", emailUsername)
+	fmt.Sprintf("Email To: \t%v\n", emailTo)
+	fmt.Sprintf("Email Server: \t%v:%v\n", emailServer, emailPort)
 }</code></pre></li>
 		<ol>
 	</section>
 	<section>
 		<ol start="7">
+			<li>Add server and port for email server to the <code>conf/app.conf</code>
+			file.
+			<pre><code class="brush: bash">...
+email.server=smtp.gmail.com
+email.port=587</code></pre>
+			The environment variables will be discussed later.</li>
+		</ol>
+	</section>
+	<section>
+		<ol start="8">
 			<li>Create the <code>Send.html</code> page in the directory 
 			<code>app/views/Contact</code>, as a response page.
 			<pre><code class="brush: html">{{set . "title" "Contact Form"}}
@@ -407,7 +417,7 @@ Thank you for your interest.&lt;/p&gt;
 	</section>
 	<section>
 		<h2>Add Routes</h2>
-		<ol start="8">
+		<ol start="9">
 			<li>Add routes to your contact form and response page to the 
 			<code>conf/routes</code> file.
 			<pre><code class="brush: go">...
@@ -418,6 +428,108 @@ POST    /contact                Contact.Send
 			your contact page. If you are still running Revel in the default "Dev" 
 			mode, this will not require a restart.</code>
 		</ol>
+	</section>
+	<section>
+		<h3>The Complete Controller</h3>
+		
+		<pre><code class="brush: go">package controllers
+
+import (
+	"bytes"
+	"fmt"
+	"github.com/revel/revel"
+	"net/smtp"
+	"os"
+	"text/template"
+)
+
+const emailTemplate = `From: {{.From}}
+To: {{.To}}
+Subject: You got an email from your website
+
+Somebody named {{.Name}} at {{.Email}} sent you a 
+message through the contact form at your website:
+
+{{.Body}}
+`
+
+type EmailUser struct {
+	Username    string
+	Password    string
+	EmailServer string
+	Port        int
+}
+
+type SmtpTemplateData {
+	From  string
+	To    string
+	Name  string
+	Email string
+	Body  string
+}
+
+type Contact struct {
+	*revel.Controller
+}
+
+func (c Contact) Index() revel.Result {
+	return c.Render()
+}
+
+// "name", "email", "message" are the names of the request params
+func (c Contact) Send(name, email, message string) revel.Result {
+	// validate form - "email not required"
+	c.Validation.Required(name).Message("Required field")
+	c.Validation.Required(message).Message("Required field")
+	if c.Validation.HasErrors() {
+		c.Validation.Keep()
+		c.FlashParams()
+		return c.Redirect(Contact.Index)
+	} else {
+		// run in background thread
+		go c.sendMail(name, email, message)
+		return c.Render()
+	}
+}
+
+func (c Contact) sendMail(name, email, message string) error {
+	emailUsername := os.Getenv("EMAIL_USERNAME")
+	emailPassword := os.Getenv("EMAIL_PASSWORD")
+	emailTo := os.Getenv("EMAIL_DESTINATION")
+	emailServer, _ := revel.Config.String("email.server")
+	emailPort, _ := revel.Config.Int("email.port")
+
+	emailUser := &EmailUser{emailUsername, 
+		emailPassword, emailServer, emailPort}
+	auth := smtp.PlainAuth("", emailUser.Username, 
+		emailUser.Password, emailUser.EmailServer)
+
+	context := &SmtpTemplateData{emailUser.Username, 
+		emailTo, name, email, message}
+	t := template.New("emailTemplate")
+	t, err := t.Parse(emailTemplate)
+	if err != nil {
+		return err
+	}
+
+	var doc bytes.Buffer
+	err = t.Execute(&doc, context)
+	if err != nil {
+		return err
+	}
+
+	err = smtp.SendMail(fmt.Sprintf("%v:%v", 
+		emailUser.EmailServer, emailUser.Port),
+		auth,
+		emailUser.Username,
+		[]string{emailTo},
+		doc.Bytes())
+
+	if err != nil {
+		return err
+	}
+	return nil
+}</code></pre>
 	</section>
 </section>
 <section>
@@ -436,11 +548,18 @@ git commit -m "First Commit - YAY!!"</code></pre>
 # enter your username/password
 heroku create -b https://github.com/revel/heroku-buildpack-go-revel.git
 # adds the "heroku" origin to your git repository
-# and sets up the Revel buildpack
-git push heroku master</code></pre>
+# and sets up the Revel buildpack</code></pre>
 	</section>
 	<section>
 		<h2>Deploy to Heroku (Cont...)</h2>
+		<p class="left">Add required environment variables.</p>
+		<pre><code class="brush: bash">heroku config:set EMAIL_USERNAME=<em>your_username</em>
+heroku config:set EMAIL_PASSWORD=<em>your_password</em>
+heroku config:set EMAIL_DESTINATION=<em>your_email_addr</em></code></pre>
+	</section>
+	<section>
+		<h2>Deploy to Heroku (Cont...)</h2>
+		<pre><code class="brush: bash">git push heroku master</code></pre>
 		<p class="left">You should see something like:</p>
 		<pre><code class="brush: bash">-----> Fetching custom git buildpack... done
 -----> Revel app detected
@@ -469,9 +588,6 @@ git push heroku master</code></pre>
 	</section>
 </section>
 <section>
-	<h1>C'est Tout</h1>
-</section>
-<section>
-	<h1>Contact Me</h1>
+	<h1>The End</h1>
 	<p>Feel free to <a href="/contact">contact me</a> with any questions or comments.</p>
 </section>
