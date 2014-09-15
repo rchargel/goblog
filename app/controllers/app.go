@@ -36,6 +36,12 @@ func (c App) Robots() revel.Result {
 	return Robot("/")
 }
 
+func (c App) Game() revel.Result {
+	tab := "index"
+	moreScripts := []string{"js/phaser.min.js"}
+	return c.Render(tab, moreScripts)
+}
+
 func (c App) Bookmarks() revel.Result {
 	links := make([]Bookmark, 0, 10)
 	file, err := os.Open("./public/resources/bookmarks.json")
