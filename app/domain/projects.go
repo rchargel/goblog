@@ -16,13 +16,14 @@ type ProjectList struct {
 }
 
 type ProjectItem struct {
-	Name     string
-	Slug     string
-	Abstract string
-	File     string
-	Tags     string
-	Active   bool
-	Index    map[string]int
+	Name        string
+	Slug        string
+	Abstract    string
+	File        string
+	Tags        string
+	Active      bool
+	MoreScripts []string
+	Index       map[string]int
 }
 
 type ProjectItemByName []ProjectItem

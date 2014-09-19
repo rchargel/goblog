@@ -27,7 +27,14 @@ func (c Projects) Show() revel.Result {
 		content := project.GetContent()
 		meta_description := project.Abstract
 		meta_keywords := project.Tags
-		return c.Render(tab, project, content, meta_description, meta_keywords)
+		var moreScripts []string
+		if len(project.MoreScripts) != 0 {
+			moreScripts = make([]string, len(project.MoreScripts))
+			for i, script := range project.MoreScripts {
+				moreScripts[i] = "js/" + script
+			}
+		}
+		return c.Render(tab, project, content, meta_description, meta_keywords, moreScripts)
 	} else {
 		return c.NotFound("Could not find page " + c.Action)
 	}

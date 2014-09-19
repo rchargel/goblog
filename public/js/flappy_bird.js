@@ -25,13 +25,15 @@ var mainState = {
 			slow: 12
 		};
 		this.speed = 250;
+		this.birdVelocity = 300;
+		this.gravity = 1000;
 		this.yScale = 20;
 		this.yPositions = (game.world.height - 70) / this.yScale;
 		game.stage.backgroundColor = '#146d2c';
-		game.load.image('jungle', '/public/img/game/background.png');
-		game.load.spritesheet('fruit', '/public/img/game/fruit.png', 50, 50, 3);
-		game.load.spritesheet('macaw', '/public/img/game/macaws.png', 135, 100, 8);
-		game.load.spritesheet('vines', '/public/img/game/vine.png', 50, 487, 4);
+		game.load.image('jungle', '/public/img/flappy_bird/background.png');
+		game.load.spritesheet('fruit', '/public/img/flappy_bird/fruit.png', 50, 50, 3);
+		game.load.spritesheet('macaw', '/public/img/flappy_bird/macaws.png', 135, 100, 8);
+		game.load.spritesheet('vines', '/public/img/flappy_bird/vine.png', 50, 487, 4);
 	},
 	
 	create: function() {
@@ -77,7 +79,7 @@ var mainState = {
 		
 		// setup physics
 		game.physics.arcade.enable(this.bird);
-    	this.bird.body.gravity.y = 800;
+    	this.bird.body.gravity.y = this.gravity;
 		this.bird.body.collideWorldBounds = true;
 		this.bird.body.offset.y = 47;
 		this.bird.body.offset.x = 63;
@@ -90,8 +92,8 @@ var mainState = {
 	update: function() {
 		this.jungle.tilePosition.x -= (this.speed / 100);
 		if (this.mouseDown) {
-			this.bird.body.velocity.y = -300;
-		}
+			this.bird.body.velocity.y = -this.birdVelocity;
+		} 
 		game.physics.arcade.overlap(this.bird, this.vines, this.restartGame, null, this);
 		game.physics.arcade.overlap(this.bird, this.fruit, this.incrementScore, null, this);
 	},
