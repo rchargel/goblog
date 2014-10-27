@@ -1,0 +1,49 @@
+{
+	"ImportPath": "github.com/rchargel/goblog",
+	"GoVersion": "go1.2.1",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "code.google.com/p/go.net/websocket",
+			"Comment": "null-116",
+			"Rev": "89dbba2db2d45f337bb06f974ec45d3c426a5072"
+		},
+		{
+			"ImportPath": "code.google.com/p/gofpdf",
+			"Comment": "null-66",
+			"Rev": "44d28eed7408d5091b511267f9905af7864c95df"
+		},
+		{
+			"ImportPath": "github.com/agtorre/gocolorize",
+			"Rev": "97891670cf81d96a0b1d2d433a556da7727c8849"
+		},
+		{
+			"ImportPath": "github.com/howeyc/fsnotify",
+			"Rev": "441bbc86b167f3c1f4786afae9931403b99fdacf"
+		},
+		{
+			"ImportPath": "github.com/revel/revel",
+			"Comment": "v0.10.0",
+			"Rev": "d021d0c3787ae6e81c713ce041b1b93075b04aa7"
+		},
+		{
+			"ImportPath": "github.com/robfig/config",
+			"Rev": "09efbd4617d1beb41b72f6668403b1e383b6a4cf"
+		},
+		{
+			"ImportPath": "github.com/robfig/pathtree",
+			"Rev": "41257a1839e945fce74afd070e02bab2ea2c776a"
+		},
+		{
+			"ImportPath": "github.com/robfig/revel",
+			"Comment": "v0.9-6-ge8aac16",
+			"Rev": "e8aac16df9e93b17d309595b4ff57405dc567fdf"
+		},
+		{
+			"ImportPath": "github.com/streadway/simpleuuid",
+			"Rev": "6617b501e485b77e61b98cd533aefff9e258b5a7"
+		}
+	]
+}
