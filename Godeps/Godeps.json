@@ -1,0 +1,36 @@
+{
+	"ImportPath": "github.com/rchargel/goblog/app/domain",
+	"GoVersion": "go1.2.1",
+	"Deps": [
+		{
+			"ImportPath": "code.google.com/p/go.net/websocket",
+			"Comment": "null-116",
+			"Rev": "89dbba2db2d45f337bb06f974ec45d3c426a5072"
+		},
+		{
+			"ImportPath": "github.com/agtorre/gocolorize",
+			"Rev": "97891670cf81d96a0b1d2d433a556da7727c8849"
+		},
+		{
+			"ImportPath": "github.com/howeyc/fsnotify",
+			"Rev": "441bbc86b167f3c1f4786afae9931403b99fdacf"
+		},
+		{
+			"ImportPath": "github.com/nfnt/resize",
+			"Rev": "8aee0d995b6511c4b52187d9b5b7f4da05bbae0b"
+		},
+		{
+			"ImportPath": "github.com/revel/revel",
+			"Comment": "v0.10.0",
+			"Rev": "d021d0c3787ae6e81c713ce041b1b93075b04aa7"
+		},
+		{
+			"ImportPath": "github.com/robfig/config",
+			"Rev": "09efbd4617d1beb41b72f6668403b1e383b6a4cf"
+		},
+		{
+			"ImportPath": "github.com/robfig/pathtree",
+			"Rev": "41257a1839e945fce74afd070e02bab2ea2c776a"
+		}
+	]
+}
