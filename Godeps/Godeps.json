@@ -24,6 +24,10 @@
 			"Rev": "441bbc86b167f3c1f4786afae9931403b99fdacf"
 		},
 		{
+			"ImportPath": "github.com/nfnt/resize",
+			"Rev": "8aee0d995b6511c4b52187d9b5b7f4da05bbae0b"
+		},
+		{
 			"ImportPath": "github.com/revel/revel",
 			"Comment": "v0.10.0",
 			"Rev": "d021d0c3787ae6e81c713ce041b1b93075b04aa7"
