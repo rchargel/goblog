@@ -3,7 +3,6 @@ package domain
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/nfnt/resize"
 	"github.com/revel/revel"
 	"image"
 	"image/draw"
@@ -18,7 +17,7 @@ import (
 const CAPTCHA_COLS = 5
 const CAPTCHA_ROWS = 2
 const CAPTCHA_IMAGES = CAPTCHA_COLS * CAPTCHA_ROWS
-const CAPTCHA_IMG_SIZE = 80
+const CAPTCHA_IMG_SIZE = 100
 const CAPTCHA_WIDTH = CAPTCHA_COLS * CAPTCHA_IMG_SIZE
 const CAPTCHA_HEIGHT = CAPTCHA_ROWS * CAPTCHA_IMG_SIZE
 
@@ -68,8 +67,7 @@ func readImages(images []ImageItem, ch chan TitledImage) {
 		defer file.Close()
 
 		image, _ := jpeg.Decode(file)
-		m := resize.Resize(CAPTCHA_IMG_SIZE, CAPTCHA_IMG_SIZE, image, resize.Bilinear)
-		ch <- TitledImage{Image: m, Title: img.Title}
+		ch <- TitledImage{Image: image, Title: img.Title}
 	}
 	close(ch)
 }
