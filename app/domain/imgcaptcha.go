@@ -3,6 +3,7 @@ package domain
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/nfnt/resize"
 	"github.com/revel/revel"
 	"image"
 	"image/draw"
@@ -13,6 +14,13 @@ import (
 	"strings"
 	"time"
 )
+
+const CAPTCHA_COLS = 5
+const CAPTCHA_ROWS = 2
+const CAPTCHA_IMAGES = CAPTCHA_COLS * CAPTCHA_ROWS
+const CAPTCHA_IMG_SIZE = 80
+const CAPTCHA_WIDTH = CAPTCHA_COLS * CAPTCHA_IMG_SIZE
+const CAPTCHA_HEIGHT = CAPTCHA_ROWS * CAPTCHA_IMG_SIZE
 
 type ImageItem struct {
 	Title string
@@ -60,7 +68,8 @@ func readImages(images []ImageItem, ch chan TitledImage) {
 		defer file.Close()
 
 		image, _ := jpeg.Decode(file)
-		ch <- TitledImage{Image: image, Title: img.Title}
+		m := resize.Resize(CAPTCHA_IMG_SIZE, CAPTCHA_IMG_SIZE, image, resize.Bilinear)
+		ch <- TitledImage{Image: m, Title: img.Title}
 	}
 	close(ch)
 }
@@ -84,7 +93,7 @@ func newImageCaptcha() map[string]image.Image {
 
 	decoder := json.NewDecoder(file)
 
-	images := make([]ImageItem, 0, 12)
+	images := make([]ImageItem, 0, 18)
 	for {
 		if err := decoder.Decode(&images); err == nil {
 			// resume will get set
@@ -103,14 +112,14 @@ func newImageCaptcha() map[string]image.Image {
 func NewCaptcha() ImageCaptcha {
 	rand.Seed(time.Now().Unix())
 	keys := keys()
-	start := random(0, len(keys)-6)
+	start := random(0, len(keys)-CAPTCHA_IMAGES)
 
-	keys = keys[start : start+6]
+	keys = keys[start : start+CAPTCHA_IMAGES]
 
 	var title string
 	var index int
 	images := ""
-	index = random(0, 6)
+	index = random(0, CAPTCHA_IMAGES)
 	for i, key := range keys {
 		if i == index {
 			title = key
@@ -126,16 +135,16 @@ func NewCaptcha() ImageCaptcha {
 }
 
 func (c ImageCaptcha) Output(w io.Writer) {
-	img := image.NewRGBA(image.Rect(0, 0, 300, 200))
+	img := image.NewRGBA(image.Rect(0, 0, CAPTCHA_WIDTH, CAPTCHA_HEIGHT))
 	for i, key := range strings.Split(c.Images, ",") {
 		pos := i
 		py := 0
-		if pos >= 3 {
-			py = 100
-			pos -= 3
+		if pos >= CAPTCHA_COLS {
+			py += CAPTCHA_IMG_SIZE
+			pos -= CAPTCHA_COLS
 		}
-		px := pos * 100
-		rec := image.Rect(px, py, px+100, py+100)
+		px := pos * CAPTCHA_IMG_SIZE
+		rec := image.Rect(px, py, px+CAPTCHA_IMG_SIZE, py+CAPTCHA_IMG_SIZE)
 		draw.Draw(img, rec, imageMap[key], image.ZP, draw.Src)
 	}
 	jpeg.Encode(w, img, &jpeg.Options{85})
@@ -149,16 +158,16 @@ func (c ImageCaptcha) Apply(req *revel.Request, resp *revel.Response) {
 func (c ImageCaptcha) IsCorrect(x, y int) bool {
 	pos := c.Index
 	py := 0
-	if pos >= 3 {
-		py = 100
-		pos -= 3
+	if pos >= CAPTCHA_COLS {
+		py += CAPTCHA_IMG_SIZE
+		pos -= CAPTCHA_COLS
 	}
-	px := pos * 100
+	px := pos * CAPTCHA_IMG_SIZE
 
-	if x < px || x > (px+100) {
+	if x < px || x > (px+CAPTCHA_IMG_SIZE) {
 		return false
 	}
-	if y < py || y > (py+100) {
+	if y < py || y > (py+CAPTCHA_IMG_SIZE) {
 		return false
 	}
 	return true
