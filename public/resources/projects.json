@@ -55,5 +55,14 @@
 		"Tags"        : "game, javascript, fun, flappy bird",
 		"File"        : "flappy-bird.html",
 		"MoreScripts" : ["phaser.min.js"]
+	},
+	{
+		"Name"        : "Space Shooter",
+		"Slug"        : "space-shooter",
+		"Abstract"    : "A basic space shooter game. Move with the arrow keys and shoot with the spacebar.",
+		"Active"      : false,
+		"Tags"        : "game, javascript, fun, space, shooter",
+		"File"        : "space-shooter.html",
+		"MoreScripts" : ["phaser.min.js"]
 	}
 ]

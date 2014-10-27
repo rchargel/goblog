@@ -90,31 +90,29 @@ var mainState = {
 	},
 	
 	update: function() {
-		this.jungle.tilePosition.x -= (this.speed / 100);
 		if (this.mouseDown) {
 			this.bird.body.velocity.y = -this.birdVelocity;
 		} 
+		this.jungle.tilePosition.x -= (this.speed / 100);
 		game.physics.arcade.overlap(this.bird, this.vines, this.restartGame, null, this);
 		game.physics.arcade.overlap(this.bird, this.fruit, this.incrementScore, null, this);
 	},
 	
 	restartGame: function() {
-		game.state.start('main');
 		game.paused = true;
+		game.state.start('main');
 	},
 	
 	flyUp: function() {
 		if (this.game.paused) {
 			this.game.paused = false;
+		} else {
+			this.bird.animations._anims['fly'].speed = this.flappingSpeed.fast;
+			this.mouseDown = true;
 		}
-		this.bird.animations._anims['fly'].speed = this.flappingSpeed.fast;
-		this.mouseDown = true;
 	},
 	
 	flyDown: function() {
-		if (this.game.paused) {
-			this.game.paused = false;
-		}
 		this.bird.animations._anims['fly'].speed = this.flappingSpeed.slow;
 		this.mouseDown = false;
 	},

@@ -27,8 +27,8 @@
 		<div id="captcha_widget">
 			Click the image '<span class="captcha_title">{{.captcha_title}}</span>' to submit.<br />
 			<img id="captcha" class="captcha" src="/captcha.jpg"/>
-			<input type="hidden" name="x"/>
-			<input type="hidden" name="y"/>
+			<input type="hidden" name="x" value="-1"/>
+			<input type="hidden" name="y" value="-1"/>
 			{{if .flash.captcha_error}}<span class="error">{{.flash.captcha_error}}</span>{{end}}
 		</div>
 	</form>
