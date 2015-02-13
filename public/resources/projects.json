@@ -64,5 +64,13 @@
 		"Tags"        : "game, javascript, fun, space, shooter",
 		"File"        : "space-shooter.html",
 		"MoreScripts" : ["phaser.min.js"]
+	},
+	{
+		"Name"        : "GOAuth",
+		"Slug"        : "goauth",
+		"Abstract"    : "An OAuth 1.0 and OAuth 2.0 implementation in GO.",
+		"Active"      : true,
+		"Tags"        : "go, golang, oauth, authentication",
+		"File"        : "goauth.html"
 	}
 ]

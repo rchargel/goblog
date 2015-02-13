@@ -1,0 +1,109 @@
+<img src="https://travis-ci.org/rchargel/goauth.svg?branch=master"/>
+<p>The goauth package contains a simplified implementation of OAuth 1.0 and
+OAuth 2.0 spec for the Go programming language.</p>
+
+<h3>Installation</h3>
+
+<p><strong>Download</strong></p>
+
+<pre><code class="bash">go get "github.com/rchargel/goauth"</code></pre>
+
+<p><strong>Import</strong></p>
+
+<pre><code class="go">import "github.com/rchargel/goauth"</code></pre>
+
+<h3>Documentation</h3>
+
+<p>The package documentation can be found at
+<a href="http://godoc.org/github.com/rchargel/goauth">http://godoc.org/github.com/rchargel/goauth</a>.</p>
+
+<p>The github package can be found at:
+<a href="http://github.com/rchargel/goauth">http://github.com/rchargel/goauth</a>.</p>
+
+<h3>Dependencies</h3>
+
+<p><code>golang.org/x/oauth2</code> - the OAuth 2.0 service provider wraps this API.
+
+<h3>Implementation Description</h3>
+
+<p>Package goauth is a simple to use and implement tool to configure OAuth
+authentication for your application or service. It relies on some of the
+OAuth tools already available for Go, but adds in some structure to reduce
+the complexity of your implementation. The intent is to make authentication
+easy by reducing the pain points to just a couple of configuration parameters.</p>
+
+<p>This package provides two OAuth implementations, Version 1.0 and Version 2.0.
+For version 2.0 implementations the sequence of events is fairly straightforward.</p>
+
+<pre>Browser                    Server                   Provider
+   |                          |                          |
+   # GET: /oauth/provider     |                          |
+   #==>==>==>==>==>==>==>==>=>#                          |
+   |            Send Redirect #                          |
+   #<=<==<==<==<==<==<==<==<==#                          |
+   # Redirect to provider login                          |
+   #==>==>==>==>==>==>==>==>==|==>==>==>==>==>==>==>==>=>#
+   |                          |                          # User logs in
+   |                          | Redirect to callback URL #
+   #<=<==<==<==<==<==<==<==<==|==<==<==<==<==<==<==<==<==#
+   # GET: Callback URL        |                          |
+   #==>==>==>==>==>==>==>==>=>#                          |
+   |                          # GET: User Info           |
+   |                          #==>==>==>==>==>==>==>==>=>#
+   |                          #<=<==<==<==<==<==<==<==<==#
+   |                          # Process User             |
+   |                          # Create Session           |
+   |          Respond To User #                          |
+   #<=<==<==<==<==<==<==<==<==#                          |
+   #                          |                          |</pre>
+
+<p>For version 1.0 implementations the sequence of events is slightly more
+complex, however most of that complexity is hidden from you by the API.</p>
+
+<pre>Browser                    Server                    Provider
+   |                          |                          |
+   # GET: /oauth/provider     |                          |
+   #==>==>==>==>==>==>==>==>=>#                          |
+   |                          # Fetch OAuth Token        |
+   |                          #==>==>==>==>==>==>==>==>=>#
+   |                          #                          # Auth Request
+   |                          #  Return Token and Secret #
+   |                          #<=<==<==<==<==<==<==<==<==#
+   |            Send Redirect #                          |
+   #<=<==<==<==<==<==<==<==<==#                          |
+   # Redirect to provider login                          |
+   #==>==>==>==>==>==>==>==>==|==>==>==>==>==>==>==>==>=>#
+   |                          |                          # User logs in
+   |                          | Redirect to callback URL #
+   #<=<==<==<==<==<==<==<==<==|==<==<==<==<==<==<==<==<==#
+   # GET: Callback URL        |                          |
+   #==>==>==>==>==>==>==>==>=>#                          |
+   |                          # Fetch Access Token       |
+   |                          #==>==>==>==>==>==>==>==>=>#
+   |                          #                          # Auth Request
+   |                          #      Return Access Token #
+   |                          #<=<==<==<==<==<==<==<==<==#
+   |                          # GET: User Info           |
+   |                          #==>==>==>==>==>==>==>==>=>#
+   |                          #<=<==<==<==<==<==<==<==<==#
+   |                          # Process User             |
+   |                          # Create Session           |
+   |          Respond To User #                          |
+   #<=<==<==<==<==<==<==<==<==#                          |
+   #                          |                          |</pre>
+
+<h3>Testing</h3>
+
+<p>So far, I have only tested this API with the following OAuth Providers:</p>
+
+<ul>
+  <li><strong>OAuth 2.0</strong></li>
+    <ul>
+      <li>Google</li>
+      <li>Facebook</li>
+    </ul>
+  <li><strong>OAuth 1.0</strong></li>
+    <ul>
+      <li>Twitter</li>
+    </ul>
+</ul>
