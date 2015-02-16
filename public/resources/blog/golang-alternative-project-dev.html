@@ -1,5 +1,5 @@
 <p>I'll admit it. I just might be a Gopher (fan of Go). But is Go really ready for prime-time
-development? Instead of simply answering yes or no (which is an impossible task anyhow), I 
+development? Instead of simply answering yes or no (which is an impossible task anyhow), I
 am creating a list of things I see as the positives and negatives. You are all adults
 and can certainly make up your own minds as to the viability of the language for your
 own projects.
@@ -11,7 +11,7 @@ own projects.
 
 <p>Go is an open source programming language developed at Google by programming legends
 Ken Thompson, Rob Pike, and Robert Griesemer. It seems to be derived from C, but with
-the addition of some support for dynamic-typing, and automatic memory management. The 
+the addition of some support for dynamic-typing, and automatic memory management. The
 language library is small, but provides most of the functionality required for everyday
 development tasks. Below is a simple go application.
 </p>
@@ -29,10 +29,10 @@ func main() {
 
     fmt.Println(message1)
     fmt.Println(message2)
-	
+
     // this won't compile: (mismatched types string and int)
     fmt.Println(message1 + 5)
-	
+
     // this will work, but the output will be rubbish
     fmt.Println([]byte(message1)) // casting string to byte array.
 }</code></pre>
@@ -40,22 +40,22 @@ func main() {
 <h3 id="what-i-like">2 What I Like</h3>
 
 <p>Like I said, I very well might be a Gopher. I enjoy coding in this language. It reminds
-me of those first days playing with Python. Learning a new programming language fun, not unlike
+me of those first days playing with Python. Learning a new programming language is fun, not unlike
 learning to speak a human language. With each new language you start with syntax, then move on
 to grammar, and finally you learn how to <em>think</em> in that language. I might even venture
-to say that learning a new language is like falling in love. So how much of my gushing that is
-to ensue due to mere fatuation, and how much is from an honest admiration. I'd like to think 
-that I am an objective reporter. Also, for all the good things that I have to say about Go,
-there are plenty of negatives.</p>
+to say that learning a new language is like falling in love. So, how much of the gushing that
+you are about to read is due to mere fatuation, and how much is from an honest admiration? While it
+is true that I am smitten with this language, I'd like to think that I am an objective reporter,
+and for all the good things that I have to say about Go, I have included plenty of negatives.</p>
 
 <h4 id="compiler">2.1 Go Compiler</h4>
 
 <p>The Go compiler is fast. Really really fast. If it takes a whole second to compile your
-app, there's probably something really wrong with your code. This allows the team at Google
-to do some really cool things. One of those things is the <a href="http://play.golang.org">Go 
+app, there's probably something really wrong with your code. This high compilation speed allows
+the team at Google to do some really cool things, like the <a href="http://play.golang.org">Go
 Playground</a>. This is a site that allows you to write test code into a textarea, hit the "Run"
-button and the web app sends your code to their server. The server compiles your code, runs it, 
-and returns the output back to you. This happens very fast; the code above compiled and ran, and 
+button and the web app sends your code to their server. The server compiles your code, runs it,
+and returns the output back to you. This happens very fast; the code above compiled and ran, and
 the full round-trip to and from the server took 108 milliseconds.
 </p>
 
@@ -63,16 +63,16 @@ the full round-trip to and from the server took 108 milliseconds.
 
 <p>Like C or C++, Go compiles to native code. There is no VM required, which is good and bad.
 Unlike C/C++, Go hides most of the nitty-gritty kernel level code from you. This includes
-scheduling tasks for multi-threaded code (more on this later) that was a nightmare to write 
-in the former languages. I'm not going to claim that Go is the mythical "write once run 
+scheduling tasks for multi-threaded code (more on this later) which was a nightmare to write
+in the former languages. I'm not going to claim that Go is the mythical "write once run
 anywhere" language, but it's pretty good. Unfortunately, this also means that you have to
-compile binaries for every architecure. Here's an <a href="https://coderwall.com/p/pnfwxg">article</a> 
+compile binaries for every architecure. Here's an <a href="https://coderwall.com/p/pnfwxg">article</a>
 on how to cross-compile for other architectures. I have not tried this yet, so I can't speak
-for this article.</p>
+for its accuracy or ease.</p>
 
-<p>So is Go as fast as C?. Well... no. Like Java, Go runs a garbage collector. If you're 
-generating a lot of object over really short periods, the garbage collector
-may slow things down. Here is a <a href="http://benchmarksgame.alioth.debian.org/u32/compare.php?lang=go">side 
+<p>So is Go as fast as C?. Well... no. Like Java, Go runs a garbage collector. If you're
+generating a lot of objects over really short periods, the garbage collector
+may slow things down. Here is a <a href="http://benchmarksgame.alioth.debian.org/u32/compare.php?lang=go">side
 by side benchmark comparison of Go vs C on a single core x86 running Ubuntu</a>.</p>
 
 <p>Okay, so how does it compare with Java? Well, the same site does provide a
@@ -80,25 +80,25 @@ by side benchmark comparison of Go vs C on a single core x86 running Ubuntu</a>.
 between Go and Java performance</a>, and it appears that Go outperforms Java on some tasks, while the JVM
 still beats Go soundly at others. But these tests really don't account for anything practical. Here's a better
 question. How long does it take to start up a Java application container, like JBOSS, and initialize a Spring web
-application? So here's a real-world example. I originally developed this website in Grails (which is essentially a 
+application? I originally developed this website in Grails (which is essentially a
 Spring web application), and deployed it to Heroku. It took an average of 1 minute to spin up the container.
-I have since migrated the site to Go, and the average spin up time is less than 1 second (neither of these times
+I have since migrated the site to Go, and the average spin up time is less than half a second (neither of these times
 include the time to spin up the host).</p>
 
 <p>There are still things you can do in Java and C that you just don't have access to in Go. There are tricks
 and gems hidden away in the JVM that allow you to do some really crazy performance tuning of your applications,
 but most developers will never use these. Go provides a simple language to build applications
-that perform well, without a having to understand the core components of the JVM.</p>
+that perform well, without a having to understand the core components and "unsafe" packages of the JVM.</p>
 
 <h4 id="channels">2.3 Go Channels</h4>
 
-<p>A channel in Go is essentially an in-memory blocking queue. These exist in Java (and other languages). That's 
-not really new or special. But Go's channels are just so easy to use. I went to a conference last year where a 
-presenter said that Go was a language built to solve concurrency problems. I'm not really convinced that's true, 
-as Go routines are not inherently thread-safe, but channels make it really easy to "share memory by communicating." 
+<p>A channel in Go is essentially an in-memory blocking queue. These exist in Java (and other languages). That's
+not really new or special. But Go's channels are just so easy to use. I went to a conference last year where a
+presenter said that Go was a language built to solve concurrency problems. I'm not really convinced that's true,
+as Go routines are not inherently thread-safe, but channels make it really easy to "share memory by communicating."
 </p>
 
-<p>Here is a simple example.  When the <code>printWordMap</code> function is allowed to run as part of the main thread. it will 
+<p>Here is a simple example.  When the <code>printWordMap</code> function is allowed to run as part of the main thread. it will
 print the output of the generated word map. However, if you make that function also run in a go routine, the main method
 will print an empty (or partially empty map) and exit the application. Closing the channel at the end of the <code>reaWords</code>
 function, does not actually change resource allocations. It is only used to inform any reading threads that they should not expect
@@ -136,60 +136,60 @@ func readWords(channel chan string) {
     reader := strings.NewReader(contents)
     bufferedReader := bufio.NewReader(reader)
     for {
-        line, _, err := bufferedReader.ReadLine(); 
+        line, _, err := bufferedReader.ReadLine();
         if err == io.EOF {
             break;
         }
         for _, word := range strings.Fields(string(line)) {
             channel &lt;- strings.ToLower(word)
         }
-    } 
+    }
     close(channel)
 }</code></pre>
 
-<p>Very simple multi-threading with cross-thread communication. Not a lot of boiler plate code. 
+<p>Very simple multi-threading with cross-thread communication. Not a lot of boiler plate code.
 Here is a <a href="http://play.golang.org/p/Cm6paIAcY_">link to this app in the Go Playground</a>.</p>
 
 <h3 id="what-needs-work">3 What Needs Work</h3>
 
-<p>There's plenty more that can be said for all of the great features of Go, but others have written plenty on that subject.  
-Now let's talk a little about some of the problems I have run found. What should make you think twice about
-using this language for your own applications.</p>
+<p>There's plenty more that can be said for all of the great features of Go, but others have written plenty on that subject.
+Now let's talk a little about some of the problems I have found. What should make you think twice about
+using this language for your own enterprise development.</p>
 
 <h4 id="embedded-resources">3.1 Embedding Resources</h4>
 
-<p>Okay, this first problem is more of an annoyance than a real problem, as there are plenty of 
+<p>Okay, this first problem is more of an annoyance than a real problem, as there are plenty of
 work-arounds.  In Java, if you want to embed a properties file or any other configuration
-file this isn't a problem. It gets packaged into the jar, and can be read out of the 
+file this isn't a problem. It gets packaged into the jar, and can be read out of the
 classpath.</p>
 
-<p>This is not really possible with Go. The binaries cannot contain resource files. There is a 
-package called <a href="https://github.com/jteeuwen/go-bindata">go-bindata</a> which can compile 
+<p>This is not really possible with Go. The binaries cannot contain resource files. There is a
+package called <a href="https://github.com/jteeuwen/go-bindata">go-bindata</a> which can compile
 resources as binary data, but it actually just converts the data into a byte array and packages
-that array as a code.  The worst part is, the resource data must be completely loaded into memory
-before the your code can run. This means that if the data is large enough, it can take an insanely 
+that array inlined into your code.  The worst part is, the resource data must be completely loaded into memory
+before the your code can run. This means that if the data is large enough, it can take an insanely
 long time for your application to run; so much for performance.</p>
 
 <p>Like I said, there are work-arounds for this. If you know the file layout, you can simply
 read your resource files directly out of the filesystem. Your Go application can read environment
-variables to figure out where resource files should be loaded, or you can simply deploy your resource 
+variables to figure out where resource files should be loaded, or you can simply deploy your resource
 files in the same directory as your application.</p>
 
 <p>This is an inconvenience, but not a deal-breaker.</p>
 
 <h4 id="implicit-interfaces">3.2 Implicit Interfaces</h4>
 
-<p>Golang does have the concept of interfaces, however their implementation is a little strange. Any class 
-you write implements a known interface, if it has all of the required method signatures of that interface.
-There is <em>no requirement</em> that a class explicitly declares an interface.  This means that I can write
-a class call today, and five years later somebody creates an interface with the same, or with a partial list 
-of my method signatures. Now, without any action from me, my class that I wrote five years ago automatically
-implements the interface defined today. The new developer can cast my old class to his new interface, without
+<p>Golang does have the concept of interfaces, however their implementation is a little strange. Any type
+you create implements a known interface, if it has all of the required method signatures for that interface.
+There is <em>no requirement</em> that a type explicitly declares an interface.  This means that I can write
+a type call today, and five years later somebody creates an interface with the same, or with a partial list
+of my method signatures. Now, without any action from me, my five year-old type automatically
+implements the interface defined today. The new developer can cast my old type to his new interface, without
 writing any kind of adaptors.</p>
 
-<p>Some of you might be thinking, that's really cool. And hey, I can totally see where that kind of thing might
+<p>Some of you might be thinking, that's really cool, and I can totally see where that kind of thing might
 come in handy. However, there is the possibility that this could lead to unexpected results. Let's say I'm writing
-a simple chess game and I define the following class:</p>
+a simple chess game and I define the following type:</p>
 
 <pre><code class="go">package chess
 
@@ -201,28 +201,28 @@ func (c ChessPiece) MoveTo(row, column string) error {
    ...
 }</code></pre>
 
-<p>A simple enough class. Perhaps the <code>moveTo()</code> function uses a graphics library to 
+<p>A simple enough type. Perhaps the <code>moveTo()</code> function uses a graphics library to
 render the chess piece moving across the screen.  Now somebody a year from now creates the following interface:</p>
 
 <pre><code class="go">type FileSystem interface {
     MoveTo(oldPath, newPath string) error
 }</code></pre>
 
-<p>Now my ChessPiece class is automatically also a FileSystem.  This is odd, and theoretically someone
+<p>Now my ChessPiece is automatically also a FileSystem.  This is odd, and theoretically someone
 could attempt to use my ChessPiece as a FileSystem and get some pretty strange results.  Now, I'll admit
-that this scenario is rather contrived. It's unlikely that somebody would load my chess library into an 
+that this scenario is rather contrived. It's unlikely that somebody would load my chess library into an
 application that would need the FileSystem interface (unless they are EMACS developers), but there are
 scenarios where less divergent, but equally problamatic, pairing could cause problems for developers.</p>
 
-<p>This is still not a deal-breaker for me.  It's not the language developers' responsibility to keep 
+<p>This is still not a deal-breaker for me.  It's not the language developers' responsibility to keep
 people from shooting themselves in the foot.  But it's something that nobody seems to be talking much about,
 but something that Golang users should really keep in mind.</p>
 
 <h4 id="slices">3.3 Slices Behave Badly</h4>
 
-<p>A slice is a little bit like a Vector or ArrayList in Java. The problem comes when you are 
+<p>A slice is a little bit like a Vector or ArrayList in Java. The problem comes when you are
 working with multiple slices backed by the same array.  I won't go into too much detail about
-this particular quirk, as my friend Keith Gregory has already covered this one in his 
+this particular quirk, as my friend Keith Gregory has already covered this one in his
 <a href="http://blog.kdgregory.com/2013/12/learning-go-slices.html">blog post from December of last
 year</a>.</p>
 
@@ -237,8 +237,8 @@ you're doing.</p>
 
 <h4 id="deps">3.4 Dependencies</h4>
 
-<p>Google had an interesting idea when they developed Go's dependency management framework. Rather, then 
-download a binary or have some configuration file, simply include the URL of the source repository as the 
+<p>Google had an interesting idea when they developed Go's dependency management framework. Rather, then
+download a binary or have some configuration file, simply include the URL of the source repository as the
 import statement. The developer will then call the <code>go get &lt;url_of_repo&gt;</code> to fetch that
 dependency, and all of its transitive dependencies. So if you are writing the code below:</p>
 
@@ -251,36 +251,36 @@ import (
 
 func OpenDB() gorm.DB {
     db, err := gorm.Open("postgres", "user_info_here")
-	
+
     if err != nil {
         panic(fmt.Sprintf("Got error '%v' when connecting to the database", err))
     }
     return db
 }</code></pre>
 
-<p>You would simply call "<code>go get github.com/jinzhu/gorm</code>" before compiling your code, and 
+<p>You would simply call "<code>go get github.com/jinzhu/gorm</code>" before compiling your code, and
 Go will fetch the source from GitHub (also works with Mercurial) and place it into your Go packages.</p>
 
-<p>Sounds kind of cool at first. However, it's important to remember that you are fetching the head 
+<p>Sounds kind of cool at first. However, it's important to remember that you are fetching the head
 revision of master. You're using the development branch of someone else's code as your production library.
-If they check in a change that is not backwards compatible, you will have a broken build. If they delete 
-or move the repository, you will have a broken build. You as the developer 
-cannot define that you want to use version "X" of the dependency, which means that you do not have 
+If they check in a change that is not backwards compatible, you will have a broken build. If they delete
+or move the repository, you will have a broken build. You as the developer
+cannot define that you want to use version "X" of the dependency, which means that you do not have
 reproducable builds.</p>
 
-<p>This, in my opinion, is the single greatest flaw of the Golang build process. In order to "fix" this problem 
-some developers have commited copies of the third party libraries that they use into their own repositories. 
+<p>This, in my opinion, is the single greatest flaw of the Golang build process. In order to "fix" this problem
+some developers have commited copies of the third party libraries that they use into their own repositories.
 This akin to checking in Jar files into your code repositories. It works, but it is really ugly.</p>
 
 <p>In order to fix this problem, Google will need to add some kind of versioning mechanism. This mechanism
 must get the required libraries and their versions out of the source code, whether that's from the import
-statement alone, or there is some additional configuration file. Perhaps something could be built to wrap the 
-current build process.  Perhaps they could develop a proxy that intercepted the the <code>go get</code> request 
+statement alone, or there is some additional configuration file. Perhaps something could be built to wrap the
+current build process.  Perhaps they could develop a proxy that intercepted the the <code>go get</code> request
 and pulled the required version out of the a config file in the source code. This proxy could act like a Maven
 repository. Taking that to the next level, it would be nice to have something like Maven Central, where there
-is a list of open-source projects with versions that are managed by some central network. This not only 
+is a list of open-source projects with versions that are managed by some central network. This not only
 allows for versioning, but also means that reposities won't disappear or be moved, at least not within the same
-release version.  It also means that there are actual releases; making available a tested and vetted version of 
+release version.  It also means that there are actual releases; making available a tested and vetted version of
 the application or library.</p>
 
 <h3 id="last-thoughts">4 Last Thoughts</h3>
@@ -288,10 +288,10 @@ the application or library.</p>
 <p>There's plenty more that could be said both for and against the use of Go for your projects. I think the
 <a href="#deps">dependency issue</a> may be a deal-breaker for my own projects, however different developers
 and projects have different requirements.  It is certainly fast and simple to build projects in Golang, but 
-I could say the same thing about Groovy. Golang has channels to simplify communication between threads, but so 
-does Clojure (another JVM language).  Golang is fun, and I like using it, but it's also a young language (Go 1.0 was 
-released on March 28, 2012). It still has some growing pains to get through. If Google decides that they want the 
+I could say the same thing about Groovy. Golang has channels to simplify communication between threads, but so
+does Clojure (another JVM language).  Golang is fun, and I like using it, but it's also a young language (Go 1.0 was
+released on March 28, 2012). It still has some growing pains to get through. If Google decides that they want the
 language to become widely adopted, they will have to fix the dependency issue.  If they don't, it will never become
 an enterprise language (I know, how uncool).  If they do fix it, there could be a serious third-party contender for
-the role of most popular programming language, which has been a two-man race between 
+the role of most popular programming language, which has been a two-man race between
 <a href="http://www.tiobe.com/index.php/content/paperinfo/tpci/index.html">Java and C for the past 12 years</a>.</p>

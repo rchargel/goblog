@@ -1,19 +1,22 @@
-<p>This is an update to my previous post called <a href="/blog/formatting-xml-in-vim">Formatting XML in VIM</a>. It's a 
-quick and easy way to format JSON documents using VIM. It makes use of Python's <code>-mjson.tool</code> feature, so make sure that 
+<p>This is an update to my previous post called <a href="/blog/formatting-xml-in-vim">Formatting XML in VIM</a>. It's a
+quick and easy way to format JSON documents using VIM. It makes use of Python's <code>-mjson.tool</code> feature, so make sure that
 you already have Python installed on your system.</p>
 
-<p><strong>Note:</strong> All commands are assumed to be performed as 'root' unless stated otherwise.  If you 
-choose to perform this is another user, you will need to 'sudo' most of these commands.</p>
+<p><strong>Note:</strong> All commands are assumed to be performed as 'root' unless stated otherwise.  If you
+choose to perform this as another user, you will need to 'sudo' most of these commands.</p>
 
 <ol>
-	<li><p>Create a new shell script called jsonpp.sh in any directory you choose. I put mine in 
+	<li><p>Create a new shell script called jsonpp.sh in any directory you choose. I put mine in
 	<code>/usr/local/scripts/jsonpp.sh</code>.</p></li>
 
 	<li><p>Copy the following code to your shell script:</p>
 
 	<pre><code class="bash">#!/bin/bash
-cat $1 | python -mjson.tool
-Make that file executable.` ``bash chmod +x jsonpp.sh ```</code></pre></li>
+cat $1 | python -mjson.tool</code></pre>
+
+  <p>Make that file executable.</p>
+
+	<pre><code class="bash">chmod +x jsonpp.sh</code></pre></li>
 
 	<li><p>Add that file to your path through a symbolic link.</p>
 
@@ -21,7 +24,7 @@ Make that file executable.` ``bash chmod +x jsonpp.sh ```</code></pre></li>
 
 	<p>At this point you already have a cool json pretty-printer that you can just call on a file.</p></li>
 
-	<li><p>Now just modify the .vimrc file in your home directory (should not be done as root) Add the 
+	<li><p>Now just modify the .vimrc file in your home directory (should not be done as root) Add the
 	following to your .vimrc file:</p>
 
 	<pre><code class="bash">:syntax enable
@@ -38,10 +41,12 @@ function! DoFormatXml()
 % !xmllint % --format
 endfunction
 function! DoFormatJson()
-% !jsonpp % --format 
+% !jsonpp % --format
 endfunction
 command! FormatXml call DoFormatXml()
 command! FormatJson call DoFormatJson()</code></pre></li>
 </ol>
 
 <p>Try it out: Next time you are editing a JSON file in VIM, just type the following command: <code>:FormatJson</code></p>
+<p>Note: make sure the file is saved before attempting this, as the command will format that most recently saved version
+	of the file.</p>
