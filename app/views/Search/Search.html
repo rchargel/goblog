@@ -1,5 +1,5 @@
 
-<article>	
+<article>
 	<header>
 		<h2>Search Results</h2>
 	</header>
@@ -10,7 +10,7 @@
 	{{ range .searchResults.BlogResults }}
 	<div class="blog-item">
 		<header>
-			<a href="{{.Link}}">{{.Name}}</a>
+			<a href="/{{.Link}}">{{.Name}}</a>
 			<span class="score">Score: {{.Score}}</span>
 			<time>{{date .Date}}</time>
 		</header>
@@ -27,7 +27,7 @@
 	{{ range .searchResults.ProjectResults }}
 	<div class="blog-item">
 		<header>
-			<a href="{{.Link}}">{{.Name}}</a>
+			<a href="/{{.Link}}">{{.Name}}</a>
 			<span class="score">Score: {{.Score}}</span>
 		</header>
 		<div class="blog-roll-details">
