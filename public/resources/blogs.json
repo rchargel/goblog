@@ -115,5 +115,14 @@
 		"Active"   : true,
 		"Tags"     : "go, golang, heroku, revel, programming, software, web",
 		"File"     : "deploying-a-go-website-with-heroku-and-revel.html"
+	},
+	{
+		"Name"     : "A Simple OAuth Implementation for Go",
+		"Date"     : "2015-02-15",
+		"Slug"     : "goauth",
+		"Abstract" : "While there are many implementations of either OAuth 1.0 or OAuth 2.0 in Go, there is no single implementation that provides both authentication schemes, nor do any of the other implementations make coding and configuration so simple.",
+		"Active"   : true,
+		"Tags"     : "go, golang, oauth, authentication, authorization, google, facebook, twitter, yaml",
+		"File"     : "goauth.html"
 	}
 ]

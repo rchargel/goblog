@@ -1,0 +1,187 @@
+<p>Here's the thing, there are plenty of implementations of <a href="http://oauth.net">OAuth</a>
+in Go. Some of those are for OAuth 1.0, and some are for OAuth 2.0, but I haven't found any that
+cover both. I found this a bit odd, as most identity providers do not offer a choice. They either
+support one or the other, and as such it is up to the developer to support the specification used
+by their chosen identity providers.  The other problem I found with the current OAuth implementations
+is that they tend to be confusing and require the developer to still write a lot of boiler plate
+code.</p>
+
+<p>So to that end, I decided to provide my own
+<a href="https://github.com/rchargel/goauth/">implementation of OAuth 1.0 and 2.0</a> as a single Go
+package. I know what you're thinking. This is just like that XKCD comic where there are
+<a href="http://xkcd.com/927/">14 competing standards</a> and so the main character attempts to
+create a universal standard to replace them all, and at the end there are 15 competing standards.
+Well fortunately, I am not attempting to replace all the other packages with my own universal
+implementation. Rather, I am simply attempting to solve one person's, mine, problems with the
+currently available packages.</p>
+
+<p>With that task completed, I of course felt the need to provide some real-world examples of how
+another developer could take advantage of the work I'd already completed. Which brings me here.
+While I have already provided a
+<a href="http://godoc.org/github.com/rchargel/goauth#example-OAuthServiceProvider">contrived
+example</a> of how a developer could put my code to use, I have decided to provide a more realistic
+tutorial here. For this tutorial, I am taking advantage of another Go package
+<a href="https://github.com/hoisie/web">github.com/hoisie/web</a> which wraps Go's <code>net/http</code>
+package.</p>
+
+<p>First let's start with the main function (<code>main.go</code>):</p>
+
+<pre><code class="go">package main
+
+import (
+  "fmt"
+  "log"
+  "os"
+
+  "github.com/hoisie/web"
+)
+
+func main() {
+  // get the port as a string form an environment variable.
+  // this could be loaded any number of different ways or hard coded.
+  port := os.Getenv("PORT")
+
+  log.Printf("Starting webserver on port %s", port)
+
+  oauthController := CreateOAuthController()
+  /* define other controllers ... */
+
+  // apply controllers to handlers
+  web.Get("/img/(.*)", imageController.RenderImage)
+  web.Get("/css/(.*)", cssController.RenderCSS)
+  web.Get("/js/(.*)", jsController.RenderJS)
+  // ... apply other controllers ...
+
+  // first OAuth screen redirects user to provider's authentication screen.
+  web.Get("/oauth/authenticate/(.*)", oauthController.SendOAuthScreenRedirect)
+  // send OAuth call processes the reply from the provider, and then redirects
+  // the user to another part of the application.
+  web.Get("/oauth/callback/(.*)", oauthController.ProcessOAuthReply)
+
+  // start server
+  web.Run(fmt.Sprintf("0.0.0.0:%s"), port)
+}</code></pre>
+
+<p>Next we should create a simple configuration file. My preference is to use YAML as it's
+about as simple as it gets. Here is <code>oauth_config.yaml</code>:</p>
+
+<pre><code class="css">GOOGLE:
+  OAuthVersion: <span class="literal">2.0</span>
+  AuthURL:      <span class="string">https://accounts.google.com/o/oauth2/auth</span>
+  TokenURL:     <span class="string">https://accounts.google.com/o/oauth2/token</span>
+  UserInfoURL:  <span class="string">https://www.googleapis.com/oauth2/v2/userinfo</span>
+  ClientID:     <span class="string">Google_client_id</span>
+  ClientSecret: <span class="string">Google_secret_key</span>
+  Scopes:
+    - <span class="string">https://www.googleapis.com/auth/userinfo.profile</span>
+    - <span class="string">https://www.googleapis.com/auth/userinfo.email</span>
+
+FACEBOOK:
+  OAuthVersion: <span class="literal">2.0</span>
+  AuthURL:      <span class="string">https://www.facebook.com/dialog/oauth</span>
+  TokenURL:     <span class="string">https://graph.facebook.com/oauth/access_token</span>
+  UserInfoURL:  <span class="string">https://graph.facebook.com/me?fields=id,first_name,middle_name,last_name,email,picture</span>
+  ClientID:     <span class="string">Facebook_client_id</span>
+  ClientSecret: <span class="string">Facebook_secret_key</span>
+  Scopes:
+    - <span class="string">email</span>
+    - <span class="string">public_profile</span>
+
+TWITTER:
+  OAuthVersion:     <span class="literal">1.0</span>
+  AuthURL:          <span class="string">https://api.twitter.com/oauth/authorize</span>
+  TokenURL:         <span class="string">https://api.twitter.com/oauth/access_token</span>
+  UserInfoURL:      <span class="string">https://api.twitter.com/1.1/account/verify_credentials.json</span>
+  RequestTokenURL:  <span class="string">https://api.twitter.com/oauth/request_token</span>
+  ClientID:         <span class="string">Twitter_client_id</span>
+  ClientSecret:     <span class="string">Twitter_secret_key</span></code></pre>
+
+<p>Okay, now let's create our OAuthController type (<code>oauth_controller.go</code>):</p>
+
+<pre><code class="go">package main
+
+import (
+  "fmt"
+  "log"
+  "os"
+  "strings"
+
+  "github.com/hoisie/web"
+  "github.com/rchargel/goauth"
+)
+
+// OAuthController defines the controller for OAuth2 authentication calls.
+type OAuthController struct {
+  // a map of OAuthServiceProvider by provider names (eg: google, facebook, etc.)
+  serviceProviders map[string]goauth.OAuthServiceProvider
+}
+
+// CreateOAuthController does exactly what it says.
+func CreateOAuthController() *OAuthController {
+  file, err := os.Open("oauth_config.yaml")
+  defer file.Close()
+  if err != nil {
+    panic("Could not read oauth_config.yaml file: " + err.Error())
+  }
+  // could also be JSON
+  serviceProviders, err := goauth.ConfigureProvidersFromYAML(file, "http://myhost.com/oauth/callback/%v")
+  if err != nil {
+    panic("Could not initialize OAuth Controller: " + err.Error())
+  }
+  return &amp;OAuthController{serviceProviders}
+}
+
+// SendOAuthScreenRedirect redirects the user to the correct auth screen for their request.
+// This is the first controller method.
+func (c *OAuthController) SendOAuthScreenRedirect(ctx *web.Context, providerName string) {
+  // get the implementation for the specific provider.
+  provider, found := c.serviceProviders[providerName]
+  if found {
+    redirectURL, err := provider.GetRedirectURL()
+    if err == nil {
+      ctx.Redirect(HTTPFoundRedirectCode, redirectURL)
+    } else {
+      ctx.Abort(HTTPServerErrorCode, err.Error())
+    }
+  } else {
+    ctx.Abort(HTTPBadRequestCode, fmt.Sprintf("%v is not a valid provider.", providerName))
+  }
+}
+
+// ProcessOAuthReply called by the redirect code.
+// This is the second controller method.
+func (c *OAuthController) ProcessOAuthReply(ctx *web.Context, providerName string) {
+  provider, found := c.serviceProviders[strings.ToLower(providerName)]
+  if found {
+    userData, err := provider.ProcessResponse(ctx.Request)
+    if hasNoError(ctx, err) {
+      log.Printf("Found user: %v", userData.String())
+      sessionID, err := // validate user in my webapp and create session token.
+      if hasNoError(ctx, err) {
+        ctx.Redirect(HTTPFoundRedirectCode, fmt.Sprintf("/?token=%v", sessionID))
+      }
+    }
+  } else {
+    ctx.Abort(HTTPBadRequestCode, fmt.Sprintf("%v is not a valid provider.", providerName))
+  }
+}
+
+// convenience method, sends abort if there is an error.
+func hasNoError(ctx *web.Context, err error) bool {
+  if err != nil {
+    ctx.Abort(HTTPServerErrorCode, err.Error())
+    return false
+  }
+  return true
+}</code></pre>
+
+<p>Congratulations, you've just implemeted OAuth 1.0 and 2.0 identity providers for Google, Facebook,
+and Twitter. </p>
+
+<p>Here are some project related URLs:<p>
+
+<ul>
+  <li>Project Page: <a href="/proj/goauth">http://zcarioca.net/proj/goauth</a></li>
+  <li>Github Page: <a href="https://github.com/rchargel/goauth">https://github.com/rchargel/goauth</a></li>
+  <li>GoDoc Page: <a href="http://godoc.org/github.com/rchargel/goauth">http://godoc.org/github.com/rchargel/goauth</a></li>
+</ul>
