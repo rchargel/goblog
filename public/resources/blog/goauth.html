@@ -65,36 +65,36 @@ func main() {
 <p>Next we should create a simple configuration file. My preference is to use YAML as it's
 about as simple as it gets. Here is <code>oauth_config.yaml</code>:</p>
 
-<pre><code class="css">GOOGLE:
-  OAuthVersion: <span class="literal">2.0</span>
-  AuthURL:      <span class="string">https://accounts.google.com/o/oauth2/auth</span>
-  TokenURL:     <span class="string">https://accounts.google.com/o/oauth2/token</span>
-  UserInfoURL:  <span class="string">https://www.googleapis.com/oauth2/v2/userinfo</span>
-  ClientID:     <span class="string">Google_client_id</span>
-  ClientSecret: <span class="string">Google_secret_key</span>
+<pre><code class="yaml">GOOGLE:
+  OAuthVersion: 2.0
+  AuthURL:      https://accounts.google.com/o/oauth2/auth
+  TokenURL:     https://accounts.google.com/o/oauth2/token
+  UserInfoURL:  https://www.googleapis.com/oauth2/v2/userinfo
+  ClientID:     Google_client_id
+  ClientSecret: Google_secret_key
   Scopes:
-    - <span class="string">https://www.googleapis.com/auth/userinfo.profile</span>
-    - <span class="string">https://www.googleapis.com/auth/userinfo.email</span>
+    - https://www.googleapis.com/auth/userinfo.profile
+    - https://www.googleapis.com/auth/userinfo.email
 
 FACEBOOK:
-  OAuthVersion: <span class="literal">2.0</span>
-  AuthURL:      <span class="string">https://www.facebook.com/dialog/oauth</span>
-  TokenURL:     <span class="string">https://graph.facebook.com/oauth/access_token</span>
-  UserInfoURL:  <span class="string">https://graph.facebook.com/me?fields=id,first_name,middle_name,last_name,email,picture</span>
-  ClientID:     <span class="string">Facebook_client_id</span>
-  ClientSecret: <span class="string">Facebook_secret_key</span>
+  OAuthVersion: 2.0
+  AuthURL:      https://www.facebook.com/dialog/oauth
+  TokenURL:     https://graph.facebook.com/oauth/access_token
+  UserInfoURL:  https://graph.facebook.com/me?fields=id,first_name,middle_name,last_name,email,picture
+  ClientID:     Facebook_client_id
+  ClientSecret: Facebook_secret_key
   Scopes:
-    - <span class="string">email</span>
-    - <span class="string">public_profile</span>
+    - email
+    - public_profile
 
 TWITTER:
-  OAuthVersion:     <span class="literal">1.0</span>
-  AuthURL:          <span class="string">https://api.twitter.com/oauth/authorize</span>
-  TokenURL:         <span class="string">https://api.twitter.com/oauth/access_token</span>
-  UserInfoURL:      <span class="string">https://api.twitter.com/1.1/account/verify_credentials.json</span>
-  RequestTokenURL:  <span class="string">https://api.twitter.com/oauth/request_token</span>
-  ClientID:         <span class="string">Twitter_client_id</span>
-  ClientSecret:     <span class="string">Twitter_secret_key</span></code></pre>
+  OAuthVersion:     1.0
+  AuthURL:          https://api.twitter.com/oauth/authorize
+  TokenURL:         https://api.twitter.com/oauth/access_token
+  UserInfoURL:      https://api.twitter.com/1.1/account/verify_credentials.json
+  RequestTokenURL:  https://api.twitter.com/oauth/request_token
+  ClientID:         Twitter_client_id
+  ClientSecret:     Twitter_secret_key</code></pre>
 
 <p>Okay, now let's create our OAuthController type (<code>oauth_controller.go</code>):</p>
 

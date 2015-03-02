@@ -39,7 +39,7 @@ easy by reducing the pain points to just a couple of configuration parameters.</
 <p>This package provides two OAuth implementations, Version 1.0 and Version 2.0.
 For version 2.0 implementations the sequence of events is fairly straightforward.</p>
 
-<pre>Browser                    Server                   Provider
+<pre><code class="nohighlight">Browser                    Server                   Provider
    |                          |                          |
    # GET: /oauth/provider     |                          |
    #==>==>==>==>==>==>==>==>=>#                          |
@@ -59,12 +59,12 @@ For version 2.0 implementations the sequence of events is fairly straightforward
    |                          # Create Session           |
    |          Respond To User #                          |
    #<=<==<==<==<==<==<==<==<==#                          |
-   #                          |                          |</pre>
+   #                          |                          |</code></pre>
 
 <p>For version 1.0 implementations the sequence of events is slightly more
 complex, however most of that complexity is hidden from you by the API.</p>
 
-<pre>Browser                    Server                    Provider
+<pre><code class="nohighlight">Browser                    Server                    Provider
    |                          |                          |
    # GET: /oauth/provider     |                          |
    #==>==>==>==>==>==>==>==>=>#                          |
@@ -94,7 +94,7 @@ complex, however most of that complexity is hidden from you by the API.</p>
    |                          # Create Session           |
    |          Respond To User #                          |
    #<=<==<==<==<==<==<==<==<==#                          |
-   #                          |                          |</pre>
+   #                          |                          |</code></pre>
 
 <h3>Testing</h3>
 
