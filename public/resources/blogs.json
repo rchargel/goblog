@@ -124,5 +124,14 @@
 		"Active"   : true,
 		"Tags"     : "go, golang, oauth, authentication, authorization, google, facebook, twitter, yaml",
 		"File"     : "goauth.html"
+	},
+	{
+		"Name"     : "Java 8's Optional Type",
+		"Date"     : "2015-03-04",
+		"Slug"     : "java8-optional",
+		"Abstract" : "Java 8's attempt to bring an end to the NullPointerException gives us the Optional type. Taken from Scala's 'Option' type, this new feature wraps a return statement or property in order to protect developers from nullability.",
+		"Active"   : true,
+		"Tags"     : "java, java 8, optional programming, software",
+		"File"     : "java8-optional.html"
 	}
 ]
