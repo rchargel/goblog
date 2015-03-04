@@ -39,62 +39,16 @@ easy by reducing the pain points to just a couple of configuration parameters.</
 <p>This package provides two OAuth implementations, Version 1.0 and Version 2.0.
 For version 2.0 implementations the sequence of events is fairly straightforward.</p>
 
-<pre><code class="nohighlight">Browser                    Server                   Provider
-   |                          |                          |
-   # GET: /oauth/provider     |                          |
-   #==>==>==>==>==>==>==>==>=>#                          |
-   |            Send Redirect #                          |
-   #<=<==<==<==<==<==<==<==<==#                          |
-   # Redirect to provider login                          |
-   #==>==>==>==>==>==>==>==>==|==>==>==>==>==>==>==>==>=>#
-   |                          |                          # User logs in
-   |                          | Redirect to callback URL #
-   #<=<==<==<==<==<==<==<==<==|==<==<==<==<==<==<==<==<==#
-   # GET: Callback URL        |                          |
-   #==>==>==>==>==>==>==>==>=>#                          |
-   |                          # GET: User Info           |
-   |                          #==>==>==>==>==>==>==>==>=>#
-   |                          #<=<==<==<==<==<==<==<==<==#
-   |                          # Process User             |
-   |                          # Create Session           |
-   |          Respond To User #                          |
-   #<=<==<==<==<==<==<==<==<==#                          |
-   #                          |                          |</code></pre>
+<p><code class="nohighlight" style="text-align:center"><img src="/public/img/goauth/oauth2.0.png" title="OAuth 2.0 Sequence Diagram"/></code></p>
+<p><em>Note: <span class="highlight-yellow">yellow</span> designates external systems,
+  <span class="highlight-blue">blue</span> designates the goauth implementation,
+  and <span class="highlight-red">red</span> designates the controller code that
+  you would be responsible for.</em></p>
 
 <p>For version 1.0 implementations the sequence of events is slightly more
 complex, however most of that complexity is hidden from you by the API.</p>
 
-<pre><code class="nohighlight">Browser                    Server                    Provider
-   |                          |                          |
-   # GET: /oauth/provider     |                          |
-   #==>==>==>==>==>==>==>==>=>#                          |
-   |                          # Fetch OAuth Token        |
-   |                          #==>==>==>==>==>==>==>==>=>#
-   |                          #                          # Auth Request
-   |                          #  Return Token and Secret #
-   |                          #<=<==<==<==<==<==<==<==<==#
-   |            Send Redirect #                          |
-   #<=<==<==<==<==<==<==<==<==#                          |
-   # Redirect to provider login                          |
-   #==>==>==>==>==>==>==>==>==|==>==>==>==>==>==>==>==>=>#
-   |                          |                          # User logs in
-   |                          | Redirect to callback URL #
-   #<=<==<==<==<==<==<==<==<==|==<==<==<==<==<==<==<==<==#
-   # GET: Callback URL        |                          |
-   #==>==>==>==>==>==>==>==>=>#                          |
-   |                          # Fetch Access Token       |
-   |                          #==>==>==>==>==>==>==>==>=>#
-   |                          #                          # Auth Request
-   |                          #      Return Access Token #
-   |                          #<=<==<==<==<==<==<==<==<==#
-   |                          # GET: User Info           |
-   |                          #==>==>==>==>==>==>==>==>=>#
-   |                          #<=<==<==<==<==<==<==<==<==#
-   |                          # Process User             |
-   |                          # Create Session           |
-   |          Respond To User #                          |
-   #<=<==<==<==<==<==<==<==<==#                          |
-   #                          |                          |</code></pre>
+<p><code class="nohighlight" style="text-align:center"><img src="/public/img/goauth/oauth1.0.png" title="OAuth 1.0 Sequence Diagram"/></code></p>
 
 <h3>Testing</h3>
 

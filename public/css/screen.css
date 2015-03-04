@@ -264,6 +264,13 @@ a.button {
 a.button:hover, a.button:active {
 	box-shadow: 2px 3px #2d2d2d;
 }
+.highlight-red,.highlight-yellow,.highlight-blue {
+	color: #000;
+	padding: 1px 3px;
+}
+.highlight-red { background-color: #f99;}
+.highlight-yellow { background-color: #ff9; }
+.highlight-blue { background-color: #9cf; }
 @media only screen and (min-width: 400px) {
 	header.main figure { width: 70%; }
 	section { padding: 0 10px 6em 10px; }
