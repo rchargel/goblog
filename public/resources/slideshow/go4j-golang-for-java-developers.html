@@ -1,0 +1,595 @@
+<section>
+  <h1>Go4J: Golang 4 Java Developers</h1>
+</section>
+<section>
+  <!-- WHAT IS GOLANG -->
+  <section>
+    <h2>What is Go/Golang?</h2>
+  </section>
+  <section>
+    <h3>History</h3>
+    <p class="left">Go was created by Rob Pike, Ken Thompson, and Robert Griesemer and released by Google in 2010.</p>
+    <p class="left">Thompson said of the language:</p>
+    <blockquote class="left">
+      "When the three of us got started, it was pure research. The three of us got together and decided
+      that we hated C++. We started off with the idea that all three of us had to be talked into every
+      feature in the language, so there was no extraneous garbage put into the language for any reason."
+    </blockquote>
+  </section>
+  <section>
+    <h3>What Go Isn't</h3>
+    <ul>
+      <li>Go is not a functional language (but provides first class fuctions).</li>
+      <li>Go is not a kitchen sink language (very few data models).</li>
+      <li>Go is not the solution to concurrency issues (no immutability).</li>
+      <li>Go is not <a href="/blog/golang-viable-project-dev#what-needs-work">quite</a> ready for enterprise development.</li>
+    </ul>
+  </section>
+  <section>
+    <h3>What Go Is</h3>
+    <ul>
+      <li>Go is fast (compiles to native, competes with C/C++).</li>
+      <li>Go is simple (minimal API and data stuctures).</li>
+      <li>Go is growing (backed by Google, 1% of github commits).</li>
+    </ul>
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Why Go</h2>
+  </section>
+  <section>
+    <h3>Who is Using it?</h3>
+    <ul>
+      <li>BBC Worldwide</li>
+      <li>Canonical</li>
+      <li>Github</li>
+      <li>Heroku</li>
+      <li>Tumblr</li>
+      <li>... oh, yeah. Google</li>
+    </ul>
+  </section>
+  <section>
+    <h3>Who is Using it Locally?</h3>
+    <ul>
+      <li>Drama Fever</li>
+      <li>Vistar Media</li>
+      <li>Chariot Solutions</li>
+    </ul>
+  </section>
+  <section>
+    <p class="left">
+      On January 23rd, Vistar Media hosted the Gopher Gala. This is a global
+      hackathon for Go(lang) developers, similar to Rails Rumble.
+    </p>
+  </section>
+  <section>
+    <p class="left">
+      Golang Philly is a meetup group that meets once a month in center-city
+      Philadelphia and Narberth. They also host a Github account for open source
+      projects for Philly Go(lang) developers.
+    </p>
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Installing Go</h2>
+    <p>Install documentation at: <a href="http://golang.org/doc/install">http://golang.org/doc/install</a></p>
+    <p>Current version is 1.4.2</p>
+  </section>
+  <section>
+    <h3>Setup Your Workspace</h3>
+    <p class="left">Best practice is to create a Go workspace directory eg:</p>
+    <p><code>$HOME/Documents/golang</code></p>
+    <p class="left">Create environment variables</p>
+    <ul>
+      <li><code>export GOROOT=/go/installation/path</code></li>
+      <li><code>export PATH=$GOROOT/bin:$PATH</code></li>
+      <li><code>export GOPATH=$HOME/Documents/golang</code></li>
+    </ul>
+  </section>
+  <section>
+    <h3>Go Directories</h3>
+    <dl class="left">
+      <dt><code>$GOPATH/pkg</code></dt>
+      <dd>Directory containing platform compilers and tools.</dd>
+      <dt><code>$GOPATH/bin</code></dt>
+      <dd>Directory containing packaged binaries, both yours and third-party libraries.</dd>
+      <dt><code>$GOPATH/src</code></dt>
+      <dd>Directory containing source files, both yours and third-party libraries.</dd>
+    </dl>
+  </section>
+  <section>
+    <h3>Creating a new project</h3>
+    <ol>
+      <li>Create project directory:<br/>
+      <code>mkdir -p $GOPATH/src/github.com/user/myproject</code></li>
+      <li>Change directories<br />
+      <code>cd $GOPATH/src/github.com/user/myproject</code></li>
+      <li>Create your project files:<br/>
+      <code>touch main.go</code></li>
+    </ol>
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Go Files</h2>
+  </section>
+  <section>
+    <h3>Not A Class</h3>
+    <ul>
+      <li>Go files have a <code>.go</code> file extension.</li>
+      <li>They do not define classes - there are no classes.</li>
+      <li>Represent a related collection of types and functions.</li>
+      <li>Exist within a package - the directory structure.</li>
+    </ul>
+  </section>
+  <section>
+    <h3>File Structure</h3>
+    <ol>
+      <li>Starts with the package declaration - more on packages later.</li>
+      <li>Then the required imports.</li>
+      <li>Any defined constants.</li>
+      <li>Your code.</li>
+    </ol>
+  </section>
+  <section>
+    <h2>Example File</h2>
+    <p>helloworld.go</p>
+    <pre class="go"><code>package main // current package
+
+// defines the imports
+import (
+  "fmt"
+  "time"
+)
+
+const(
+  Pi float32 = 3.14159
+)
+
+// the main function for the application.
+// can only have one main method in the 'main' package
+func main() {
+  t := time.Now()
+  fmt.Println("Hello, World!")
+  fmt.Println("PI =", Pi)
+  fmt.Println("Completed in", time.Since(t))
+}</code></pre>
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Packages</h2>
+    <p>How Go code is organized</p>
+  </section>
+  <section>
+    <p class="left">
+      Packages in Go are used to define subsystems. Files within the same package
+      share private data and functions.
+    </p>
+  </section>
+  <section>
+    <p class="left">The root directory of a Go application is called "main." For
+      libraries written in Go, the root package is usually the name of the project.
+    </p>
+  </section>
+  <section>
+    <p class="left">
+      Within the Go standard library, package names tend to be short (eg: time,
+      fmt, net/http, etc). However, for your own files, package names should include
+      the source repository directory in order to prevent package name conflicts
+      (eg: "github.com/username/myproject").
+    </p>
+    <p class="left">
+      The long package names are used when importing code from other packages or libraries.
+      When writing the package declaration in a file, "main" or the last part of
+      the package name is used.
+    </p>
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Go Syntax: Basics</h2>
+  </section>
+  <section>
+    <h3>Defining Variables</h3>
+    <p>Variables can be defined a number of different ways.</p>
+    <pre class="go"><code>// define a single variable as an int64
+var i int64 // this form works in the package or function level
+// define a group of boolean variables
+var j, k, l bool
+
+fmt.Println(i, j, k, l)
+// output: 0 false false false</code></pre>
+  </section>
+  <section>
+    <h3>Veriables (Cont...)</h3>
+    <p>Variables can be initialized when they are defined.</p>
+    <pre class="go"><code>// one initializer is needed per variable
+var i, j int = 1, 2
+
+// types can be ommitted in this form
+var k, l, m = true, 3.14, "test" // nor must they be the same type
+
+fmt.Println(i, j, k, l, m)
+// output: 1, 2, true, 3.14, "test"</code></pre>
+  </section>
+  <section>
+    <h3>Variables (Cont...)</h3>
+    <p>Short assignment syntax can also be used, but only within the scope of a
+      function.</p>
+    <pre class="go"><code>func main() {
+  i := 32
+  j, k, l := true, 3.14, "test"
+  fmt.Println(i, j, k, l)
+  // output: 32, true, 3.14, "test"
+}</code></pre>
+  </section>
+  <section>
+    <h3>Variables (Cont...)</h3>
+    <p class="left">
+      Variables can be exported by capitolizing the name. Exported
+      variables are globally available; otherwise, they are available
+      only within the package.
+    </p>
+    <pre class="go"><code>var BaseUrl = "http://server.org"</code></pre>
+    <p class="left">
+      Variables declared within the scope of a function are only
+      available within the function.
+    </p>
+  </section>
+  <section>
+    <h3>Variables (Cont...)</h3>
+    <p>Constants can be declared at both package and function level scopes.</p>
+    <pre class="go"><code>const (
+  Pi float32 = 3.14159
+  Test string = "test"
+)
+const Message = "Hello World"</code></pre>
+  </section>
+  <section>
+    <h3>Functions</h3>
+    <p>Simple functions take no arguments and have no return value.</p>
+    <pre class="go"><code>func printHello() {
+  fmt.Println("Hello World!")
+}</code></pre>
+  </section>
+  <section>
+    <h3>Functions (Cont...)</h3>
+    <p>Functions can take parameters.</p>
+    <pre class="go"><code>function add(x, y int) {
+  fmt.Println("Value:", x + y)
+}</code></pre>
+    <p>They can also return values.</p>
+    <pre class="go"><code>func add(x, y int) int {
+  return x + y
+}</code></pre>
+    <p>Or multiple values.</p>
+    <pre class="go"><code>func addProduct(x, y) (int, int) {
+  add := x + y
+  prod := x * y
+  return add, prod
+}</code></pre>
+  </section>
+  <section>
+    <h3>Functions (Cont...)</h3>
+    <p class="left">
+      Function names must also be capitolized in order for them to be exported.
+      Functions with lower-case names are only available within the package.
+    </p>
+  </section>
+  <section>
+    <h3>Functions (Cont...)</h3>
+    <p>Functions may be closures.</p>
+    <pre class="go"><code>// returns a closure
+func getNext func(int) int {
+  sum := 0
+  return func(x int) int {
+    sum += x // accessing external value
+    return sum
+  }
+}
+v := getNext()
+for i := 0; i < 10; i++ {
+  fmt.Println(pos(i))
+}</code></pre>
+  </section>
+  <section>
+    <h3>Basic Types</h3>
+    <p>Think primitives.</p>
+    <pre class="go"><code>bool
+
+string
+
+int  int8  int16  int32  int64
+uint uint8 uint16 uint32 uint64 uintptr
+
+byte // alias for uint8
+
+rune // alias for int32
+     // represents a Unicode code point
+
+float32 float64
+
+complex64 complex128</code></pre>
+  </section>
+  <section>
+    <h3>Basic Types (Cont...)</h3>
+    <p><code>int</code> vs <code>int32</code></p>
+    <p>
+      <code>int</code> is its own type, not an alias for <code>int32</code>. It
+      is an integer whose can be addressed in 32 bits or 64 bits, depending upon
+      the chip architecture.
+    </p>
+  </section>
+  <section>
+    <h3>Type Conversion</h3>
+    <p>Casting.</p>
+    <pre class="go"><code>var i int = 32
+var f float64 = float64(i)
+var u uint32 = uint32(i)</code></pre>
+  </section>
+  <section>
+    <h3>Type Inference</h3>
+    <p class="left">
+      Go infers the type if none is given. The inference is made by evaluating
+      the right side of an expression.
+    </p>
+    <pre class="go"><code>i := 32           // will be int
+f := 32.5         // will be float64
+c := 0.123 + 0.6i // will be complex128
+b := false        // will be bool
+s := "test"       // will be string</code></pre>
+  </section>
+  <section>
+    <h3>Strongly Typed</h3>
+    <p class="left">
+      Variables are strongly typed, and cannot be cast to other types that are not
+      a natural fit.
+    </p>
+    <pre class="go"><code>10 + 1.5                    // int + float64 - won't compile
+float64(10) + 1.5           // will be 11.5 float64
+"Value " + 11               // string + int - won't compile
+"Value " + string(11)       // won't compile, int can't be cast to string
+fmt.Sprintf("Value %d", 11) // will be "Value 11"</code></pre>
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Go Syntax: Arrays, Slices, and Maps</h2>
+  </section>
+  <section>
+    <h3>Arrays</h3>
+    <p>
+      An array can be of any type, and is declared simply.
+    </p>
+    <pre class="go"><code>var array [2]string
+array[0] = "Hello"
+array[1] = "World"</code></pre>
+  </section>
+  <section>
+    <h3>Arrays (Cont...)</h3>
+    <p class="left">
+      Array values are laid out in memory sequentially. So that an array of type
+      <code>[4]int32</code> will be comprized of 4 32bit blocks of sequential memory.
+    </p>
+  </section>
+  <section>
+    <h3>Slices</h3>
+    <pre class="go"><code>var slice = make([]string, 2, 5) // type, length, capacity</code></pre>
+    <p class="left">
+      A slice is an abstraction around the array, and it insternally composed of a pointer
+      to the underlying array, the offset of the array, and the length of the slice.
+      Different slices can be backed by the same array, which means that affecting the
+      values within the array, will affect the values in both slices.
+    </p>
+    <p class="left">
+      The backing array will be kept in memory, until it is no longer referenced.
+      It is possible for a slice of only 3 values to be backed by an array of many
+      hundreds. This could cause memory leaks.
+    </p>
+  </section>
+  <section>
+    <h3>Slices (Cont...)</h3>
+    <p class="left">
+      Unlike an array, a slice can continue to grow until it hits its
+      defined capacity.
+    </p>
+    <pre class="go"><code>slice = append(slice, "New Value")
+fmt.Println(len(slice)) // output: 3</code></pre>
+    <p class="left">
+      When a slice has hit its capacity, it will create a new array for its backing,
+      and copy the contents to this new array. If the backing array is referenced
+      by other slices, those slices will maintain their reference to the original array.
+    </p>
+  </section>
+  <section>
+    <h3>Maps</h3>
+    <p>Maps in Go are implemented as hash tables, and are instantiated like slices.</p>
+    <pre class="go"><code>map := make(map[keyType]valueType)</code></pre>
+  </section>
+  <section>
+    <h3>Maps (Cont...)</h3>
+    <p>Items can be added and removed.</p>
+    <pre class="go"><code>map := make(map[int]string)
+map[0] = "value1"
+map[3] = "value4"
+
+delete(map, 0)</code></pre>
+  </section>
+  <section>
+    <h3>Maps (Cont...)</h3>
+    <p>Map values can be retrieved.</p>
+    <pre class="go"><code>map := make(map[string]int)
+map["key"] = 12
+
+i := map["key"] // i = 12
+j := map["other"] // defaults to zero value j = 0
+
+// test for key
+k, exists := m["key"] // k = 12, exists = true
+l, exists := m["other"] // l = 0, exists = false
+
+// just test contains
+_, contains := m["other"] // contains = false, value is ignored
+</code></pre>
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Go Syntax: Loops</h2>
+  </section>
+  <section>
+    <h3>The 'for' Loop</h3>
+    <p>Go has only one loop construct.</p>
+    <pre class="go"><code>for i := 0; i < 10; i++ {
+  ...
+}
+// pre and post statements not required
+for keepGoing() {
+  ...
+}
+// or infinite loop
+for {
+  ...
+}</code></pre>
+  </section>
+  <section>
+    <h3>Loop Over Array</h3>
+    <p>You can loop over an array or slice.</p>
+    <pre class="go"><code>for i, item := range arr {
+  fmt.Printf("Index %d, Value %v.\n", i, item)
+}
+// can ignore the index
+for _, item := range arr {
+  ...
+}
+// can ignore the values
+for index := range arr {
+  ...
+}</code></pre>
+  </section>
+  <section>
+    <h3>Loop Over Map</h3>
+    <p>You can also loop over a map.</p>
+    <pre class="go"><code>for key, value := range map {
+  ...
+}
+// keys and values can be ignored
+for _, value := range map {
+  ...
+}
+for key := range map {
+  ...
+}</code></pre>
+  </section>
+  <section>
+    <h3>If Statement</h3>
+    <p>
+      If statements are just like Java and C/C++, minus the parens;<br/>sorry Lisp
+      fans.
+    </p>
+    <pre class="go"><code>if x < 10 {
+  ...
+}
+// can also contain a short statement
+if val, contains := map["key"]; contains {
+  fmt.Printf("Key %v = %v\n", "key", val)
+}</code></pre>
+  </section>
+  <section>
+    <h3>If Statement (Cont...)</h3>
+    <p>Variables declared in if statements are available in else blocks.</p>
+    <pre class="go"><code>if x := y * 3; x < 10 {
+  fmt.Println("x is still a small number:", x)
+} else {
+  fmt.Println("x is >= 10:", x)
+}</code></pre>
+  </section>
+  <section>
+    <h3>Switch Statements</h3>
+    <p>Switch statements in Go do not fall through.</p>
+    <pre class="go"><code>switch os := runtime.GOOS; os {
+  case "linux":
+    fmt.Println("Linux")
+  case "darwin":
+    fmt.Println("Mac")
+  case func(): // only called if not linux or darwin
+    fmt.Println("Evaluates to Function:", os)
+  default:
+    fmt.Println("Other:", os)
+}</code></pre>
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Types: Not Classes</h2>
+  </section>
+  <section>
+    <h3>Structs</h3>
+    <p>Most types are structs.</p>
+    <pre class="go"><code>// upper-case = exported
+type MyType struct {
+  Username string // public
+  userId   string // private
+  Session  string // public
+}</code></pre>
+  </section>
+  <section>
+    <h3>Functions Can Have Receivers</h3>
+    <p>Functions can be associated with types, called a receiver.</p>
+    <pre class="go"><code>// function associated with pointer to type
+func (m *MyType) GetUserId() string { // public
+  return m.userId
+}</code></pre>
+  </section>
+  <section>
+    <h3>Receivers (Cont...)</h3>
+    <p class="left">
+      Receivers can be a type or a pointer. Using pointers avoid copying the values
+      of type on each method call, and allows the method to modify the value that
+      it points to.
+    </p>
+  </section>
+  <section>
+    <h3>Types Can Be Derived</h3>
+    <pre class="go"><code>type TestString string
+func (t TestString) writeTest() string { // private
+  return fmt.Sprintf("TEST: %v", t)
+}
+
+v := TestString("a string")
+fmt.Println(v)             // output: a string
+fmt.Println(v.writeTest()) // output: TEST: a string</code></pre>
+  </section>
+  <section>
+    <h3>Types Can Be Composed</h3>
+    <p>The closest thing to inheritance.</p>
+    <pre class="go"><code>// MyTest composes Controller
+type MyTest struct {
+  *web.Controller
+}
+
+c := MyTest{}
+c.WriteResponse(...)</code></pre>
+  </section>
+  <section>
+    <h3>Interfaces</h3>
+    <p class="left">
+      Interfaces are implemented by virtue of fullfilling implementing their methods,
+      no declaration is required.
+    </p>
+    <pre class="go"><code>type Mailer interface {
+  SendMail(to, subject, message string) bool
+}
+type MyMailer struct {
+  ...
+}
+func (m *MyMailer) SendMail(to, subject, message string) bool {
+  ... // implementation details
+}
+mailDaemon := &amp;MyMailer{} // pointer
+mailer := Mailer(mailDaemon)</code></pre>
+  </section>
+</section>

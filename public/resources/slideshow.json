@@ -6,5 +6,13 @@
 		"Footer"     : "Back to <a href=\"/blog/deploying-a-go-website-with-heroku-and-revel\">Blog Post</a>.",
 		"Theme"      : "zcarioca",
 		"Transition" : "default"
+	},
+	{
+		"Name"       : "Go4J: Golang for Java Developers",
+		"Slug"       : "go4j-golang-for-java-developers",
+		"File"       : "go4j-golang-for-java-developers.html",
+		"Footer"     : "Back to <a href=\"/blog/go4j-golang-for-java-developers\">Blog Post</a>.",
+		"Theme"      : "zcarioca",
+		"Transition" : "default"
 	}
 ]
