@@ -139,7 +139,7 @@
 		"Date"     : "2015-03-17",
 		"Slug"     : "go4j-golang-for-java-developers",
 		"Abstract" : "This is a presentation for Java Developers which provides an overview of Golang: how it works, it's toolset, and why Java Developers should be aware of this language.",
-		"Active"   : true,
+		"Active"   : false,
 		"Tags"     : "java, go, golang, programming, software, web",
 		"File"     : "go4j-golang-for-java-developers.html"
 	}
