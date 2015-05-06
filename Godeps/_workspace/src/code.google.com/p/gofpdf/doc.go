@@ -44,9 +44,14 @@ Features
 
 • Clipping
 
+• Document protection
+
+• Layers
+
 gofpdf has no dependencies other than the Go standard library. All tests pass
 on Linux, Mac and Windows platforms. Like FPDF version 1.7, from which gofpdf
-is derived, this package does not yet support UTF-8 source text.
+is derived, this package does not yet support UTF-8 fonts. However, support is
+provided to translate UTF-8 runes to code page encodings.
 
 Acknowledgments
 
@@ -56,12 +61,17 @@ directly from it. Drawing support is adapted from the FPDF geometric figures
 script by David Hernández Sanz. Transparency support is adapted from the FPDF
 transparency script by Martin Hall-May. Support for gradients and clipping is
 adapted from FPDF scripts by Andreas Würmser. Support for outline bookmarks is
-adapted from Olivier Plathey by Manuel Cornes. Support for transformations is
-adapted from the FPDF transformation script by Moritz Wagner and Andreas
-Würmser. Lawrence Kesteloot provided code to allow an image's extent to be
-determined prior to placement. Support for vertical alignment within a cell was
-provided by Stefan Schroeder. Bruno Michel has provided valuable assistance
-with the code.
+adapted from Olivier Plathey by Manuel Cornes. Layer support is adapted from
+Olivier Plathey. Support for transformations is adapted from the FPDF
+transformation script by Moritz Wagner and Andreas Würmser. PDF protection is
+adapted from the work of Klemen Vodopivec for the FPDF product. Lawrence
+Kesteloot provided code to allow an image's extent to be determined prior to
+placement. Support for vertical alignment within a cell was provided by Stefan
+Schroeder. Ivan Daniluk generalized the font and image loading code to use the
+Reader interface while maintaining backward compatibility. Anthony Starks
+provided code for the Polygon function. Robert Lillack provided the Beziergon
+function and corrected some naming issues with the internal curve function.
+Bruno Michel has provided valuable assistance with the code.
 
 The FPDF website is http://www.fpdf.org/.
 
@@ -129,6 +139,13 @@ Tutorials
 A side effect of running "go test" is the production of the tutorial PDFs.
 These can be found in the gofpdf/pdf directory after the tests complete.
 
+Please note that these tutorials run in the context of a test. In order run an
+example as a standalone application, you'll need to examine fpdf_test.go for
+some helper routines, for example docWriter and strDelimit. In particular,
+docWriter is used as an argument to OutputAndClose in order to reduce the
+boilerplate in each example. In practice, you may be better served by calling
+OutputFileAndClose().
+
 Nonstandard Fonts
 
 Nothing special is required to use the standard PDF fonts (courier, helvetica,
@@ -151,9 +168,10 @@ and http://dejavu-fonts.org/.
 
 Roadmap
 
-• Handle UTF-8 source text
+• Handle UTF-8 source text natively. Until then, automatic translation of
+UTF-8 runes to code page bytes is provided.
 
-• Improve test coverage as reported by gocov (https://github.com/axw/gocov‎)
+• Improve test coverage as reported by the coverage tool.
 
 */
 package gofpdf

@@ -17,7 +17,7 @@ It's that easy!
 Usage
 -----
 
-Import package with
+This package needs at least Go 1.1. Import package with
 
 ```go
 import "github.com/nfnt/resize"
@@ -86,6 +86,13 @@ func main() {
 	jpeg.Encode(out, m, nil)
 }
 ```
+
+Caveats
+-------
+
+* Optimized access routines are used for `image.RGBA`, `image.RGBA64`, `image.YCbCr`, `image.Gray`, and `image.Gray16` types. All other image types are accessed in a generic way that will result in slow processing speed.
+* JPEG images are stored in `image.YCbCr`. This image format stores data in a way that will decrease processing speed. A resize may be up to 2 times slower than with `image.RGBA`. 
+
 
 Downsizing Samples
 -------

@@ -21,6 +21,8 @@ import (
 	"code.google.com/p/gofpdf"
 	"fmt"
 	"io/ioutil"
+	"math"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -118,9 +120,11 @@ func lorem() string {
 		"officia deserunt mollit anim id est laborum."
 }
 
-// Hello, world
+// Hello, world. Note that since only core fonts are used (in this case Arial,
+// a synonym for Helvetica), an empty string can be specified for the font
+// directory in the call to New().
 func ExampleFpdf_tutorial01() {
-	pdf := gofpdf.New("P", "mm", "A4", cnFontDir)
+	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.AddPage()
 	pdf.SetFont("Arial", "B", 16)
 	pdf.Cell(40, 10, "Hello World!")
@@ -137,7 +141,7 @@ func ExampleFpdf_tutorial01() {
 
 // Header, footer and page-breaking
 func ExampleFpdf_tutorial02() {
-	pdf := gofpdf.New("P", "mm", "A4", cnFontDir)
+	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.SetHeaderFunc(func() {
 		pdf.Image(imageFile("logo.png"), 10, 6, 30, 0, false, "", 0, "")
 		pdf.SetY(5)
@@ -164,7 +168,7 @@ func ExampleFpdf_tutorial02() {
 
 // Word-wrapping, line justification and page-breaking
 func ExampleFpdf_tutorial03() {
-	pdf := gofpdf.New("P", "mm", "A4", cnFontDir)
+	pdf := gofpdf.New("P", "mm", "A4", "")
 	titleStr := "20000 Leagues Under the Seas"
 	pdf.SetTitle(titleStr, false)
 	pdf.SetAuthor("Jules Verne", false)
@@ -237,7 +241,7 @@ func ExampleFpdf_tutorial03() {
 func ExampleFpdf_tutorial04() {
 	var y0 float64
 	var crrntCol int
-	pdf := gofpdf.New("P", "mm", "A4", cnFontDir)
+	pdf := gofpdf.New("P", "mm", "A4", "")
 	titleStr := "20000 Leagues Under the Seas"
 	pdf.SetTitle(titleStr, false)
 	pdf.SetAuthor("Jules Verne", false)
@@ -335,7 +339,7 @@ func ExampleFpdf_tutorial04() {
 
 // Various table styles
 func ExampleFpdf_tutorial05() {
-	pdf := gofpdf.New("P", "mm", "A4", cnFontDir)
+	pdf := gofpdf.New("P", "mm", "A4", "")
 	type countryType struct {
 		nameStr, capitalStr, areaStr, popStr string
 	}
@@ -456,7 +460,7 @@ func ExampleFpdf_tutorial05() {
 // This example demonstrates internal and external links with and without basic
 // HTML.
 func ExampleFpdf_tutorial06() {
-	pdf := gofpdf.New("P", "mm", "A4", cnFontDir)
+	pdf := gofpdf.New("P", "mm", "A4", "")
 	// First page: manual local link
 	pdf.AddPage()
 	pdf.SetFont("Helvetica", "", 20)
@@ -498,7 +502,7 @@ func ExampleFpdf_tutorial07() {
 
 // Various image types
 func ExampleFpdf_tutorial08() {
-	pdf := gofpdf.New("P", "mm", "A4", cnFontDir)
+	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.AddPage()
 	pdf.SetFont("Arial", "", 11)
 	pdf.Image(imageFile("logo.png"), 10, 10, 30, 0, false, "", 0, "")
@@ -521,7 +525,7 @@ func ExampleFpdf_tutorial09() {
 	var y0 float64
 	var crrntCol int
 	loremStr := lorem()
-	pdf := gofpdf.New("L", "mm", "A4", cnFontDir)
+	pdf := gofpdf.New("L", "mm", "A4", "")
 	const (
 		pageWd = 297.0 // A4 210.0 x 297.0
 		margin = 10.0
@@ -598,7 +602,7 @@ func ExampleFpdf_tutorial11() {
 		thin  = 0.2
 		thick = 3.0
 	)
-	pdf := gofpdf.New("", "", "", cnFontDir)
+	pdf := gofpdf.New("", "", "", "")
 	pdf.SetFont("Helvetica", "", 12)
 	pdf.SetFillColor(200, 200, 220)
 	pdf.AddPage()
@@ -640,13 +644,13 @@ func ExampleFpdf_tutorial11() {
 	y += 40.0
 	pdf.Text(10, y, "Curves (cubic)")
 	pdf.SetFillColor(220, 200, 220)
-	pdf.CurveCubic(10, y+30, 15, y-20, 40, y+30, 10, y+30, "D")
-	pdf.CurveCubic(45, y+30, 50, y-20, 75, y+30, 45, y+30, "F")
-	pdf.CurveCubic(80, y+30, 85, y-20, 110, y+30, 80, y+30, "FD")
+	pdf.CurveBezierCubic(10, y+30, 15, y-20, 10, y+30, 40, y+30, "D")
+	pdf.CurveBezierCubic(45, y+30, 50, y-20, 45, y+30, 75, y+30, "F")
+	pdf.CurveBezierCubic(80, y+30, 85, y-20, 80, y+30, 110, y+30, "FD")
 	pdf.SetLineWidth(thick)
-	pdf.CurveCubic(115, y+30, 120, y-20, 145, y+30, 115, y+30, "FD")
+	pdf.CurveBezierCubic(115, y+30, 120, y-20, 115, y+30, 145, y+30, "FD")
 	pdf.SetLineCapStyle("round")
-	pdf.CurveCubic(150, y+30, 155, y-20, 180, y+30, 150, y+30, "FD")
+	pdf.CurveBezierCubic(150, y+30, 155, y-20, 150, y+30, 180, y+30, "FD")
 	pdf.SetLineWidth(thin)
 	pdf.SetLineCapStyle("butt")
 
@@ -686,7 +690,7 @@ func ExampleFpdf_tutorial12() {
 	modeList := []string{"Normal", "Multiply", "Screen", "Overlay",
 		"Darken", "Lighten", "ColorDodge", "ColorBurn", "HardLight", "SoftLight",
 		"Difference", "Exclusion", "Hue", "Saturation", "Color", "Luminosity"}
-	pdf := gofpdf.New("", "", "", cnFontDir)
+	pdf := gofpdf.New("", "", "", "")
 	pdf.SetLineWidth(2)
 	pdf.SetAutoPageBreak(false, 0)
 	pdf.AddPage()
@@ -724,7 +728,7 @@ func ExampleFpdf_tutorial12() {
 
 // Gradients
 func ExampleFpdf_tutorial13() {
-	pdf := gofpdf.New("", "", "", cnFontDir)
+	pdf := gofpdf.New("", "", "", "")
 	pdf.SetFont("Helvetica", "", 12)
 	pdf.AddPage()
 	pdf.LinearGradient(0, 0, 210, 100, 250, 250, 255, 220, 220, 225, 0, 0, 0, .5)
@@ -743,7 +747,7 @@ func ExampleFpdf_tutorial13() {
 
 // Clipping examples
 func ExampleFpdf_tutorial14() {
-	pdf := gofpdf.New("", "", "", cnFontDir)
+	pdf := gofpdf.New("", "", "", "")
 	y := 10.0
 	pdf.AddPage()
 
@@ -805,18 +809,18 @@ func ExampleFpdf_tutorial14() {
 func ExampleFpdf_tutorial15() {
 	pdf := gofpdf.NewCustom(&gofpdf.InitType{
 		UnitStr:    "in",
-		Size:       gofpdf.SizeType{6, 6},
+		Size:       gofpdf.SizeType{Wd: 6, Ht: 6},
 		FontDirStr: cnFontDir,
 	})
 	pdf.SetMargins(0.5, 1, 0.5)
 	pdf.SetFont("Times", "", 14)
-	pdf.AddPageFormat("L", gofpdf.SizeType{3, 12})
+	pdf.AddPageFormat("L", gofpdf.SizeType{Wd: 3, Ht: 12})
 	pdf.SetXY(0.5, 1.5)
 	pdf.CellFormat(11, 0.2, "12 in x 3 in", "", 0, "C", false, 0, "")
 	pdf.AddPage() // Default size established in NewCustom()
 	pdf.SetXY(0.5, 3)
 	pdf.CellFormat(5, 0.2, "6 in x 6 in", "", 0, "C", false, 0, "")
-	pdf.AddPageFormat("P", gofpdf.SizeType{3, 12})
+	pdf.AddPageFormat("P", gofpdf.SizeType{Wd: 3, Ht: 12})
 	pdf.SetXY(0.5, 6)
 	pdf.CellFormat(2, 0.2, "3 in x 12 in", "", 0, "C", false, 0, "")
 	for j := 0; j <= 3; j++ {
@@ -834,7 +838,7 @@ func ExampleFpdf_tutorial15() {
 
 // Bookmark test
 func ExampleFpdf_tutorial16() {
-	pdf := gofpdf.New("P", "mm", "A4", cnFontDir)
+	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.AddPage()
 	pdf.SetFont("Arial", "", 15)
 	pdf.Bookmark("Page 1", 0, 0)
@@ -861,7 +865,7 @@ func ExampleFpdf_tutorial17() {
 	)
 	var refX, refY float64
 	var refStr string
-	pdf := gofpdf.New("P", "mm", "A4", cnFontDir)
+	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.AddPage()
 	color := func(val int) {
 		pdf.SetDrawColor(val, val, val)
@@ -988,7 +992,7 @@ func ExampleFpdf_tutorial18() {
 	var infoPtr *gofpdf.ImageInfoType
 	var fileStr string
 	var imgWd, imgHt, lf, tp float64
-	pdf := gofpdf.New("P", "mm", "A4", cnFontDir)
+	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.AddPage()
 	pdf.SetMargins(10, 10, 10)
 	pdf.SetFont("Helvetica", "", 15)
@@ -1026,7 +1030,7 @@ func ExampleFpdf_tutorial19() {
 		fontPtSize = 18.0
 		wd         = 100.0
 	)
-	pdf := gofpdf.New("P", "mm", "A4", cnFontDir) // A4 210.0 x 297.0
+	pdf := gofpdf.New("P", "mm", "A4", "") // A4 210.0 x 297.0
 	pdf.SetFont("Times", "", fontPtSize)
 	_, lineHt := pdf.GetFontSize()
 	pdf.AddPage()
@@ -1059,7 +1063,7 @@ func ExampleFpdf_tutorial20() {
 		sig gofpdf.SVGBasicType
 		err error
 	)
-	pdf := gofpdf.New("P", "mm", "A4", cnFontDir) // A4 210.0 x 297.0
+	pdf := gofpdf.New("P", "mm", "A4", "") // A4 210.0 x 297.0
 	pdf.SetFont("Times", "", fontPtSize)
 	lineHt := pdf.PointConvert(fontPtSize)
 	pdf.AddPage()
@@ -1110,7 +1114,7 @@ func ExampleFpdf_tutorial21() {
 		recType{"BC", "bottom center"},
 		recType{"BR", "bottom right"},
 	}
-	pdf := gofpdf.New("P", "mm", "A4", cnFontDir) // A4 210.0 x 297.0
+	pdf := gofpdf.New("P", "mm", "A4", "") // A4 210.0 x 297.0
 	pdf.SetFont("Helvetica", "", 16)
 	linkStr := ""
 	for pageJ := 0; pageJ < 2; pageJ++ {
@@ -1128,4 +1132,283 @@ func ExampleFpdf_tutorial21() {
 	pdf.OutputAndClose(docWriter(pdf, 21))
 	// Output:
 	// Successfully generated pdf/tutorial21.pdf
+}
+
+// This example demonstrates the use of characters in the high range of the
+// Windows-1252 code page (gofdpf default). See the following example (23) for
+// a way to do this automatically.
+func ExampleFpdf_tutorial22() {
+	pdf := gofpdf.New("P", "mm", "A4", "") // A4 210.0 x 297.0
+	fontSize := 16.0
+	pdf.SetFont("Helvetica", "", fontSize)
+	ht := pdf.PointConvert(fontSize)
+	write := func(str string) {
+		pdf.CellFormat(190, ht, str, "", 1, "C", false, 0, "")
+		pdf.Ln(ht)
+	}
+	pdf.AddPage()
+	htmlStr := `Until gofpdf supports UTF-8 encoded source text, source text needs ` +
+		`to be specified with all special characters escaped to match the code page ` +
+		`layout of the currently selected font. By default, gofdpf uses code page 1252.` +
+		` See <a href="http://en.wikipedia.org/wiki/Windows-1252">Wikipedia</a> for ` +
+		`a table of this layout.`
+	html := pdf.HTMLBasicNew()
+	html.Write(ht, htmlStr)
+	pdf.Ln(2 * ht)
+	write("Voix ambigu\xeb d'un c\x9cur qui au z\xe9phyr pr\xe9f\xe8re les jattes de kiwi.")
+	write("Falsches \xdcben von Xylophonmusik qu\xe4lt jeden gr\xf6\xdferen Zwerg.")
+	write("Heiz\xf6lr\xfccksto\xdfabd\xe4mpfung")
+	write("For\xe5rsj\xe6vnd\xf8gn / Efter\xe5rsj\xe6vnd\xf8gn")
+	pdf.OutputAndClose(docWriter(pdf, 22))
+	// Output:
+	// Successfully generated pdf/tutorial22.pdf
+}
+
+// This example demonstrates the conversion of UTF-8 strings to an 8-bit font
+// encoding.
+func ExampleFpdf_tutorial23() {
+	pdf := gofpdf.New("P", "mm", "A4", "") // A4 210.0 x 297.0
+	fontSize := 16.0
+	pdf.SetFont("Helvetica", "", fontSize)
+	ht := pdf.PointConvert(fontSize)
+	tr := pdf.UnicodeTranslatorFromDescriptor("") // "" defaults to "cp1252"
+	write := func(str string) {
+		pdf.CellFormat(190, ht, tr(str), "", 1, "C", false, 0, "")
+		pdf.Ln(ht)
+	}
+	pdf.AddPage()
+	str := `Gofpdf provides a translator that will convert any UTF-8 code point ` +
+		`that is present in the specified code page.`
+	pdf.MultiCell(190, ht, str, "", "L", false)
+	pdf.Ln(2 * ht)
+	write("Voix ambiguë d'un cœur qui au zéphyr préfère les jattes de kiwi.")
+	write("Falsches Üben von Xylophonmusik quält jeden größeren Zwerg.")
+	write("Heizölrückstoßabdämpfung")
+	write("Forårsjævndøgn / Efterårsjævndøgn")
+	pdf.OutputAndClose(docWriter(pdf, 23))
+	// Output:
+	// Successfully generated pdf/tutorial23.pdf
+}
+
+// This example demonstrates document protection.
+func ExampleFpdf_tutorial24() {
+	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf.SetProtection(gofpdf.CnProtectPrint, "123", "abc")
+	pdf.AddPage()
+	pdf.SetFont("Arial", "", 12)
+	pdf.Write(10, "Password-protected.")
+	pdf.OutputAndClose(docWriter(pdf, 24))
+	// Output:
+	// Successfully generated pdf/tutorial24.pdf
+}
+
+// This example displays equilateral polygons in a demonstration of the Polygon
+// function.
+func ExampleFpdf_tutorial25() {
+	const rowCount = 5
+	const colCount = 4
+	const ptSize = 36
+	var x, y, radius, gap, advance float64
+	var rgVal int
+	var pts []gofpdf.PointType
+	vertices := func(count int) (res []gofpdf.PointType) {
+		var pt gofpdf.PointType
+		res = make([]gofpdf.PointType, 0, count)
+		mlt := 2.0 * math.Pi / float64(count)
+		for j := 0; j < count; j++ {
+			pt.Y, pt.X = math.Sincos(float64(j) * mlt)
+			res = append(res, gofpdf.PointType{X: x + radius*pt.X, Y: y + radius*pt.Y})
+		}
+		return
+	}
+	pdf := gofpdf.New("P", "mm", "A4", "") // A4 210.0 x 297.0
+	pdf.AddPage()
+	pdf.SetFont("Helvetica", "", ptSize)
+	pdf.SetDrawColor(0, 80, 180)
+	gap = 12.0
+	pdf.SetY(gap)
+	pdf.CellFormat(190.0, gap, "Equilateral polygons", "", 1, "C", false, 0, "")
+	radius = (210.0 - float64(colCount+1)*gap) / (2.0 * float64(colCount))
+	advance = gap + 2.0*radius
+	y = 2*gap + pdf.PointConvert(ptSize) + radius
+	rgVal = 230
+	for row := 0; row < rowCount; row++ {
+		pdf.SetFillColor(rgVal, rgVal, 0)
+		rgVal -= 12
+		x = gap + radius
+		for col := 0; col < colCount; col++ {
+			pts = vertices(row*colCount + col + 3)
+			pdf.Polygon(pts, "FD")
+			x += advance
+		}
+		y += advance
+	}
+	pdf.OutputAndClose(docWriter(pdf, 25))
+	// Output:
+	// Successfully generated pdf/tutorial25.pdf
+}
+
+// This example demonstrates document layers. The initial visibility of a layer
+// is specified with the second parameter to AddLayer(). The layer list
+// displayed by the document reader allows layer visibility to be controlled
+// interactively.
+func ExampleFpdf_tutorial26() {
+
+	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+	pdf.SetFont("Arial", "", 15)
+	pdf.Write(8, "This line doesn't belong to any layer.\n")
+
+	// Define layers
+	l1 := pdf.AddLayer("Layer 1", true)
+	l2 := pdf.AddLayer("Layer 2", true)
+
+	// Open layer pane in PDF viewer
+	pdf.OpenLayerPane()
+
+	// First layer
+	pdf.BeginLayer(l1)
+	pdf.Write(8, "This line belongs to layer 1.\n")
+	pdf.EndLayer()
+
+	// Second layer
+	pdf.BeginLayer(l2)
+	pdf.Write(8, "This line belongs to layer 2.\n")
+	pdf.EndLayer()
+
+	// First layer again
+	pdf.BeginLayer(l1)
+	pdf.Write(8, "This line belongs to layer 1 again.\n")
+	pdf.EndLayer()
+
+	pdf.OutputAndClose(docWriter(pdf, 26))
+	// Output:
+	// Successfully generated pdf/tutorial26.pdf
+
+}
+
+// This example demonstrates the use of an image that is retrieved from a web
+// server.
+func ExampleFpdf_tutorial27() {
+
+	const (
+		margin   = 10
+		wd       = 210
+		ht       = 297
+		fontSize = 15
+		urlStr   = "https://code.google.com/p/gofpdf/logo?cct=1402750750"
+		msgStr   = `Images from the web can be easily embedded when a PDF document is generated.`
+	)
+
+	var (
+		rsp *http.Response
+		err error
+		tp  string
+	)
+
+	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+	pdf.SetFont("Helvetica", "", fontSize)
+	ln := pdf.PointConvert(fontSize)
+	pdf.MultiCell(wd-margin-margin, ln, msgStr, "", "L", false)
+	rsp, err = http.Get(urlStr)
+	if err == nil {
+		tp = pdf.ImageTypeFromMime(rsp.Header["Content-Type"][0])
+		infoPtr := pdf.RegisterImageReader(urlStr, tp, rsp.Body)
+		if pdf.Ok() {
+			imgWd, imgHt := infoPtr.Extent()
+			pdf.Image(urlStr, (wd-imgWd)/2.0, pdf.GetY()+ln, imgWd, imgHt, false, tp, 0, "")
+		}
+	} else {
+		pdf.SetError(err)
+	}
+	pdf.OutputAndClose(docWriter(pdf, 27))
+	// Output:
+	// Successfully generated pdf/tutorial27.pdf
+
+}
+
+// This example demonstrates the Beziergon function.
+func ExampleFpdf_tutorial28() {
+
+	const (
+		margin      = 10
+		wd          = 210
+		unit        = (wd - 2*margin) / 6
+		ht          = 297
+		fontSize    = 15
+		msgStr      = `Demonstration of Beziergon function`
+		coefficient = 0.6
+		delta       = coefficient * unit
+		ln          = fontSize * 25.4 / 72
+		offsetX     = (wd - 4*unit) / 2.0
+		offsetY     = offsetX + 2*ln
+	)
+
+	srcList := []gofpdf.PointType{
+		{X: 0, Y: 0},
+		{X: 1, Y: 0},
+		{X: 1, Y: 1},
+		{X: 2, Y: 1},
+		{X: 2, Y: 2},
+		{X: 3, Y: 2},
+		{X: 3, Y: 3},
+		{X: 4, Y: 3},
+		{X: 4, Y: 4},
+		{X: 1, Y: 4},
+		{X: 1, Y: 3},
+		{X: 0, Y: 3},
+	}
+
+	ctrlList := []gofpdf.PointType{
+		{X: 1, Y: -1},
+		{X: 1, Y: 1},
+		{X: 1, Y: 1},
+		{X: 1, Y: 1},
+		{X: 1, Y: 1},
+		{X: 1, Y: 1},
+		{X: 1, Y: 1},
+		{X: 1, Y: 1},
+		{X: -1, Y: 1},
+		{X: -1, Y: -1},
+		{X: -1, Y: -1},
+		{X: -1, Y: -1},
+	}
+
+	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+	pdf.SetFont("Helvetica", "", fontSize)
+	for j, src := range srcList {
+		srcList[j].X = offsetX + src.X*unit
+		srcList[j].Y = offsetY + src.Y*unit
+	}
+	for j, ctrl := range ctrlList {
+		ctrlList[j].X = ctrl.X * delta
+		ctrlList[j].Y = ctrl.Y * delta
+	}
+	jPrev := len(srcList) - 1
+	srcPrev := srcList[jPrev]
+	curveList := []gofpdf.PointType{srcPrev} // point [, control 0, control 1, point]*
+	control := func(x, y float64) {
+		curveList = append(curveList, gofpdf.PointType{X: x, Y: y})
+	}
+	for j, src := range srcList {
+		ctrl := ctrlList[jPrev]
+		control(srcPrev.X+ctrl.X, srcPrev.Y+ctrl.Y) // Control 0
+		ctrl = ctrlList[j]
+		control(src.X-ctrl.X, src.Y-ctrl.Y) // Control 1
+		curveList = append(curveList, src)  // Destination
+		jPrev = j
+		srcPrev = src
+	}
+	pdf.MultiCell(wd-margin-margin, ln, msgStr, "", "C", false)
+	pdf.SetDrawColor(224, 224, 224)
+	pdf.Polygon(srcList, "D")
+	pdf.SetDrawColor(64, 64, 128)
+	pdf.SetLineWidth(pdf.GetLineWidth() * 3)
+	pdf.Beziergon(curveList, "D")
+	pdf.OutputAndClose(docWriter(pdf, 28))
+	// Output:
+	// Successfully generated pdf/tutorial28.pdf
+
 }

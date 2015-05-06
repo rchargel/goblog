@@ -1,8 +1,9 @@
 package app
 
 import (
-	"github.com/revel/revel"
 	"strings"
+
+	"github.com/revel/revel"
 )
 
 func init() {

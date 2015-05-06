@@ -49,6 +49,11 @@ type PointType struct {
 	X, Y float64
 }
 
+// XY returns the X and Y components of the receiver point.
+func (p PointType) XY() (float64, float64) {
+	return p.X, p.Y
+}
+
 // ImageInfoType contains size, color and other information about an image
 type ImageInfoType struct {
 	data  []byte
@@ -196,6 +201,8 @@ type Fpdf struct {
 	clipNest         int                       // Number of active clipping contexts
 	transformNest    int                       // Number of active transformation contexts
 	err              error                     // Set if error occurs during life cycle of instance
+	protect          protectType               // document protection structure
+	layer            layerRecType              // manages optional layers in document
 	colorFlag        bool                      // indicates whether fill and text colors are different
 	color            struct {                  // Composite values of colors
 		draw, fill, text clrType

@@ -4,3 +4,6 @@ pdf/*.pdf
 look
 open
 pdf.txt
+*.sublime*
+font/Ubuntu-*
+*.0

@@ -17,9 +17,9 @@ package config
 import (
 	"bufio"
 	"errors"
-	"io"
 	"os"
 	"strings"
+	"unicode"
 )
 
 // _read is the base to read a file and get the configuration representation.
@@ -57,16 +57,9 @@ func ReadDefault(fname string) (*Config, error) {
 
 func (c *Config) read(buf *bufio.Reader) (err error) {
 	var section, option string
-
-	for {
-		l, err := buf.ReadString('\n') // parse line-by-line
-		if err == io.EOF {
-			break
-		} else if err != nil {
-			return err
-		}
-
-		l = strings.TrimSpace(l)
+	var scanner = bufio.NewScanner(buf)
+	for scanner.Scan() {
+		l := strings.TrimRightFunc(stripComments(scanner.Text()), unicode.IsSpace)
 
 		// Switch written for readability (not performance)
 		switch {
@@ -74,15 +67,18 @@ func (c *Config) read(buf *bufio.Reader) (err error) {
 		case len(l) == 0, l[0] == '#', l[0] == ';':
 			continue
 
-		// New section
+		// New section. The [ must be at the start of the line
 		case l[0] == '[' && l[len(l)-1] == ']':
 			option = "" // reset multi-line value
 			section = strings.TrimSpace(l[1 : len(l)-1])
 			c.AddSection(section)
 
-		// No new section and no section defined so
-		//case section == "":
-		//return os.NewError("no section defined")
+		// Continuation of multi-line value
+		// starts with whitespace, we're in a section and working on an option
+		case section != "" && option != "" && (l[0] == ' ' || l[0] == '\t'):
+			prev, _ := c.RawString(section, option)
+			value := strings.TrimSpace(l)
+			c.AddOption(section, option, prev+"\n"+value)
 
 		// Other alternatives
 		default:
@@ -90,21 +86,15 @@ func (c *Config) read(buf *bufio.Reader) (err error) {
 
 			switch {
 			// Option and value
-			case i > 0:
-				i := strings.IndexAny(l, "=:")
+			case i > 0 && l[0] != ' ' && l[0] != '\t': // found an =: and it's not a multiline continuation
 				option = strings.TrimSpace(l[0:i])
-				value := strings.TrimSpace(stripComments(l[i+1:]))
+				value := strings.TrimSpace(l[i+1:])
 				c.AddOption(section, option, value)
-			// Continuation of multi-line value
-			case section != "" && option != "":
-				prev, _ := c.RawString(section, option)
-				value := strings.TrimSpace(stripComments(l))
-				c.AddOption(section, option, prev+"\n"+value)
 
 			default:
 				return errors.New("could not parse line: " + l)
 			}
 		}
 	}
-	return nil
+	return scanner.Err()
 }

@@ -173,6 +173,7 @@ func fpdfNew(orientationStr, unitStr, sizeStr, fontDirStr string, size SizeType)
 	f.gradientList = append(f.gradientList, gradientType{}) // gradientList[0] is unused
 	// Set default PDF version number
 	f.pdfVersion = "1.3"
+	f.layerInit()
 	return
 }
 
@@ -200,7 +201,10 @@ func NewCustom(init *InitType) (f *Fpdf) {
 // "Letter", or "Legal". An empty string will be replaced with "A4".
 //
 // fontDirStr specifies the file system location in which font resources will
-// be found. An empty string is replaced with ".".
+// be found. An empty string is replaced with ".". This argument only needs to
+// reference an actual directory if a font other than one of the core
+// fonts is used. The core fonts are "courier", "helvetica" (also called
+// "arial"), "times", and "zapfdingbats" (also called "symbol").
 func New(orientationStr, unitStr, sizeStr, fontDirStr string) (f *Fpdf) {
 	return fpdfNew(orientationStr, unitStr, sizeStr, fontDirStr, SizeType{0, 0})
 }
@@ -216,7 +220,8 @@ func (f *Fpdf) Err() bool {
 }
 
 // SetErrorf sets the internal Fpdf error with formatted text to halt PDF
-// generation; this may facilitate error handling by application.
+// generation; this may facilitate error handling by application. If an error
+// condition is already set, this call is ignored.
 //
 // See the documentation for printing in the standard fmt package for details
 // about fmtStr and args.
@@ -243,6 +248,26 @@ func (f *Fpdf) SetError(err error) {
 // Error returns the internal Fpdf error; this will be nil if no error has occurred.
 func (f *Fpdf) Error() error {
 	return f.err
+}
+
+// GetPageSize returns the current page's width and height. This is the paper's
+// size. To compute the size of the area being used, subtract the margins (see
+// GetMargins()).
+func (f *Fpdf) GetPageSize() (width, height float64) {
+	width = f.w
+	height = f.h
+	return
+}
+
+// GetMargins returns the left, top, right, and bottom margins. The first three
+// are set with the SetMargins() method. The bottom margin is set with the
+// SetAutoPageBreak() method.
+func (f *Fpdf) GetMargins() (left, top, right, bottom float64) {
+	left = f.lMargin
+	top = f.tMargin
+	right = f.rMargin
+	bottom = f.bMargin
+	return
 }
 
 // SetMargins defines the left, top and right margins. By default, they equal 1
@@ -648,7 +673,7 @@ func colorValue(r, g, b int, grayStr, fullStr string) (clr clrType) {
 
 // SetDrawColor defines the color used for all drawing operations (lines,
 // rectangles and cell borders). It is expressed in RGB components (0 - 255).
-// The method can be called before the first page is created and the value is
+// The method can be called before the first page is created. The value is
 // retained from page to page.
 func (f *Fpdf) SetDrawColor(r, g, b int) {
 	f.color.draw = colorValue(r, g, b, "G", "RG")
@@ -681,7 +706,7 @@ func (f *Fpdf) GetFillColor() (int, int, int) {
 
 // SetTextColor defines the color used for text. It is expressed in RGB
 // components (0 - 255). The method can be called before the first page is
-// created and the value is retained from page to page.
+// created. The value is retained from page to page.
 func (f *Fpdf) SetTextColor(r, g, b int) {
 	f.color.text = colorValue(r, g, b, "g", "rg")
 	f.colorFlag = f.color.fill.str != f.color.text.str
@@ -709,7 +734,7 @@ func (f *Fpdf) GetStringWidth(s string) float64 {
 }
 
 // SetLineWidth defines the line width. By default, the value equals 0.2 mm.
-// The method can be called before the first page is created and the value is
+// The method can be called before the first page is created. The value is
 // retained from page to page.
 func (f *Fpdf) SetLineWidth(width float64) {
 	f.lineWidth = width
@@ -718,9 +743,14 @@ func (f *Fpdf) SetLineWidth(width float64) {
 	}
 }
 
+// GetLineWidth returns the current line thickness.
+func (f *Fpdf) GetLineWidth() float64 {
+	return f.lineWidth
+}
+
 // SetLineCapStyle defines the line cap style. styleStr should be "butt",
 // "round" or "square". A square style projects from the end of the line. The
-// method can be called before the first page is created and the value is
+// method can be called before the first page is created. The value is
 // retained from page to page.
 func (f *Fpdf) SetLineCapStyle(styleStr string) {
 	var capStyle int
@@ -798,15 +828,75 @@ func (f *Fpdf) Ellipse(x, y, rx, ry, degRotate float64, styleStr string) {
 	f.Arc(x, y, rx, ry, degRotate, 0, 360, styleStr)
 }
 
+// Polygon draws a closed figure defined by a series of vertices specified by
+// points. The x and y fields of the points use the units established in New().
+// The last point in the slice will be implicitly joined to the first to close
+// the polygon.
+//
+// styleStr can be "F" for filled, "D" for outlined only, or "DF" or "FD" for
+// outlined and filled. An empty string will be replaced with "D". Drawing uses
+// the current draw color and line width centered on the ellipse's perimeter.
+// Filling uses the current fill color.
+//
+// See tutorial 25 for an example of this function.
+func (f *Fpdf) Polygon(points []PointType, styleStr string) {
+	if len(points) > 2 {
+		for j, pt := range points {
+			if j == 0 {
+				f.point(pt.X, pt.Y)
+			} else {
+				f.outf("%.5f %.5f l ", pt.X*f.k, (f.h-pt.Y)*f.k)
+			}
+		}
+		f.outf("%.5f %.5f l ", points[0].X*f.k, (f.h-points[0].Y)*f.k)
+		f.outf(fillDrawOp(styleStr))
+	}
+}
+
+// Beziergon draws a closed figure defined by a series of cubic Bézier curve
+// segments. The first point in the slice defines the starting point of the
+// figure. Each three following points p1, p2, p3 represent a curve segment to
+// the point p3 using p1 and p2 as the Bézier control points.
+//
+// The x and y fields of the points use the units established in New().
+//
+// styleStr can be "F" for filled, "D" for outlined only, or "DF" or "FD" for
+// outlined and filled. An empty string will be replaced with "D". Drawing uses
+// the current draw color and line width centered on the ellipse's perimeter.
+// Filling uses the current fill color.
+//
+// See tutorial 28 for an example of this function.
+func (f *Fpdf) Beziergon(points []PointType, styleStr string) {
+
+	// Thanks, Robert Lillack, for contributing this function.
+
+	if len(points) < 4 {
+		return
+	}
+	f.point(points[0].XY())
+
+	points = points[1:]
+	for len(points) >= 3 {
+		cx0, cy0 := points[0].XY()
+		cx1, cy1 := points[1].XY()
+		x1, y1 := points[2].XY()
+		f.curve(cx0, cy0, cx1, cy1, x1, y1)
+		points = points[3:]
+	}
+
+	f.outf(fillDrawOp(styleStr))
+}
+
 // Outputs current point
 func (f *Fpdf) point(x, y float64) {
 	f.outf("%.2f %.2f m", x*f.k, (f.h-y)*f.k)
 }
 
-// Outputs quadratic curve from current point
-func (f *Fpdf) curve(cx0, cy0, x1, y1, cx1, cy1 float64) {
-	f.outf("%.5f %.5f %.5f %.5f %.5f %.5f c", cx0*f.k, (f.h-cy0)*f.k, x1*f.k,
-		(f.h-y1)*f.k, cx1*f.k, (f.h-cy1)*f.k)
+// Outputs a single cubic Bézier curve segment from current point
+func (f *Fpdf) curve(cx0, cy0, cx1, cy1, x, y float64) {
+	// Thanks, Robert Lillack, for straightening this out
+	f.outf("%.5f %.5f %.5f %.5f %.5f %.5f c", cx0*f.k, (f.h-cy0)*f.k, cx1*f.k,
+		(f.h-cy1)*f.k, x*f.k, (f.h-y)*f.k)
 }
 
 // Curve draws a single-segment quadratic Bézier curve. The curve starts at
@@ -828,7 +918,17 @@ func (f *Fpdf) Curve(x0, y0, cx, cy, x1, y1 float64, styleStr string) {
 		fillDrawOp(styleStr))
 }
 
-// CurveCubic draws a single-segment cubic Bézier curve. The curve starts at
+// CurveCubic draws a single-segment cubic Bézier curve. This routine performs
+// the same function as CurveBezierCubic() but has a nonstandard argument order.
+// It is retained to preserve backward compatibility.
+func (f *Fpdf) CurveCubic(x0, y0, cx0, cy0, x1, y1, cx1, cy1 float64, styleStr string) {
+	// f.point(x0, y0)
+	// f.outf("%.5f %.5f %.5f %.5f %.5f %.5f c %s", cx0*f.k, (f.h-cy0)*f.k,
+	// cx1*f.k, (f.h-cy1)*f.k, x1*f.k, (f.h-y1)*f.k, fillDrawOp(styleStr))
+	f.CurveBezierCubic(x0, y0, cx0, cy0, cx1, cy1, x1, y1, styleStr)
+}
+
+// CurveBezierCubic draws a single-segment cubic Bézier curve. The curve starts at
 // the point (x0, y0) and ends at the point (x1, y1). The control points (cx0,
 // cy0) and (cx1, cy1) specify the curvature. At the start point, the curve is
 // tangent to the straight line between the start point and the control point
@@ -840,8 +940,11 @@ func (f *Fpdf) Curve(x0, y0, cx, cy, x1, y1 float64, styleStr string) {
 // the current draw color, line width, and cap style centered on the curve's
 // path. Filling uses the current fill color.
 //
-// See tutorials 11 and 20 for examples of this function.
-func (f *Fpdf) CurveCubic(x0, y0, cx0, cy0, x1, y1, cx1, cy1 float64, styleStr string) {
+// This routine performs the same function as CurveCubic() but uses standard
+// argument order.
+//
+// See tutorial 11 for examples of this function.
+func (f *Fpdf) CurveBezierCubic(x0, y0, cx0, cy0, cx1, cy1, x1, y1 float64, styleStr string) {
 	f.point(x0, y0)
 	f.outf("%.5f %.5f %.5f %.5f %.5f %.5f c %s", cx0*f.k, (f.h-cy0)*f.k,
 		cx1*f.k, (f.h-cy1)*f.k, x1*f.k, (f.h-y1)*f.k, fillDrawOp(styleStr))
@@ -1208,40 +1311,52 @@ func (f *Fpdf) ClipEnd() {
 //
 // See tutorial 7 for an example of this function.
 func (f *Fpdf) AddFont(familyStr, styleStr, fileStr string) {
+	if fileStr == "" {
+		fileStr = strings.Replace(familyStr, " ", "", -1) + strings.ToLower(styleStr) + ".json"
+	}
+	fileStr = path.Join(f.fontpath, fileStr)
+
+	file, err := os.Open(fileStr)
+	if err != nil {
+		f.err = err
+		return
+	}
+	defer file.Close()
+
+	f.AddFontFromReader(familyStr, styleStr, file)
+}
+
+// AddFontFromReader imports a TrueType, OpenType or Type1 font and makes it
+// available using a reader that satisifies the io.Reader interface. See
+// AddFont for details about familyStr and styleStr.
+func (f *Fpdf) AddFontFromReader(familyStr, styleStr string, r io.Reader) {
 	if f.err != nil {
 		return
 	}
 	// dbg("Adding family [%s], style [%s]", familyStr, styleStr)
 	var ok bool
 	familyStr = strings.ToLower(familyStr)
-	if fileStr == "" {
-		fileStr = strings.Replace(familyStr, " ", "", -1) + strings.ToLower(styleStr) + ".json"
-	}
-	fileStr = path.Join(f.fontpath, fileStr)
 	styleStr = strings.ToUpper(styleStr)
 	if styleStr == "IB" {
 		styleStr = "BI"
 	}
 	fontkey := familyStr + styleStr
-	// dbg("fontkey [%s]", fontkey)
 	_, ok = f.fonts[fontkey]
 	if ok {
-		// dbg("fontkey found; returning")
 		return
 	}
 	var info fontDefType
-	info = f.loadfont(fileStr)
+	info = f.loadfont(r)
 	if f.err != nil {
 		return
 	}
 	info.I = len(f.fonts)
-	// dbg("font [%s], I [%d]", fileStr, info.I)
 	if len(info.Diff) > 0 {
 		// Search existing encodings
 		n := -1
 		for j, str := range f.diffs {
 			if str == info.Diff {
-				n = j
+				n = j + 1
 				break
 			}
 		}
@@ -1269,7 +1384,8 @@ func (f *Fpdf) AddFont(familyStr, styleStr, fileStr string) {
 // document will not be valid.
 //
 // The font can be either a standard one or a font added via the AddFont()
-// method. Standard fonts use the Windows encoding cp1252 (Western Europe).
+// method or AddFontFromReader() method. Standard fonts use the Windows
+// encoding cp1252 (Western Europe).
 //
 // The method can be called before the first page is created and the font is
 // kept from page to page. If you just wish to change the current font size, it
@@ -1278,10 +1394,10 @@ func (f *Fpdf) AddFont(familyStr, styleStr, fileStr string) {
 // Note: the font definition file must be accessible. An error is set if the
 // file cannot be read.
 //
-// familyStr specifies the font fammily. It can be either a name defined by
-// AddFont() or one of the standard families (case insensitive): "Courier" for
-// fixed-width, "Helvetica" or "Arial" for sans serif, "Times" for serif,
-// "Symbol" or "ZapfDingbats" for symbolic.
+// familyStr specifies the font family. It can be either a name defined by
+// AddFont(), AddFontFromReader() or one of the standard families (case
+// insensitive): "Courier" for fixed-width, "Helvetica" or "Arial" for sans
+// serif, "Times" for serif, "Symbol" or "ZapfDingbats" for symbolic.
 //
 // styleStr can be "B" (bold), "I" (italic), "U" (underscore) or any
 // combination. The default value (specified with an empty string) is regular.
@@ -1328,13 +1444,19 @@ func (f *Fpdf) SetFont(familyStr, styleStr string, size float64) {
 		}
 		_, ok = f.coreFonts[familyStr]
 		if ok {
-			if familyStr == "symbol" || familyStr == "zapfdingbats" {
+			if familyStr == "symbol" {
+				familyStr = "zapfdingbats"
+			}
+			if familyStr == "zapfdingbats" {
 				styleStr = ""
 			}
 			fontkey = familyStr + styleStr
 			_, ok = f.fonts[fontkey]
 			if !ok {
-				f.AddFont(familyStr, styleStr, "")
+				rdr := f.coreFontReader(familyStr, styleStr)
+				if f.err == nil {
+					f.AddFontFromReader(familyStr, styleStr, rdr)
+				}
 				if f.err != nil {
 					return
 				}
@@ -1654,7 +1776,7 @@ func (f *Fpdf) SplitLines(txt []byte, w float64) [][]byte {
 	// Function contributed by Bruno Michel
 	lines := [][]byte{}
 	cw := &f.currentFont.Cw
-	wmax := (w - 2*f.cMargin) * 1000 / f.fontSize
+	wmax := int(math.Ceil((w - 2*f.cMargin) * 1000 / f.fontSize))
 	s := bytes.Replace(txt, []byte("\r"), []byte{}, -1)
 	nb := len(s)
 	for nb > 0 && s[nb-1] == '\n' {
@@ -1664,10 +1786,10 @@ func (f *Fpdf) SplitLines(txt []byte, w float64) [][]byte {
 	sep := -1
 	i := 0
 	j := 0
-	l := 0.0
+	l := 0
 	for i < nb {
 		c := s[i]
-		l += float64(cw[c])
+		l += cw[c]
 		if c == ' ' || c == '\t' || c == '\n' {
 			sep = i
 		}
@@ -1944,39 +2066,27 @@ func (f *Fpdf) Ln(h float64) {
 	}
 }
 
-// Image puts a JPEG, PNG or GIF image in the current page. The size it will
-// take on the page can be specified in different ways. If both w and h are 0,
-// the image is rendered at 96 dpi. If either w or h is zero, it will be
-// calculated from the other dimension so that the aspect ratio is maintained.
-// If w and h are negative, their absolute values indicate their dpi extents.
-//
-// Supported JPEG formats are 24 bit, 32 bit and gray scale. Supported PNG
-// formats are 24 bit, indexed color, and 8 bit indexed gray scale. If a GIF
-// image is animated, only the first frame is rendered. Transparency is
-// supported. It is possible to put a link on the image. Remark: if an image is
-// used several times, only one copy is embedded in the file.
-//
-// If x is negative, the current abscissa is used.
-//
-// If flow is true, the current y value is advanced after placing the image and
-// a page break may be made if necessary.
-//
-// tp specifies the image format. Possible values are (case insensitive):
-// "JPG", "JPEG", "PNG" and "GIF". If not specified, the type is inferred from
-// the file extension.
-//
-// If link refers to an internal page anchor (that is, it is non-zero; see
-// AddLink()), the image will be a clickable internal link. Otherwise, if
-// linkStr specifies a URL, the image will be a clickable external link.
-func (f *Fpdf) Image(fileStr string, x, y, w, h float64, flow bool, tp string, link int, linkStr string) {
-	if f.err != nil {
-		return
+// ImageTypeFromMime returns the image type used in various image-related
+// functions (for example, Image()) that is associated with the specified MIME
+// type. For example, "jpg" is returned if mimeStr is "image/jpeg". An error is
+// set if the specified MIME type is not supported.
+func (f *Fpdf) ImageTypeFromMime(mimeStr string) (tp string) {
+	switch mimeStr {
+	case "image/png":
+		tp = "png"
+	case "image/jpg":
+		tp = "jpg"
+	case "image/jpeg":
+		tp = "jpg"
+	case "image/gif":
+		tp = "gif"
+	default:
+		f.SetErrorf("unsupported image type: %s", mimeStr)
 	}
-	info := f.RegisterImage(fileStr, tp)
-	if f.err != nil {
-		return
-	}
+	return
+}
 
+func (f *Fpdf) imageOut(info *ImageInfoType, x, y, w, h float64, flow bool, link int, linkStr string) {
 	// Automatic width and height calculation if needed
 	if w == 0 && h == 0 {
 		// Put image at 96 dpi
@@ -2018,6 +2128,97 @@ func (f *Fpdf) Image(fileStr string, x, y, w, h float64, flow bool, tp string, l
 	if link > 0 || len(linkStr) > 0 {
 		f.newLink(x, y, w, h, link, linkStr)
 	}
+}
+
+// Image puts a JPEG, PNG or GIF image in the current page. The size it will
+// take on the page can be specified in different ways. If both w and h are 0,
+// the image is rendered at 96 dpi. If either w or h is zero, it will be
+// calculated from the other dimension so that the aspect ratio is maintained.
+// If w and h are negative, their absolute values indicate their dpi extents.
+//
+// Supported JPEG formats are 24 bit, 32 bit and gray scale. Supported PNG
+// formats are 24 bit, indexed color, and 8 bit indexed gray scale. If a GIF
+// image is animated, only the first frame is rendered. Transparency is
+// supported. It is possible to put a link on the image.
+//
+// imageNameStr may be the name of an image as registered with a call to either
+// RegisterImageReader() or RegisterImage(). In the first case, the image is
+// loaded using an io.Reader. This is generally useful when the image is
+// obtained from some other means than as a disk-based file. In the second
+// case, the image is loaded as a file. Alternatively, imageNameStr may
+// directly specify a sufficiently qualified filename.
+//
+// However the image is loaded, if it is used more than once only one copy is
+// embedded in the file.
+//
+// If x is negative, the current abscissa is used.
+//
+// If flow is true, the current y value is advanced after placing the image and
+// a page break may be made if necessary.
+//
+// tp specifies the image format. Possible values are (case insensitive):
+// "JPG", "JPEG", "PNG" and "GIF". If not specified, the type is inferred from
+// the file extension.
+//
+// If link refers to an internal page anchor (that is, it is non-zero; see
+// AddLink()), the image will be a clickable internal link. Otherwise, if
+// linkStr specifies a URL, the image will be a clickable external link.
+func (f *Fpdf) Image(imageNameStr string, x, y, w, h float64, flow bool, tp string, link int, linkStr string) {
+	if f.err != nil {
+		return
+	}
+	info := f.RegisterImage(imageNameStr, tp)
+	if f.err != nil {
+		return
+	}
+	f.imageOut(info, x, y, w, h, flow, link, linkStr)
+	return
+}
+
+// RegisterImageReader registers an image, reading it from Reader r, adding it
+// to the PDF file but not adding it to the page. Use Image() with the same
+// name to add the image to the page. Note that tp should be specified in this
+// case.
+//
+// See Image() for restrictions on the image and the "tp" parameters.
+//
+// See tutorial 27 for an example of how this function can be used to load an
+// image from the web.
+func (f *Fpdf) RegisterImageReader(imgName, tp string, r io.Reader) (info *ImageInfoType) {
+	// Thanks, Ivan Daniluk, for generalizing this code to use the Reader interface.
+	if f.err != nil {
+		return
+	}
+	info, ok := f.images[imgName]
+	if ok {
+		return
+	}
+
+	// First use of this image, get info
+	if tp == "" {
+		f.err = fmt.Errorf("image type should be specified if reading from custom reader")
+		return
+	}
+	tp = strings.ToLower(tp)
+	if tp == "jpeg" {
+		tp = "jpg"
+	}
+	switch tp {
+	case "jpg":
+		info = f.parsejpg(r)
+	case "png":
+		info = f.parsepng(r)
+	case "gif":
+		info = f.parsegif(r)
+	default:
+		f.err = fmt.Errorf("unsupported image type: %s", tp)
+	}
+	if f.err != nil {
+		return
+	}
+	info.i = len(f.images) + 1
+	f.images[imgName] = info
+
 	return
 }
 
@@ -2030,38 +2231,28 @@ func (f *Fpdf) Image(fileStr string, x, y, w, h float64, flow bool, tp string, l
 // See tutorial 18 for an example of this function.
 func (f *Fpdf) RegisterImage(fileStr, tp string) (info *ImageInfoType) {
 	info, ok := f.images[fileStr]
-	if !ok {
-		// First use of this image, get info
-		if tp == "" {
-			pos := strings.LastIndex(fileStr, ".")
-			if pos < 0 {
-				f.err = fmt.Errorf("image file has no extension and no type was specified: %s", fileStr)
-				return
-			}
-			tp = fileStr[pos+1:]
-		}
-		tp = strings.ToLower(tp)
-		if tp == "jpeg" {
-			tp = "jpg"
-		}
-		switch tp {
-		case "jpg":
-			info = f.parsejpg(fileStr)
-		case "png":
-			info = f.parsepng(fileStr)
-		case "gif":
-			info = f.parsegif(fileStr)
-		default:
-			f.err = fmt.Errorf("unsupported image type: %s", tp)
-		}
-		if f.err != nil {
-			return
-		}
-		info.i = len(f.images) + 1
-		f.images[fileStr] = info
+	if ok {
+		return
 	}
 
-	return info
+	file, err := os.Open(fileStr)
+	if err != nil {
+		f.err = err
+		return
+	}
+	defer file.Close()
+
+	// First use of this image, get info
+	if tp == "" {
+		pos := strings.LastIndex(fileStr, ".")
+		if pos < 0 {
+			f.err = fmt.Errorf("image file has no extension and no type was specified: %s", fileStr)
+			return
+		}
+		tp = fileStr[pos+1:]
+	}
+
+	return f.RegisterImageReader(fileStr, tp, file)
 }
 
 // GetXY returns the abscissa and ordinate of the current position.
@@ -2108,6 +2299,33 @@ func (f *Fpdf) SetY(y float64) {
 func (f *Fpdf) SetXY(x, y float64) {
 	f.SetY(y)
 	f.SetX(x)
+}
+
+// SetProtection applies certain constraints on the finished PDF document.
+//
+// actionFlag is a bitflag that controls various document operations.
+// CnProtectPrint allows the document to be printed. CnProtectModify allows a
+// document to be modified by a PDF editor. CnProtectCopy allows text and
+// images to be copied into the system clipboard. CnProtectAnnotForms allows
+// annotations and forms to be added by a PDF editor. These values can be
+// combined by or-ing them together, for example,
+// CnProtectCopy|CnProtectModify. This flag is advisory; not all PDF readers
+// implement the constraints that this argument attempts to control.
+//
+// userPassStr specifies the password that will need to be provided to view the
+// contents of the PDF. The permissions specified by actionFlag will apply.
+//
+// ownerPassStr specifies the password that will need to be provided to gain
+// full access to the document regardless of the actionFlag value. An empty
+// string for this argument will be replaced with a random value, effectively
+// prohibiting full access to the document.
+//
+// See tutorial 24 for an example of this function.
+func (f *Fpdf) SetProtection(actionFlag byte, userPassStr, ownerPassStr string) {
+	if f.err != nil {
+		return
+	}
+	f.protect.setProtection(actionFlag, userPassStr, ownerPassStr)
 }
 
 // OutputAndClose sends the PDF document to the writer specified by w. This
@@ -2221,21 +2439,23 @@ func (f *Fpdf) beginpage(orientationStr string, size SizeType) {
 }
 
 func (f *Fpdf) endpage() {
+	f.EndLayer()
 	f.state = 1
 }
 
-// Load a font definition file from the font directory
-func (f *Fpdf) loadfont(fontStr string) (def fontDefType) {
+// Load a font definition file from the given Reader
+func (f *Fpdf) loadfont(r io.Reader) (def fontDefType) {
 	if f.err != nil {
 		return
 	}
 	// dbg("Loading font [%s]", fontStr)
-	buf, err := ioutil.ReadFile(fontStr)
+	var buf bytes.Buffer
+	_, err := buf.ReadFrom(r)
 	if err != nil {
 		f.err = err
 		return
 	}
-	err = json.Unmarshal(buf, &def)
+	err = json.Unmarshal(buf.Bytes(), &def)
 	if err != nil {
 		f.err = err
 	}
@@ -2254,6 +2474,11 @@ func (f *Fpdf) escape(s string) string {
 
 // Format a text string
 func (f *Fpdf) textstring(s string) string {
+	if f.protect.encrypted {
+		b := []byte(s)
+		f.protect.rc4(uint32(f.n), &b)
+		s = string(b)
+	}
 	return "(" + f.escape(s) + ")"
 }
 
@@ -2288,16 +2513,21 @@ func (f *Fpdf) newImageInfo() *ImageInfoType {
 	return &ImageInfoType{scale: f.k}
 }
 
-// Extract info from a JPEG file
+// Extract info from io.Reader with JPEG data
 // Thank you, Bruno Michel, for providing this code.
-func (f *Fpdf) parsejpg(fileStr string) (info *ImageInfoType) {
+func (f *Fpdf) parsejpg(r io.Reader) (info *ImageInfoType) {
 	info = f.newImageInfo()
-	var err error
-	info.data, err = ioutil.ReadFile(fileStr)
+	var (
+		data bytes.Buffer
+		err  error
+	)
+	_, err = data.ReadFrom(r)
 	if err != nil {
 		f.err = err
 		return
 	}
+	info.data = data.Bytes()
+
 	config, err := jpeg.DecodeConfig(bytes.NewReader(info.data))
 	if err != nil {
 		f.err = err
@@ -2319,9 +2549,9 @@ func (f *Fpdf) parsejpg(fileStr string) (info *ImageInfoType) {
 	return
 }
 
-// Extract info from a PNG file
-func (f *Fpdf) parsepng(fileStr string) (info *ImageInfoType) {
-	buf, err := bufferFromFile(fileStr)
+// Extract info from a PNG data
+func (f *Fpdf) parsepng(r io.Reader) (info *ImageInfoType) {
+	buf, err := bufferFromReader(r)
 	if err != nil {
 		f.err = err
 		return
@@ -2506,16 +2736,15 @@ func (f *Fpdf) parsepngstream(buf *bytes.Buffer) (info *ImageInfoType) {
 	return
 }
 
-// Extract info from a GIF file (via PNG conversion)
-func (f *Fpdf) parsegif(fileStr string) (info *ImageInfoType) {
-	data, err := ioutil.ReadFile(fileStr)
+// Extract info from a GIF data (via PNG conversion)
+func (f *Fpdf) parsegif(r io.Reader) (info *ImageInfoType) {
+	data, err := bufferFromReader(r)
 	if err != nil {
 		f.err = err
 		return
 	}
-	gifBuf := bytes.NewBuffer(data)
 	var img image.Image
-	img, err = gif.Decode(gifBuf)
+	img, err = gif.Decode(data)
 	if err != nil {
 		f.err = err
 		return
@@ -2542,6 +2771,9 @@ func (f *Fpdf) newobj() {
 
 func (f *Fpdf) putstream(b []byte) {
 	// dbg("putstream")
+	if f.protect.encrypted {
+		f.protect.rc4(uint32(f.n), &b)
+	}
 	f.out("stream")
 	f.out(string(b))
 	f.out("endstream")
@@ -2875,7 +3107,7 @@ func (f *Fpdf) putresourcedict() {
 	f.putxobjectdict()
 	f.out(">>")
 	count := len(f.blendList)
-	if count > 0 {
+	if count > 1 {
 		f.out("/ExtGState <<")
 		for j := 1; j < count; j++ {
 			f.outf("/GS%d %d 0 R", j, f.blendList[j].objNum)
@@ -2883,14 +3115,15 @@ func (f *Fpdf) putresourcedict() {
 		f.out(">>")
 	}
 	count = len(f.gradientList)
-	if count > 0 {
+	if count > 1 {
 		f.out("/Shading <<")
 		for j := 1; j < count; j++ {
 			f.outf("/Sh%d %d 0 R", j, f.gradientList[j].objNum)
 		}
 		f.out(">>")
 	}
-
+	// Layers
+	f.layerPutResourceDict()
 }
 
 func (f *Fpdf) putBlendModes() {
@@ -2934,6 +3167,7 @@ func (f *Fpdf) putresources() {
 	if f.err != nil {
 		return
 	}
+	f.layerPutLayers()
 	f.putBlendModes()
 	f.putGradients()
 	f.putfonts()
@@ -2948,6 +3182,19 @@ func (f *Fpdf) putresources() {
 	f.putresourcedict()
 	f.out(">>")
 	f.out("endobj")
+	if f.protect.encrypted {
+		f.newobj()
+		f.protect.objNum = f.n
+		f.out("<<")
+		f.out("/Filter /Standard")
+		f.out("/V 1")
+		f.out("/R 2")
+		f.outf("/O (%s)", f.escape(string(f.protect.oValue)))
+		f.outf("/U (%s)", f.escape(string(f.protect.uValue)))
+		f.outf("/P %d", f.protect.pValue)
+		f.out(">>")
+		f.out("endobj")
+	}
 	return
 }
 
@@ -2997,6 +3244,8 @@ func (f *Fpdf) putcatalog() {
 		f.outf("/Outlines %d 0 R", f.outlineRoot)
 		f.out("/PageMode /UseOutlines")
 	}
+	// Layers
+	f.layerPutCatalog()
 }
 
 func (f *Fpdf) putheader() {
@@ -3010,6 +3259,10 @@ func (f *Fpdf) puttrailer() {
 	f.outf("/Size %d", f.n+1)
 	f.outf("/Root %d 0 R", f.n)
 	f.outf("/Info %d 0 R", f.n-1)
+	if f.protect.encrypted {
+		f.outf("/Encrypt %d 0 R", f.protect.objNum)
+		f.out("/ID [()()]")
+	}
 }
 
 func (f *Fpdf) putbookmarks() {
@@ -3069,6 +3322,7 @@ func (f *Fpdf) enddoc() {
 	if f.err != nil {
 		return
 	}
+	f.layerEndDoc()
 	f.putheader()
 	f.putpages()
 	f.putresources()
