@@ -1,10 +1,36 @@
 <section>
-  <h1>Go4J: Golang 4 Java Developers</h1>
+  <h1>Go4J: Go(lang) 4 Java Developers</h1>
 </section>
 <section>
   <!-- WHAT IS GOLANG -->
   <section>
-    <h2>What is Go/Golang?</h2>
+    <h2>What is Go(lang)?</h2>
+    <ul>
+      <li>Statically-typed</li>
+      <li>C-like syntax</li>
+      <li>Managed memory</li>
+      <li>Inferred typing</li>
+      <li>Native code</li>
+    </ul>
+  </section>
+  <section>
+    <h3>Supported Operating Systems</h3>
+    <ul>
+      <li>Linux</li>
+      <li>Mac</li>
+      <li>Windows</li>
+      <li>BSD - many variants</li>
+      <li>Plan 9</li>
+    </ul>
+  </section>
+  <section>
+    <h3>Supported Architectures</h3>
+    <ul>
+      <li>i386</li>
+      <li>amd64</li>
+      <li>ARM</li>
+      <li>IBM POWER</li>
+    </ul>
   </section>
   <section>
     <h3>History</h3>
@@ -16,45 +42,35 @@
       feature in the language, so there was no extraneous garbage put into the language for any reason."
     </blockquote>
   </section>
-  <section>
-    <h3>What Go Isn't</h3>
-    <ul>
-      <li>Go is not a functional language (but provides first class fuctions).</li>
-      <li>Go is not a kitchen sink language (very few data models).</li>
-      <li>Go is not the solution to concurrency issues (no immutability).</li>
-      <li>Go is not <a href="/blog/golang-viable-project-dev#what-needs-work">quite</a> ready for enterprise development.</li>
-    </ul>
-  </section>
-  <section>
-    <h3>What Go Is</h3>
-    <ul>
-      <li>Go is fast (compiles to native, competes with C/C++).</li>
-      <li>Go is simple (minimal API and data stuctures).</li>
-      <li>Go is growing (backed by Google, 1% of github commits).</li>
-    </ul>
-  </section>
 </section>
+<!-- WHY USE GO -->
 <section>
   <section>
-    <h2>Why Go</h2>
+    <h2>Why Go?</h2>
+    <ul>
+      <li>Systems engineers use it for making command-line tools</li>
+      <li>Web developers use if for making web back-ends</li>
+      <li>Network engineers use it for writing performant routers</li>
+    </ul>
   </section>
   <section>
-    <h3>Who is Using it?</h3>
+    <h2>Who is Using it?</h2>
     <ul>
       <li>BBC Worldwide</li>
       <li>Canonical</li>
       <li>Github</li>
+      <li>Google</li>
       <li>Heroku</li>
       <li>Tumblr</li>
-      <li>... oh, yeah. Google</li>
     </ul>
   </section>
   <section>
     <h3>Who is Using it Locally?</h3>
     <ul>
-      <li>Drama Fever</li>
+      <li>Comcast</li>
+      <li>DramaFever</li>
+      <li>HashiCorp</li>
       <li>Vistar Media</li>
-      <li>Chariot Solutions</li>
     </ul>
   </section>
   <section>
@@ -70,47 +86,17 @@
       projects for Philly Go(lang) developers.
     </p>
   </section>
-</section>
-<section>
   <section>
-    <h2>Installing Go</h2>
-    <p>Install documentation at: <a href="http://golang.org/doc/install">http://golang.org/doc/install</a></p>
-    <p>Current version is 1.4.2</p>
-  </section>
-  <section>
-    <h3>Setup Your Workspace</h3>
-    <p class="left">Best practice is to create a Go workspace directory eg:</p>
-    <p><code>$HOME/Documents/golang</code></p>
-    <p class="left">Create environment variables</p>
+    <h2>Why Should I Care?</h2>
     <ul>
-      <li><code>export GOROOT=/go/installation/path</code></li>
-      <li><code>export PATH=$GOROOT/bin:$PATH</code></li>
-      <li><code>export GOPATH=$HOME/Documents/golang</code></li>
+      <li>Languages are tools</li>
+      <li>Go has a powerful backer</li>
+      <li>You already know it</li>
+      <li>Simple solutions for complex problems</li>
     </ul>
   </section>
-  <section>
-    <h3>Go Directories</h3>
-    <dl class="left">
-      <dt><code>$GOPATH/pkg</code></dt>
-      <dd>Directory containing platform compilers and tools.</dd>
-      <dt><code>$GOPATH/bin</code></dt>
-      <dd>Directory containing packaged binaries, both yours and third-party libraries.</dd>
-      <dt><code>$GOPATH/src</code></dt>
-      <dd>Directory containing source files, both yours and third-party libraries.</dd>
-    </dl>
-  </section>
-  <section>
-    <h3>Creating a new project</h3>
-    <ol>
-      <li>Create project directory:<br/>
-      <code>mkdir -p $GOPATH/src/github.com/user/myproject</code></li>
-      <li>Change directories<br />
-      <code>cd $GOPATH/src/github.com/user/myproject</code></li>
-      <li>Create your project files:<br/>
-      <code>touch main.go</code></li>
-    </ol>
-  </section>
 </section>
+<!-- GO CODE STRUCTURE: FILES -->
 <section>
   <section>
     <h2>Go Files</h2>
@@ -136,9 +122,8 @@
   <section>
     <h2>Example File</h2>
     <p>helloworld.go</p>
-    <pre class="go"><code>package main // current package
+    <pre class="go"><code>package main
 
-// defines the imports
 import (
   "fmt"
   "time"
@@ -158,6 +143,7 @@ func main() {
 }</code></pre>
   </section>
 </section>
+<!-- GO CODE STRUCTURE: PACKAGES -->
 <section>
   <section>
     <h2>Packages</h2>
@@ -188,6 +174,8 @@ func main() {
     </p>
   </section>
 </section>
+<!-- GO SYNTAX - not really useful -->
+<!--
 <section>
   <section>
     <h2>Go Syntax: Basics</h2>
@@ -591,5 +579,167 @@ func (m *MyMailer) SendMail(to, subject, message string) bool {
 }
 mailDaemon := &amp;MyMailer{} // pointer
 mailer := Mailer(mailDaemon)</code></pre>
+  </section>
+</section>
+-->
+<section>
+  <section>
+    <h2>Best Parts</h2>
+  </section>
+  <section>
+    <h3>Go is blazingly fast</h3>
+    <ul>
+      <li>Go compiler will compile most applications in &lt; 1 second.</li>
+      <li>Go compiles to native code; it competes with C in performance benchmarks.</code>
+    </ul>
+  </section>
+  <section>
+    <h3>Go has a simple, but useful standard library</h3>
+    <ul>
+      <li>Very few data models:
+        <ul>
+          <li>Array</li>
+          <li>Slice (ArrayList)</li>
+          <li>Map (HashTable)</li>
+        </ul>
+      </li>
+      <li>Can write client-server applications with standard library.</li>
+      <li>Go stays backwards compatible*</li>
+    </ul>
+    <p style="font-size: 80%">* within major releases - so far only one</p>
+  </section>
+  <section>
+    <h3>Many 3rd Party Libraries</h3>
+    <ul>
+      <li>Usually many options of libraries for any task</li>
+      <li>Becoming a library contributer is easier than dealing with Sonatype</li>
+      <li>Godoc.org lists/generates API Docs for all 3rd party libraries</li>
+      <li>Growing and helpful community</li>
+    </ul>
+  </section>
+  <section>
+    <h3>Go Channels</h3>
+    <p>Not the only language with channels, but they are implemented well.</p>
+    <pre class="go"><code>// create channel
+c := make(chan string, bufferSize)
+
+// write to channel
+c &lt;- "message"
+close(c) // sends "EOF" message
+
+// read from channel
+for message := range c { // reads until close message received
+  ...
+}</code></pre>
+  </section>
+  <section>
+    <h3>Go Routines</h3>
+    <p>Spawns a separate thread, not process</p>
+    <pre class="go"><code>func doSomething(c chan string) {
+  for {
+    ...
+    c &lt;- "something"
+  }
+  close(c)
+}
+func main() {
+  ...
+  c := make(chan string) // default buffer = 1
+  <b>go</b> doSomething(c) // happens in bg
+  for message := range c { // blocks until messages appear
+    ...
+  }
+}</code></pre>
+  </section>
+  <section>
+    <h3>Closures</h3>
+    <pre class="go"><code>package main
+import "fmt"
+var sum = 0
+func incr(x int) {
+  sum += x
+}
+func main() {
+  incr(2)
+  incr(3)
+  fmt.Println(sum == 5) // output: true
+}</code></pre>
+  </section>
+  <section>
+    <h3>Functions Are Types</h3>
+    <pre class="go"><code>package main
+import "fmt"
+func incr() func(int) int { // returns func with int param and returns int
+  var sum = 0
+  return func(x int) int {
+    sum += x
+    return sum
+  }
+}
+func main() {
+  i := incr()
+  s1, s2 := i(2), i(3)
+  fmt.Println(s1 == 2) // output: true
+  fmt.Println(s2 == 5) // output: true
+}</code></pre>
+  </section>
+  <section>
+    <h3>Functions Are Types (Cont...)</h3>
+    <pre class="go"><code>package main
+import "fmt"
+type convert func(int) string // define type function
+func value(x int) string { // implement "convert" as another function
+  return fmt.Sprintf("%v", x)
+}
+func quoteResult(fn convert, x int) string { // take "convert" as param
+  return `"` + fn(x) + `"`
+}
+func main() {
+  v := quoteResult(value, 123)
+  fmt.Println(v) // output: "123"
+}</code></pre>
+  </section>
+  <section>
+    <h3>Community is Key</h3>
+    <p>The Go developers community is remarkably friendly and helpful.</p>
+  </section>
+</section>
+<section>
+  <section>
+    <h2>The Devil is in the Details</h2>
+  </section>
+  <section>
+    <h3>Slices are Backed By Arrays</h3>
+    <p class="left">
+      Go slices are like Java ArrayLists, and are backed by an array. Slices can
+      be appended to until the array is full, then it will create a new array, and
+      copy its contents.
+    </p>
+    <p class="left">
+      It is possible, and easy, to have multiple slices backed by the same array,
+      however, once the array limit is reached and the new array is created, they
+      will now be backed by different arrays.
+    </p>
+  </section>
+  <section>
+    <h3>Go is not Thread Safe</h3>
+    <ul>
+      <li>There is no immutability</li>
+      <li>It is very easy to change shared memory from two go routines</li>
+      <li>There are some limited concurrency APIs</li>
+    </ul>
+  </section>
+  <section>
+    <h3>Go's Solution</h3>
+    <p>Don't Do That!</p>
+  </section>
+  <section>
+    <h3>Versions? We Don't Need no Stinking Versions.</h3>
+    <p>Go has no native concept of tagged releases</p>
+  </section>
+  <section>
+    <h3>Go's Solution</h3>
+    <p>Godep: a third-party library to identify "versions" for dependencies.</p>
+    <p>Uses commit hashes, not release tags.</p>
   </section>
 </section>
