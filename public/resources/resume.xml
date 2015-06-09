@@ -1,9 +1,9 @@
 <CV>
 	<Summary>
 		Senior Software Developer with more than 10 years of experience.  Background in distributed applications
-		with a focus on large data mining and performance or delivery.  Extensive client-side interfacing and 
+		with a focus on large data mining and performance or delivery.  Extensive client-side interfacing and
 		integrating teams of technologists with business professionals.  Additional experience in graphic
-		design, merging technologies with clean, beautiful interfaces.  Worked on a number of open-source 
+		design, merging technologies with clean, beautiful interfaces.  Worked on a number of open-source
 		projects on available on both GitHub and Sourceforge.
 	</Summary>
 	<Experience>
@@ -14,7 +14,7 @@
 			<Title>Consultant</Title>
 			<Location>Fort Washington, PA</Location>
 			<Description>
-				Member of Chariot Solution's consulting group, working with client companies to 
+				Member of Chariot Solution's consulting group, working with client companies to
 				design and build appropriate technology solutions with regards to excellence of quality and
 				effective cost management.
 			</Description>
@@ -27,14 +27,13 @@
 			<Title>Sr. Software Engineer</Title>
 			<Location>Wayne, PA</Location>
 			<Description>
-				Senior engineer for the Traffic Technologies and Sciences Group, an agile development team 
-				which functioned as the research and development wing for the traffic services division of 
-				Navteq. Responsible for green-fielding new technologies to improve the efficiency and 
-				accuracy of the traffic models, and new development frameworks to increase the productivity 
-				of our other development teams. Working directly with the Architecture team in order to design 
-				and implement an elastically scalable solution, based upon Map Reduce, to process real time 
-				streaming data from millions of GPS units world-wide. Introduced new technologies into the 
-				development organization, including Multi-Threaded Javascript and Groovy.
+				Senior engineer for the Traffic Technologies and Sciences Group, an agile development team
+				which functioned as a research and development group for the traffic services division of
+				NAVTEQ. Responsible for green-fielding new technologies to improve the efficiency and
+				accuracy of the traffic models, and new development frameworks to increase the productivity
+				of our other development teams. Working directly with the Architecture team in order to design
+				and implement frameworks based upon Map Reduce, to process real time
+				streaming data from millions of GPS units world-wide.
 			</Description>
 			<Skills>Java, Spring, Hibernate/JPA, Groovy, Linux Administration, Java Performance Tuning, JQuery, Selenium,
 			Python</Skills>
@@ -46,10 +45,10 @@
 			<Title>Software Architect</Title>
 			<Location>Philadelphia, PA</Location>
 			<Description>
-				Designer and lead developer for all product development projects, including Xebra, the world's 
-				first cross-platform and open-source medical diagnostic viewer (FDA approved) written using 
-				Java/J2EE, JPIP, and DICOM standards. Acted as a member of the Technical Panel for IHE 
-				(Integrating the Healthcare Environment), a standards body involved in the development of 
+				Designer and lead developer for all product development projects, including Xebra, the world's
+				first cross-platform and open-source medical diagnostic viewer (FDA approved) written using
+				Java/J2EE, JPIP, and DICOM standards. Acted as a member of the Technical Panel for IHE
+				(Integrating the Healthcare Environment), a standards body involved in the development of
 				interoperability standards in the Healthcare IT industry, which include XDS, XDS-I, and HL7.
 			</Description>
 			<Skills>Java, C++, Oracle, DICOM, HL7, HIPPA, Health Data Security</Skills>
@@ -61,16 +60,16 @@
 			<Title>Consultant</Title>
 			<Location>Washington, DC</Location>
 			<Description>
-				Senior technical consultant for Latin America, supervising all technical aspects of client 
-				projects and responsible for all hands-on and face-to-face interaction with clients in the 
-				region, which included company's largest international client. Projects varied, but 
-				focused on four main areas of development and deployment: Installing and configuring 
-				load-balanced and highly available deployments (Unix/Windows IT Security and 
-				Load Balancing), developing custom integration between the Blackboard product-line and 
-				clients' internal systems (J2EE and SOAP Event Driven Integration Layers), developing 
-				customized user interfaces for dynamic manipulation of the product-line's internal 
-				subsystems (JSP/Servlets using an MVC Struts Frameworks), and developing data-mining 
-				applications for advanced and extensive reporting and billing (Database Abstraction 
+				Senior technical consultant for Latin America, supervising all technical aspects of client
+				projects and responsible for all hands-on and face-to-face interaction with clients in the
+				region, which included company's largest international client. Projects varied, but
+				focused on four main areas of development and deployment: Installing and configuring
+				load-balanced and highly available deployments (Unix/Windows IT Security and
+				Load Balancing), developing custom integration between the Blackboard product-line and
+				clients' internal systems (J2EE and SOAP Event Driven Integration Layers), developing
+				customized user interfaces for dynamic manipulation of the product-line's internal
+				subsystems (JSP/Servlets using an MVC Struts Frameworks), and developing data-mining
+				applications for advanced and extensive reporting and billing (Database Abstraction
 				and Optimization in Oracle and SQL Server 2000).
 			</Description>
 			<Skills>Java, PERL, Oracle, SQL Server, MySQL, LDAP, Kerberos, SCORM, Unix (Solaris, HP-UX), Windows</Skills>
@@ -83,10 +82,10 @@
 			<Location>Washington, DC</Location>
 			<Description>
 				Development of a Novell Portal Server application for the Global Learning Portal. Developed portal
-				extensions with project leaders from member nations, and facilitated communication and content 
-				development. J2EE application layer which abstracted content provided by a Novell LDAP 
-				Server back-end into an XML data-feed. Feeds would translated into HTML via a series 
-				of XSLT transforms, which were assigned on the basis any combination of user LDAP attributes, 
+				extensions with project leaders from member nations, and facilitated communication and content
+				development. J2EE application layer which abstracted content provided by a Novell LDAP
+				Server back-end into an XML data-feed. Feeds would translated into HTML via a series
+				of XSLT transforms, which were assigned on the basis any combination of user LDAP attributes,
 				providing different front-end experiences depending upon the individual user configurations.
 			</Description>
 			<Skills>Java, XML/XSLT, LDAP, SQL Server, MySQL, PHP, ASP</Skills>
