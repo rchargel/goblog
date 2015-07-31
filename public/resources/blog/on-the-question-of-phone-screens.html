@@ -1,0 +1,289 @@
+<p>
+  Okay, so I have already written a blog post about <a href="on-the-question-of-interviews">interviewing candidates</a>,
+  so why am I writing another post on this topic? One simple reason, I am tired of waisting valuable resources in on-site
+  interviews with candidates who can clearly not code their way out of a paper bag. I literally saw this in a Java code test
+  a candidate was taking:
+</p>
+
+<pre><code class="java">1. public class Person implements Comparable {
+  ... // getters and setters
+2.   public int compareTo(Object obj) {
+3.     Person person = new Person(this.firstInitial, this.lastName);
+4.     if (person < obj) {
+5.       return 0;
+6.     }
+7.     return 0;
+8.   }
+9. }</code></pre>
+
+<p>Shall we break this down:</p>
+<blockquote>
+  <dl>
+    <dt>Line 1</dt>
+    <dd>No generics: <code>Person</code> should implement <code>Comparable&lt;Person&gt;</code>. Eclipse gave him
+        the brackets, but he didn't
+        know what to do with them so he just deleted them. This isn't a knew thing, we've had generics in Java
+        since JDK 1.5, released in 2004.</dd>
+    <dt>Line 2</dt>
+    <dd>Once again, this should have been <code>public int compareTo(Person other)</code>.</dd>
+    <dt>Line 3</dt>
+    <dd>Um... what? Why would you instantiate a new person with the same information of the current person?</dd>
+    <dt>Line 4</dt>
+    <dd>Probably my favorite line of code I've ever seen. It didn't seem to bother him that it wouldn't
+        compile, but he didn't seem to realize that he was trying to compare the reference values, not the contents
+        of those two objects.</dd>
+  </dl>
+</blockquote>
+
+<p>
+  This was only the beginning of the debacle that was that interview. At the end of the day, the real failure here was
+  that everybody's time was wasted. This candidate should never have spent his afternoon driving to my office, and
+  I should have been doing more important work. The poor guy should have been weeded out by the phone screen process.
+  For the sake of full disclosure, I have been guilty of clearing candidates during the phone screen, that later
+  completely bombed their code tests.
+</p>
+
+<p>
+  So I did what any reasonably inteligent person would do. I asked Google. What I eventually found was a blog post
+  by <a href="https://sites.google.com/site/steveyegge2/blog-rants">Steve Yegge</a>,
+  <a href="https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions">The Five Essential
+  Phone Screen Questions</a>. I found this to be a great guide to phone screening, however I feel that the author
+  of this post is a little harsh and also misses one big area.
+</p>
+
+<p>
+  I'm not going to bother summarazing his post, but Steve Yegge offers up the proposition that there are five
+  essential areas that <em>all</em> developers must be fluent.
+  <ol>
+    <li><strong>Coding</strong></li>
+    <li><strong>Object Oriented Design</strong></li>
+    <li><strong>Scripting and Regular Expressions</strong></li>
+    <li><strong>Data Structures</strong></li>
+    <li><strong>Bits and Bytes</strong></li>
+  </ol>
+  I think that he is mostly right, but I also think that some of his requirements are arbitrary. Furthermore, most
+  people are unprepared for a long phone screen, and the post does not describe how to keep the screen to under 45
+  minutes.
+</p>
+
+<p>
+  So I will attempt to write a flexible script, with just a few questions, which can be covered within 30 minutes.
+  The script should probably not be used verbatim, but as a rough guideline on how to conduct a phone screen. That said,
+  as Steve Yegge explains in the post listed above, it is important not to allow the candidate to controll the
+  conversation. If they begin to drone on, and attempt to steer you into a friendly banter about the virtues
+  of checked vs unchecked exceptions, interrupt and get things back on track.
+</p>
+
+<p>
+  The following is a list of questions that I believe should be asked, and in the order in which they should
+  be presented. The order is important because each question builds upon the expected understanding of prior questions.
+  Also, if the candidate fails to correctly or satisfactorally answer any of the questions, the interview should
+  be terminated in a friendly manner. Do not continue to the next question, just say "Thank you for your time, those are
+  all the questions I have for you today. Do you have any questions for me?" Furthermore, the dialogs
+  presented are all real dialogs that I have had with candidates, though not necessarily during phone
+  screens. Unlike many other blogs on this topic, I will am presenting only conversations that went well, as
+  there is no need to drag you through a list of absurdaties.
+</p>
+<h3>Question 1</h3>
+<p>
+  The first question should be just as Yegge suggests, a simple function that demonstrates the candidate's ability
+  to think in code. My preference is to use non-arbitrary actions like calculating fibinacci. First, because
+  people expect the fibinacci calculation, and second because that doesn't really evaluate anything. Second, the question
+  should be something that you as the interviewer could answer in less than 5 minutes. Finally, I don't expect people
+  to actually give me completed code, as many candidates are not sitting at a desk during a phone screen. Some people,
+  God forbid, prefer to be screened during their lunch breaks at their current job, and don't have pen and paper at hand.
+</p>
+<p>
+  So here is an example of a simple question and answer.
+</p>
+<pre><code class="nohighlight"><b>Me:</b>   How would you write a method that takes a String
+      parameter, and returns a copy of that String with the
+      characters in reverse order?
+<b>Them:</b> I would just use StringBuilder's reverse method.
+<b>Me:</b>   Good answer, but what if that was not available?
+<b>Them:</b> Then I would create a for loop that started with <em>i =
+      string.length() - 1</em>, counts down and continues until
+      <em>i &gt;= 0</em>. Inside the loop I would call <em>string.charAt(i)</em>
+      and append that to a variable that was declared
+      before the loop.
+<b>Me:</b>   Awesome, but how would you append it?
+<b>Them:</b> If I could use StringBuilder, I would use that.
+      Otherwise, I would just keep adding it to the end of
+      a string. The compiler will optimize it anyhow.
+<b>Me:</b>   Even if the compiler can't determine the final length
+      of the string?
+<b>Them:</b> Good point, I'm not sure.
+<b>Me:</b>   That's okay, you've thought about it. What would you
+      do if you were reversing an integer instead of a
+      string?
+<b>Them:</b> Hmm..(pause) I would use a modulus of 10 and keep
+      dividing the input by 10 in order to step through the
+      digits.</code></pre>
+<p>
+  Those are good answers which lead to follow-up questions. It didn't take more than
+  a few minutes, and I did not expect the candidate to know more than they had pretensions
+  of knowing. For instance, I would not have asked the question about compiler optimization
+  if the candidate had not brought it up. The fact that they even consider how the compiler
+  treats their code is a bonus, and extra kudos are apportioned if they know exactly how it
+  works. Even more kudos are offered if the candidate points out edge cases (eg: what if
+  the string input is null, or if the integer ends in zero?).
+</p>
+<p>
+  Furthermore, while candidate might be expecting a question about string reversal, and could
+  have prepared for it, throwing in the last bit about reversing an integer forces
+  them to think a little harder.
+</p>
+<p>
+  Again, if they cannot answer this question, or they refuse on principle, thank them for
+  their time, and end the call.
+</p>
+
+<h3>Question 2</h3>
+<p>
+  Okay, he or she can write and think in code. Now we should see if they understand how databases
+  work. If your project does not use relational databases, feel free to skip this question.
+  That said, even if your project uses noSql datastores or if your doing everything through
+  an ORM, I believe that it is important to understand how to do basic SQL queries.
+</p>
+<pre><code class="nohighlight"><b>Me:</b>   Okay, I have a database with two tables: Person and
+      Address. The Address table has a Person ID field. What
+      is the relationship between the two tables?
+<b>Them:</b> You mean like one-to-one, one-to-many, that sort of
+      thing?
+<b>Me:</b>   Exactly.
+<b>Them:</b> It's potentially one-to-many, a person could have more
+      than one address, but an address has only one person.
+<b>Me:</b>   Great, now how would you write a query that gets all
+      of the people and their addresses from the database?
+<b>Them:</b> I suppose I would use a join.
+<b>Me:</b>   Would it matter if not everybody had an address
+      record?
+<b>Them:</b> Yes, then you would need an outer join.</code></pre>
+<p>
+  See, that wasn't so bad. The real life candidate in this case did need a little prodding, as
+  she did not seem to know what I was driving at with my second question, but the whole dialog
+  took about 5 minutes.
+</p>
+
+<h3>Question 3</h3>
+<p>
+  Hey, if they know SQL they should understand data models. For this question, I am including
+  two dialogs. The first dialog was a good response, the second was a great response.</p>
+<p>Dialog #1</p>
+<pre><code class="nohighlight"><b>Me:</b>   I am writing a simple employee tracking application.
+      This application needs to track employees, their hours,
+      salaries, addresses, and managers. Can you give me an
+      example data model?
+<b>Them:</b> Okay, I would have an Employee class with salaries as a
+      field. It would also have a list of Address objects and
+      a field for the manager, which is just another employee.
+      For the hours you would need another class that mapped
+      the employee to the date and number of hours worked on
+      that date.
+<b>Me:</b>   Great, now what if I had volunteers who also had hours,
+      but no salaries? How would I tell the difference.
+<b>Them:</b> I would add a field with an EmployeeType enum. That enum
+      would have something like Staff and Volunteer.
+<b>Me:</b>   What if I also had board members? They have addresses,
+      but they are not employees. They don't have hours,
+      managers, or salaries.
+<b>Them:</b> Maybe I would create a Person class, and Employee and
+      Board member would extend Person.</code></pre>
+
+<p>Dialog #2</p>
+<pre><code class="nohighlight"><b>Me:</b>   //same question as above
+<b>Them:</b> I would start with a Person class and create an Employee
+      that extends that.
+<b>Me:</b>   (interrupting) Why wouldn't you just create an Employee
+      class?
+<b>Them:</b> Later on down the line we may need users that are not
+      employees, but are people. Or some other person type
+      that isn't necessarily an employee and doesn't fit that
+      mold.
+<b>Me:</b>   Awesome, go on.
+...</code></pre>
+
+<p>
+  Both of these were good responses, but the second dialog showed me that the candidate
+  was already thinking ahead to the next problem.
+</p>
+
+<h3>Question 4</h3>
+<p>
+  We're chugging right along now. Now we've determined that the candidate is a fairly
+  proficient developer. Before we start asking about data-structures, let's get a better
+  view into how well this person understands corner cases and possible bugs.
+</p>
+<pre><code class="nohighlight"><b>Me:</b>   Okay, we're going to change direction a little bit here.
+      What is Integer Overflow and what could it do to your
+      application?
+<b>Them:</b> I don't know what that is.
+<b>Me:</b>   Thank you for being honest. How about this, what is the
+      maximum value you can put into an int in Java?
+<b>Them:</b> Oh, I see. I just never heard that name before. So the
+      max value of an int is like 2 billion and something. Or
+      really 2<sup>31</sup> - 1. If you try to put something
+      larger than that into an int, it will overrun and go to
+      the next negative value. So if you add one to the max
+      int, it will be the minimum value of an int, negative
+      two billion and something.
+<b>Me:</b>   Why is this something we should care about?
+<b>Them:</b> Well it could totally mess up the math in your code if
+      you're dealing with really large numbers.
+<b>Me:</b>   How could you deal with this?
+<b>Them:</b> Well, if you know it could be an issue you could just
+      use a long, or BigInteger if you need to deal with huge
+      numbers.</code></pre>
+
+<h3>Question 5</h3>
+<p>
+  Okay, now we're ready to talk about data-structures.
+</p>
+
+<pre><code class="nohighlight"><b>Me:</b>   What data-structure best describes the DOM?
+<b>Them:</b> The DOM? The DOM is a Tree.
+<b>Me:</b>   Cool, what are some other trees you might normally run
+      into?
+<b>Them:</b> Well binary trees are used for searching in hash tables.
+      The heap is usually implemented as a tree in order to
+      manage priority queues.</code></pre>
+
+<p>
+  Very simple question, with a simple answer. Doesn't take more than a few seconds, but gives you
+  some insight into the candidate's understanding of the underpinnings of how software is built.
+</p>
+
+<h3>Conclusion</h3>
+<p>
+  At this point I would ask the candidate if he or she had any questions for me, and start to
+  wrap up the interview. I did not ask about previous experience or goals. I just need to find out
+  if it's worth bringing this person in for an on-sight interview. At that point they can talk about
+  where they see themselves in five years.
+</p>
+<p>
+  You will also notice that I didn't ask about scripting, or bits-and-bytes. For the former, I don't
+  really care whether or not they can write a decent regular expression. I do think it's important that
+  a developer understands the available tools in their ecosystem, and I would encourage you to ask a
+  question that concerns the ecosystem that relates to your organization. For instance, Yegge mentions grep,
+  but not everybody has the freedom to work with real operating systems. Some poor souls are forced to deal
+  with Windows, and don't have Cygwin for some reason. Another example he gives is asking about text editors
+  and the candidate mentions vi, but doesn't know about vim. Okay, that would be a huge red-flag for me. But
+  I highly doubt that somebody who can do well with the questions above would be that far off on understanding
+  their environment.
+</p>
+<p>
+  As to the bits and bytes, I might argue that the Integer Overflow question covers that as well, but
+  there are plenty of simple one-off questions that can cover that. "What is a primitive?" or "When might
+  you use bit-shifting?"
+</p>
+<p>
+  Finally, there is one question that I will <em>always</em> ask people interviewing for a Java developer
+  position (and I ask it as the first question). "What build framework do you use and explain how it works?"
+  I have run into too many Java developers that just know how to use Eclipse and don't understand how to
+  actually produce artifacts. I don't care if they tell me that they just have a Make file, or write a shell
+  script that produces a war, but if they don't know what I'm talking about, then I end the interview at
+  that point. The only exception to this rule is interviewing for interns or junior developers.
+</p>
+<p>
+  Good luck to everyone on this. I know how hard this part of the job can be.
+</p>

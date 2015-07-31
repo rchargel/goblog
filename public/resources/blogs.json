@@ -142,5 +142,14 @@
 		"Active"   : true,
 		"Tags"     : "java, go, golang, programming, software, web",
 		"File"     : "go4j-golang-for-java-developers.html"
+	},
+	{
+		"Name"     : "On the Question of Phone Screens",
+		"Date"     : "2015-07-30",
+		"Slug"     : "on-the-question-of-phone-screens",
+		"Abstract" : "It's hard to find good software developers, that's true, but it can be even harder to weed out bad developers during a phone screen. This incurs costs in both time and money for all involved, but how do we solve this problem.",
+		"Active"   : true,
+		"Tags"     : "interview, interviews, question, questions, software, programming, phone screens",
+		"File"     : "on-the-question-of-phone-screens.html"
 	}
 ]
