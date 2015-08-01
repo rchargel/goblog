@@ -1,6 +1,6 @@
 <p>
-  Okay, so I have already written a blog post about <a href="on-the-question-of-interviews">interviewing candidates</a>,
-  so why am I writing another post on this topic? One simple reason, I am tired of waisting valuable resources in on-site
+  Okay, so I have already written a blog post about <a href="on-the-question-of-interviews">interviewing candidates</a>.
+  So why am I writing another post on the very same topic? One simple reason, I am tired of wasting valuable resources in on-site
   interviews with candidates who can clearly not code their way out of a paper bag. I literally saw this in a Java code test
   a candidate was taking:
 </p>
@@ -37,14 +37,15 @@
 
 <p>
   This was only the beginning of the debacle that was that interview. At the end of the day, the real failure here was
-  that everybody's time was wasted. This candidate should never have spent his afternoon driving to my office, and
+  that everybody's time was wasted. This candidate should never have spent his afternoon driving to our office, and
   I should have been doing more important work. The poor guy should have been weeded out by the phone screen process.
   For the sake of full disclosure, I have been guilty of clearing candidates during the phone screen, that later
   completely bombed their code tests.
 </p>
 
 <p>
-  So I did what any reasonably inteligent person would do. I asked Google. What I eventually found was a blog post
+  Unfortunately, I did not have a good answer on how to better determine a candidate's qualifications during a phone screen.
+  So I did what any reasonably intelligent person would do; I asked Google. What I eventually found was a blog post
   by <a href="https://sites.google.com/site/steveyegge2/blog-rants">Steve Yegge</a>,
   <a href="https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions">The Five Essential
   Phone Screen Questions</a>. I found this to be a great guide to phone screening, however I feel that the author
@@ -52,8 +53,8 @@
 </p>
 
 <p>
-  I'm not going to bother summarazing his post, but Steve Yegge offers up the proposition that there are five
-  essential areas that <em>all</em> developers must be fluent.
+  I'm not going to bother summarizing his post, but Steve Yegge offers up the proposition that there are five
+  essential areas wherein <em>all</em> developers must be fluent.
   <ol>
     <li><strong>Coding</strong></li>
     <li><strong>Object Oriented Design</strong></li>
@@ -62,35 +63,36 @@
     <li><strong>Bits and Bytes</strong></li>
   </ol>
   I think that he is mostly right, but I also think that some of his requirements are arbitrary. Furthermore, most
-  people are unprepared for a long phone screen, and the post does not describe how to keep the screen to under 45
+  people are unprepared for a long phone screen, and the post does not describe how to keep the phone call to under 45
   minutes.
 </p>
 
 <p>
-  So I will attempt to write a flexible script, with just a few questions, which can be covered within 30 minutes.
-  The script should probably not be used verbatim, but as a rough guideline on how to conduct a phone screen. That said,
-  as Steve Yegge explains in the post listed above, it is important not to allow the candidate to controll the
-  conversation. If they begin to drone on, and attempt to steer you into a friendly banter about the virtues
+  So this post is an attempt to write a flexible script, with just a few questions, which can be covered within 30 minutes.
+  This script should probably not be used verbatim, but as a rough guideline on how to conduct a phone screen. That said,
+  as Yegge explains in his post listed above, it is important not to allow the candidate to control the
+  conversation. If they begin to drone on, and attempt to steer you into some friendly banter about the virtues
   of checked vs unchecked exceptions, interrupt and get things back on track.
 </p>
 
 <p>
   The following is a list of questions that I believe should be asked, and in the order in which they should
-  be presented. The order is important because each question builds upon the expected understanding of prior questions.
-  Also, if the candidate fails to correctly or satisfactorally answer any of the questions, the interview should
+  be presented. Ordering is important because each question builds upon the expected understanding of prior questions.
+  Also, if the candidate fails to correctly or satisfactorily answer one, the interview should
   be terminated in a friendly manner. Do not continue to the next question, just say "Thank you for your time, those are
-  all the questions I have for you today. Do you have any questions for me?" Furthermore, the dialogs
-  presented are all real dialogs that I have had with candidates, though not necessarily during phone
-  screens. Unlike many other blogs on this topic, I will am presenting only conversations that went well, as
-  there is no need to drag you through a list of absurdaties.
+  all the questions I have for you today. Do you have any questions for me?" Furthermore, it should be noted that the dialogs
+  presented below are all real conversations that I have had with real candidates, though not necessarily during phone
+  screens. Unlike many other blogs on this topic, I am presenting only conversations that went well, as
+  there is no need to drag you through a list of absurdities.
 </p>
 <h3>Question 1</h3>
 <p>
   The first question should be just as Yegge suggests, a simple function that demonstrates the candidate's ability
-  to think in code. My preference is to use non-arbitrary actions like calculating fibinacci. First, because
-  people expect the fibinacci calculation, and second because that doesn't really evaluate anything. Second, the question
-  should be something that you as the interviewer could answer in less than 5 minutes. Finally, I don't expect people
-  to actually give me completed code, as many candidates are not sitting at a desk during a phone screen. Some people,
+  to think in code. My preference is to use non-arbitrary actions, unlike his example of calculating the n-th Fibonacci number. First, because
+  people expect (and may have memorized the solution to) the Fibonacci calculation, nor does it really
+  evaluate a real-world task. Also, the question
+  should be something that you as the interviewer could answer in less than 5 minutes. Please do not expect people
+  to actually give you completed code, as many candidates are not sitting at a desk during a phone screen. Some people,
   God forbid, prefer to be screened during their lunch breaks at their current job, and don't have pen and paper at hand.
 </p>
 <p>
@@ -129,7 +131,7 @@
   the string input is null, or if the integer ends in zero?).
 </p>
 <p>
-  Furthermore, while candidate might be expecting a question about string reversal, and could
+  Furthermore, while the candidate might be expecting a question about string reversal, and could
   have prepared for it, throwing in the last bit about reversing an integer forces
   them to think a little harder.
 </p>
@@ -142,7 +144,7 @@
 <p>
   Okay, he or she can write and think in code. Now we should see if they understand how databases
   work. If your project does not use relational databases, feel free to skip this question.
-  That said, even if your project uses noSql datastores or if your doing everything through
+  That said, even if your project uses noSql datastores or if you're doing everything through
   an ORM, I believe that it is important to understand how to do basic SQL queries.
 </p>
 <pre><code class="nohighlight"><b>Me:</b>   Okay, I have a database with two tables: Person and
@@ -257,23 +259,24 @@
 <p>
   At this point I would ask the candidate if he or she had any questions for me, and start to
   wrap up the interview. I did not ask about previous experience or goals. I just need to find out
-  if it's worth bringing this person in for an on-sight interview. At that point they can talk about
+  if it's worth bringing this person in for an on-sight interview, where they can talk about
   where they see themselves in five years.
 </p>
 <p>
-  You will also notice that I didn't ask about scripting, or bits-and-bytes. For the former, I don't
-  really care whether or not they can write a decent regular expression. I do think it's important that
-  a developer understands the available tools in their ecosystem, and I would encourage you to ask a
+  You will also notice that I didn't ask about scripting, or bits-and-bytes, as Yegge suggests. For the former, I don't
+  really care whether or not they can write a decent regular expression, Google can help with that. I <em>do</em> think it's important that
+  a developer understands the available tools in their ecosystem however, and I would encourage you to ask a
   question that concerns the ecosystem that relates to your organization. For instance, Yegge mentions grep,
   but not everybody has the freedom to work with real operating systems. Some poor souls are forced to deal
   with Windows, and don't have Cygwin for some reason. Another example he gives is asking about text editors
-  and the candidate mentions vi, but doesn't know about vim. Okay, that would be a huge red-flag for me. But
-  I highly doubt that somebody who can do well with the questions above would be that far off on understanding
+  and the candidate mentions vi, but doesn't know about vim. Okay, that would be a huge red-flag for me (only
+  because the candidate brought up vi in the first place). But
+  I highly doubt that somebody who can do well with the questions I suggested would be that far off on understanding
   their environment.
 </p>
 <p>
   As to the bits and bytes, I might argue that the Integer Overflow question covers that as well, but
-  there are plenty of simple one-off questions that can cover that. "What is a primitive?" or "When might
+  there are plenty of simple one-off questions that can be tried. "What is a primitive?" or "When might
   you use bit-shifting?"
 </p>
 <p>
