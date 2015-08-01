@@ -18,6 +18,7 @@ package gofpdf
 
 import (
 	"bytes"
+	"io"
 )
 
 // Version of FPDF from which this package is derived
@@ -75,8 +76,21 @@ type ImageInfoType struct {
 // value expressed in the unit of measure specified in New(). Since font
 // management in Fpdf uses points, this method can help with line height
 // calculations and other methods that require user units.
-func (f *Fpdf) PointConvert(pt float64) float64 {
+func (f *Fpdf) PointConvert(pt float64) (u float64) {
 	return pt / f.k
+}
+
+// PointToUnitConvert is an alias for PointConvert.
+func (f *Fpdf) PointToUnitConvert(pt float64) (u float64) {
+	return pt / f.k
+}
+
+// UnitToPointConvert returns the value of u, expressed in the unit of measure
+// specified in New(), as a value expressed in points (1/72 inch). Since font
+// management in Fpdf uses points, this method can help with setting font sizes
+// based on the sizes of other non-font page elements.
+func (f *Fpdf) UnitToPointConvert(u float64) (pt float64) {
+	return u * f.k
 }
 
 // Extent returns the width and height of the image in the units of the Fpdf
@@ -132,6 +146,15 @@ type InitType struct {
 	FontDirStr     string
 }
 
+// FontLoader is used to read fonts (JSON font specification and zlib compressed font binaries)
+// from arbitrary locations (e.g. files, zip files, embedded font resources).
+//
+// Open provides an io.Reader for the specified font file (.json or .z). The file name
+// does never include a path. Open returns an error if the specified file cannot be opened.
+type FontLoader interface {
+	Open(name string) (io.Reader, error)
+}
+
 // Fpdf is the principal structure for creating a single PDF document
 type Fpdf struct {
 	page             int                       // current page number
@@ -160,6 +183,7 @@ type Fpdf struct {
 	lasth            float64                   // height of last printed cell
 	lineWidth        float64                   // line width in user unit
 	fontpath         string                    // path containing fonts
+	fontLoader       FontLoader                // used to load font files from arbitrary locations
 	coreFonts        map[string]bool           // array of core font names
 	fonts            map[string]fontDefType    // array of used fonts
 	fontFiles        map[string]fontFileType   // array of font files
@@ -195,8 +219,12 @@ type Fpdf struct {
 	fontDirStr       string                    // location of font definition files
 	capStyle         int                       // line cap style: butt 0, round 1, square 2
 	joinStyle        int                       // line segment join style: miter 0, round 1, bevel 2
+	dashArray        []float64                 // dash array
+	dashPhase        float64                   // dash phase
 	blendList        []blendModeType           // slice[idx] of alpha transparency modes, 1-based
 	blendMap         map[string]int            // map into blendList
+	blendMode        string                    // current blend mode
+	alpha            float64                   // current transpacency
 	gradientList     []gradientType            // slice[idx] of gradient records
 	clipNest         int                       // Number of active clipping contexts
 	transformNest    int                       // Number of active transformation contexts
@@ -220,21 +248,91 @@ type fontBoxType struct {
 	Xmin, Ymin, Xmax, Ymax int
 }
 
-type fontDescType struct {
-	Ascent       int
-	Descent      int
-	CapHeight    int
-	Flags        int
-	FontBBox     fontBoxType
-	ItalicAngle  int
-	StemV        int
+// Font flags for FontDescType.Flags as defined in the pdf specification.
+const (
+	// FontFlagFixedPitch is set if all glyphs have the same width (as
+	// opposed to proportional or variable-pitch fonts, which have
+	// different widths).
+	FontFlagFixedPitch = 1 << 0
+	// FontFlagSerif is set if glyphs have serifs, which are short
+	// strokes drawn at an angle on the top and bottom of glyph stems.
+	// (Sans serif fonts do not have serifs.)
+	FontFlagSerif = 1 << 1
+	// FontFlagSymbolic is set if font contains glyphs outside the
+	// Adobe standard Latin character set. This flag and the
+	// Nonsymbolic flag shall not both be set or both be clear.
+	FontFlagSymbolic = 1 << 2
+	// FontFlagScript is set if glyphs resemble cursive handwriting.
+	FontFlagScript = 1 << 3
+	// FontFlagNonsymbolic is set if font uses the Adobe standard
+	// Latin character set or a subset of it.
+	FontFlagNonsymbolic = 1 << 5
+	// FontFlagItalic is set if glyphs have dominant vertical strokes
+	// that are slanted.
+	FontFlagItalic = 1 << 6
+	// FontFlagAllCap is set if font contains no lowercase letters;
+	// typically used for display purposes, such as for titles or
+	// headlines.
+	FontFlagAllCap = 1 << 16
+	// SmallCap is set if font contains both uppercase and lowercase
+	// letters. The uppercase letters are similar to those in the
+	// regular version of the same typeface family. The glyphs for the
+	// lowercase letters have the same shapes as the corresponding
+	// uppercase letters, but they are sized and their proportions
+	// adjusted so that they have the same size and stroke weight as
+	// lowercase glyphs in the same typeface family.
+	SmallCap = 1 << 18
+	// ForceBold determines whether bold glyphs shall be painted with
+	// extra pixels even at very small text sizes by a conforming
+	// reader. If the ForceBold flag is set, features of bold glyphs
+	// may be thickened at small text sizes.
+	ForceBold = 1 << 18
+)
+
+// FontDescType (font descriptor) specifies metrics and other
+// attributes of a font, as distinct from the metrics of individual
+// glyphs (as defined in the pdf specification).
+type FontDescType struct {
+	// The maximum height above the baseline reached by glyphs in this
+	// font (for example for "S"). The height of glyphs for accented
+	// characters shall be excluded.
+	Ascent int
+	// The maximum depth below the baseline reached by glyphs in this
+	// font. The value shall be a negative number.
+	Descent int
+	// The vertical coordinate of the top of flat capital letters,
+	// measured from the baseline (for example "H").
+	CapHeight int
+	// A collection of flags defining various characteristics of the
+	// font. (See the FontFlag* constants.)
+	Flags int
+	// A rectangle, expressed in the glyph coordinate system, that
+	// shall specify the font bounding box. This should be the smallest
+	// rectangle enclosing the shape that would result if all of the
+	// glyphs of the font were placed with their origins coincident
+	// and then filled.
+	FontBBox fontBoxType
+	// The angle, expressed in degrees counterclockwise from the
+	// vertical, of the dominant vertical strokes of the font. (The
+	// 9-o’clock position is 90 degrees, and the 3-o’clock position
+	// is –90 degrees.) The value shall be negative for fonts that
+	// slope to the right, as almost all italic fonts do.
+	ItalicAngle int
+	// The thickness, measured horizontally, of the dominant vertical
+	// stems of glyphs in the font.
+	StemV int
+	// The width to use for character codes whose widths are not
+	// specified in a font dictionary’s Widths array. This shall have
+	// a predictable effect only if all such codes map to glyphs whose
+	// actual widths are the same as the value of the MissingWidth
+	// entry. (Default value: 0.)
 	MissingWidth int
 }
 
 type fontDefType struct {
 	Tp           string       // "Core", "TrueType", ...
 	Name         string       // "Courier-Bold", ...
-	Desc         fontDescType // Font descriptor
+	Desc         FontDescType // Font descriptor
 	Up           int          // Underline position
 	Ut           int          // Underline thickness
 	Cw           [256]int     // Character width by ordinal
@@ -259,5 +357,5 @@ type fontInfoType struct {
 	UnderlinePosition  int
 	Widths             [256]int
 	Size1, Size2       uint32
-	Desc               fontDescType
+	Desc               FontDescType
 }

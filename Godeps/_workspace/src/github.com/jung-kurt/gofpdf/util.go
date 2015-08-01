@@ -69,6 +69,19 @@ func bufferFromReader(r io.Reader) (b *bytes.Buffer, err error) {
 	return
 }
 
+// Returns true if the two specified float slices are equal
+func slicesEqual(a, b []float64) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
+}
+
 // Returns a zlib-compressed copy of the specified byte array
 func sliceCompress(data []byte) []byte {
 	var buf bytes.Buffer
@@ -247,7 +260,7 @@ func UnicodeTranslatorFromFile(fileStr string) (f func(string) string, err error
 // If an error occurs reading the descriptor, the returned function is valid
 // but does not perform any rune translation.
 //
-// See tutorial 23 for an example of this function.
+// The CellFormat (4) example demonstrates this method.
 func (f *Fpdf) UnicodeTranslatorFromDescriptor(cpStr string) (rep func(string) string) {
 	var str string
 	var ok bool

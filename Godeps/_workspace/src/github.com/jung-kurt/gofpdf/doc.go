@@ -53,53 +53,27 @@ on Linux, Mac and Windows platforms. Like FPDF version 1.7, from which gofpdf
 is derived, this package does not yet support UTF-8 fonts. However, support is
 provided to translate UTF-8 runes to code page encodings.
 
-Acknowledgments
-
-This package's code and documentation are closely derived from the FPDF library
-created by Olivier Plathey, and a number of font and image resources are copied
-directly from it. Drawing support is adapted from the FPDF geometric figures
-script by David Hernández Sanz. Transparency support is adapted from the FPDF
-transparency script by Martin Hall-May. Support for gradients and clipping is
-adapted from FPDF scripts by Andreas Würmser. Support for outline bookmarks is
-adapted from Olivier Plathey by Manuel Cornes. Layer support is adapted from
-Olivier Plathey. Support for transformations is adapted from the FPDF
-transformation script by Moritz Wagner and Andreas Würmser. PDF protection is
-adapted from the work of Klemen Vodopivec for the FPDF product. Lawrence
-Kesteloot provided code to allow an image's extent to be determined prior to
-placement. Support for vertical alignment within a cell was provided by Stefan
-Schroeder. Ivan Daniluk generalized the font and image loading code to use the
-Reader interface while maintaining backward compatibility. Anthony Starks
-provided code for the Polygon function. Robert Lillack provided the Beziergon
-function and corrected some naming issues with the internal curve function.
-Bruno Michel has provided valuable assistance with the code.
-
-The FPDF website is http://www.fpdf.org/.
-
-License
-
-gofpdf is copyrighted by Kurt Jung and is released under the MIT License.
-
 Installation
 
 To install the package on your system, run
 
-	go get code.google.com/p/gofpdf
+	go get github.com/jung-kurt/gofpdf
 
 Later, to receive updates, run
 
-	go get -u code.google.com/p/gofpdf
+	go get -u github.com/jung-kurt/gofpdf
 
 Quick Start
 
-The following Go code generates a simple PDF.
+The following Go code generates a simple PDF file.
 
-	pdf := gofpdf.New("P", "mm", "A4", "../font")
+	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.AddPage()
 	pdf.SetFont("Arial", "B", 16)
 	pdf.Cell(40, 10, "Hello, world")
-	pdf.Output(os.Stdout)
+	err := pdf.OutputFileAndClose("hello.pdf")
 
-See the tutorials in the fpdf_test.go file (shown as examples in this
+See the functions in the fpdf_test.go file (shown as examples in this
 documentation) for more advanced PDF examples.
 
 Errors
@@ -134,17 +108,14 @@ that are passed to them; in these cases additional methods have been exported
 to provide similar functionality. Font definition files are produced in JSON
 rather than PHP.
 
-Tutorials
+Example PDFs
 
-A side effect of running "go test" is the production of the tutorial PDFs.
-These can be found in the gofpdf/pdf directory after the tests complete.
+A side effect of running "go test" is the production of a number of example
+PDFs. These can be found in the gofpdf/pdf directory after the tests complete.
 
-Please note that these tutorials run in the context of a test. In order run an
+Please note that these examples run in the context of a test. In order run an
 example as a standalone application, you'll need to examine fpdf_test.go for
-some helper routines, for example docWriter and strDelimit. In particular,
-docWriter is used as an argument to OutputAndClose in order to reduce the
-boilerplate in each example. In practice, you may be better served by calling
-OutputFileAndClose().
+some helper routines, for example exampleFilename and summary.
 
 Nonstandard Fonts
 
@@ -162,9 +133,67 @@ the font subdirectory and run the command as in the following example.
 	./makefont --embed --enc=../font/cp1252.map --dst=../font ../font/calligra.ttf
 
 In your PDF generation code, call AddFont() to load the font and, as with the
-standard fonts, SetFont() to begin using it. See tutorial 7 for an example.
-Good sources of free, open-source fonts include http://www.google.com/fonts/
-and http://dejavu-fonts.org/.
+standard fonts, SetFont() to begin using it. Most examples, including the
+package example, demonstrate this method. Good sources of free, open-source
+fonts include http://www.google.com/fonts/ and http://dejavu-fonts.org/.
+
+Related Packages
+
+The draw2d package (https://github.com/llgcode/draw2d) is a two dimensional
+vector graphics library that can generate output in different forms. It uses
+gofpdf for its document production mode.
+
+Contributing Changes
+
+gofpdf is a global community effort and you are invited to make it even better.
+If you have implemented a new feature or corrected a problem, please consider
+contributing your change to the project. Here are guidelines for making
+submissions. Your change should
+
+• be compatible with the MIT License
+
+• be properly documented
+
+• include an example in fpdf_test.go if appropriate
+
+• conform to the standards of golint (https://github.com/golang/lint) and
+go vet (https://godoc.org/golang.org/x/tools/cmd/vet), that is, `golint .` and
+`go vet .` should not generate any warnings
+
+• not diminish test coverage (https://blog.golang.org/cover)
+
+Pull requests (https://help.github.com/articles/using-pull-requests/) work
+nicely as a means of contributing your changes.
+
+License
+
+gofpdf is released under the MIT License. It is copyrighted by Kurt Jung and
+the contributors acknowledged below.
+
+Acknowledgments
+
+This package's code and documentation are closely derived from the FPDF library
+(http://www.fpdf.org/) created by Olivier Plathey, and a number of font and
+image resources are copied directly from it. Drawing support is adapted from
+the FPDF geometric figures script by David Hernández Sanz. Transparency
+support is adapted from the FPDF transparency script by Martin Hall-May.
+Support for gradients and clipping is adapted from FPDF scripts by Andreas
+Würmser. Support for outline bookmarks is adapted from Olivier Plathey by
+Manuel Cornes. Layer support is adapted from Olivier Plathey. Support for
+transformations is adapted from the FPDF transformation script by Moritz Wagner
+and Andreas Würmser. PDF protection is adapted from the work of Klemen
+Vodopivec for the FPDF product. Lawrence Kesteloot provided code to allow an
+image's extent to be determined prior to placement. Support for vertical
+alignment within a cell was provided by Stefan Schroeder. Ivan Daniluk
+generalized the font and image loading code to use the Reader interface while
+maintaining backward compatibility. Anthony Starks provided code for the
+Polygon function. Robert Lillack provided the Beziergon function and corrected
+some naming issues with the internal curve function. Claudio Felber provided
+implementations for dashed line drawing and generalized font loading. Stani
+Michiels provided support for multi-segment path drawing with smooth line
+joins, line join styles, enhanced fill modes, and has helped greatly with
+package presentation and tests. Bruno Michel has provided valuable assistance
+with the code.
 
 Roadmap
 

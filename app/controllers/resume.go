@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"code.google.com/p/gofpdf"
+	"github.com/jung-kurt/gofpdf"
 	"encoding/xml"
 	"github.com/revel/revel"
 	"io"

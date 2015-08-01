@@ -1,18 +1,17 @@
 {
 	"ImportPath": "github.com/rchargel/goblog",
-	"GoVersion": "go1.4.1",
+	"GoVersion": "go1.4.2",
 	"Packages": [
 		"./..."
 	],
 	"Deps": [
 		{
-			"ImportPath": "code.google.com/p/gofpdf",
-			"Comment": "null-98",
-			"Rev": "183f3ad62df64a6efd2900e2f791602b6b4a3e2b"
-		},
-		{
 			"ImportPath": "github.com/agtorre/gocolorize",
 			"Rev": "f42b554bf7f006936130c9bb4f971afd2d87f671"
+		},
+		{
+			"ImportPath": "github.com/jung-kurt/gofpdf",
+			"Rev": "c00065ecf3d69b0999d803751618ffbeec7a0b56"
 		},
 		{
 			"ImportPath": "github.com/nfnt/resize",
