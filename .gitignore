@@ -2,5 +2,3 @@ test-results/
 tmp/
 routes/
 *.log
-Godeps/_workspace
-Godeps/Readme
