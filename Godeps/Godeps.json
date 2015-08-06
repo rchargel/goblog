@@ -19,6 +19,16 @@
 			"Rev": "7e2ce0a2ea0c5407dbdc8de2c42cca5432c0a242"
 		},
 		{
+			"ImportPath": "github.com/revel/modules/static/app/controllers",
+			"Comment": "v0.12.0",
+			"Rev": "3589d5bf1d1b6da10a88c53701db2af12dfc0811"
+		},
+		{
+			"ImportPath": "github.com/revel/modules/testrunner/app",
+			"Comment": "v0.12.0",
+			"Rev": "3589d5bf1d1b6da10a88c53701db2af12dfc0811"
+		},
+		{
 			"ImportPath": "github.com/revel/revel",
 			"Comment": "v0.12.0-1-g83c6204",
 			"Rev": "83c62046c726f36daec7a28a335521f94b2561a6"
@@ -39,6 +49,10 @@
 			"ImportPath": "gopkg.in/fsnotify.v1",
 			"Comment": "v1.0.4",
 			"Rev": "ca50e738d35a862c379baf8fffbc3bfd080b3cff"
+		},
+		{
+			"ImportPath": "gopkg.in/yaml.v2",
+			"Rev": "7ad95dd0798a40da1ccdff6dff35fd177b5edf40"
 		}
 	]
 }
