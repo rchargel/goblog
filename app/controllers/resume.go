@@ -1,53 +1,26 @@
 package controllers
 
 import (
-	"github.com/jung-kurt/gofpdf"
-	"encoding/xml"
-	"github.com/revel/revel"
-	"io"
 	"net/http"
-	"os"
 	"regexp"
 	"strings"
+
+	"github.com/jung-kurt/gofpdf"
+	"github.com/rchargel/goblog/app/domain"
+	"github.com/revel/revel"
 )
 
-type Experience struct {
-	Jobs []Job `xml:"Job"`
-}
-
-type Education struct {
-	Year        string
-	Institution string
-	Location    string
-	Degree      string
-}
-
-type Job struct {
-	Start       string
-	End         string
-	Company     string
-	Title       string
-	Location    string
-	Description string
-	Skills      string
-}
-
-type CV struct {
-	Summary             string
-	Experience          Experience
-	Education           Education
-	AdditionalSkills    string
-	AdditionalLanguages string
-}
-
+// Resume the resume controller.
 type Resume struct {
 	*revel.Controller
 }
 
+// ResumePDF a type used to output the resume into PDF format
 type ResumePDF struct {
-	resume CV
+	resume domain.CV
 }
 
+// Apply writes the pdf file.
 func (r ResumePDF) Apply(req *revel.Request, resp *revel.Response) {
 	resp.Out.Header().Set("Content-Disposition", `inline; filename="rafael_chargels_resume.pdf"`)
 
@@ -71,7 +44,7 @@ func (r ResumePDF) Apply(req *revel.Request, resp *revel.Response) {
 		pdf.MultiCell(0, 15, cleanStr(text), "", "L", false)
 	}
 
-	writeEducation := func(education Education) {
+	writeEducation := func(education domain.Education) {
 		pdf.SetFont("Arial", "B", 11)
 		pdf.Ln(4)
 		pdf.CellFormat(0, 15, education.Institution+" - "+education.Year, "", 1, "L", false, 0, "")
@@ -80,7 +53,7 @@ func (r ResumePDF) Apply(req *revel.Request, resp *revel.Response) {
 		pdf.CellFormat(0, 15, education.Degree, "", 1, "L", false, 0, "")
 	}
 
-	writeJob := func(job Job) {
+	writeJob := func(job domain.Job) {
 		pdf.SetFont("Arial", "B", 11)
 		pdf.Ln(4)
 		pdf.CellFormat(0, 15, job.Start+" - "+job.End, "", 1, "L", false, 0, "")
@@ -129,46 +102,18 @@ func (r ResumePDF) Apply(req *revel.Request, resp *revel.Response) {
 	pdf.Output(resp.Out)
 }
 
+// Index the index page for the resume controller.
 func (c Resume) Index() revel.Result {
-	resume := CV{}
-	file, err := os.Open("./public/resources/resume.xml")
-	defer file.Close()
-	if err == nil {
-		decoder := xml.NewDecoder(file)
-		for {
-			if err := decoder.Decode(&resume); err == nil {
-				// resume will get set
-			} else if err == io.EOF {
-				break
-			} else {
-				panic(err)
-			}
-		}
-	} else {
-		panic(err)
-	}
+	resume, _ := domain.NewCV("./public/resources/resume.yml")
+
 	tab := "resume"
 	return c.Render(resume, tab)
 }
 
+// Pdf creates the pdf version of the resume.
 func (c Resume) Pdf() revel.Result {
-	resume := CV{}
-	file, err := os.Open("./public/resources/resume.xml")
-	defer file.Close()
-	if err == nil {
-		decoder := xml.NewDecoder(file)
-		for {
-			if err := decoder.Decode(&resume); err == nil {
-				// resume will get set
-			} else if err == io.EOF {
-				break
-			} else {
-				panic(err)
-			}
-		}
-	} else {
-		panic(err)
-	}
+	resume, _ := domain.NewCV("./public/resources/resume.yml")
+
 	return ResumePDF{resume}
 }
 
