@@ -1,0 +1,119 @@
+blogs:
+  - name:     "Protocol Buffers vs Avro"
+    date:     "2010-08-27"
+    slug:     "protocol-buffers-vs-avro"
+    abstract: "A comparison of Google's Protocol Buffers and Apache's Avro for serializing/unserializing Java objects. This post will look at compatibility, code generation, and other caveats that may sway developers towards selecting a Java serializer."
+    active:   true
+    tags:     "protocol buffers, protobuf, avro, thrift, compatibility, google, apache, comparison, programming, software"
+
+  - name:     "On the Question of Interviews"
+    date:     "2010-09-29"
+    slug:     "on-the-question-of-interviews"
+    abstract: "Trials and tribulations of an interviewer. It's really hard to find good software developers."
+    active:   true
+    tags:     "interview, interviews, question, questions, software, programming"
+
+  - name:     "Why Ubuntu Doesn’t Suck"
+    date:     "2010-10-01"
+    slug:     "why-ubuntu-doesn-t-suck"
+    abstract: "A message to the haters. Yes, this is merely a rant."
+    active:   true
+    tags:     "ubuntu, linux, rant"
+
+  - name:     "Formatting XML in VIM"
+    date:     "2011-03-11"
+    slug:     "formatting-xml-in-vim"
+    abstract: "A Linux trick to simply format XML content with VI(M)."
+    active:   true
+    tags:     "linux, vi, vim, xml, formatting, format"
+
+  - name:     "Evolutionary Algorithms in an Actor Model"
+    date:     "2011-03-21"
+    slug:     "evolutionary-algorithms-in-an-actor-model"
+    abstract: "An attempt to test some theories about evolutionary algorithms within the framework of an Actors Model."
+    active:   true
+    tags:     "evelutionary, algorithms, actors, software, programming"
+
+  - name:     "Using Google Closure in the Command Line"
+    date:     "2013-01-15"
+    slug:     "using-google-closure-in-the-command-line"
+    abstract: "Another Linux trick to setup the Google's Closure Javascript compiler and Closure Stylesheets into the command-line."
+    active:   true
+    tags:     "linux, command, command-line, cli, closure, javascript, css, closure-stylesheets"
+
+  - name:     "Formatting JSON in VIM"
+    date:     "2013-02-08"
+    slug:     "formatting-json-in-vim"
+    abstract: "Neat little Linux trick to make JSON formatting easy in VI(M)."
+    active:   true
+    tags:     "vi, vim, json, format, formatting, linux"
+
+  - name:     "Java: Not Dead Yet?"
+    date:     "2013-10-10"
+    slug:     "java-not-dead-yet"
+    abstract: "A short post on the future of Java and it's viability for the future. This does not discuss changes in Java 8, but does touch on some of the other available JVM languages."
+    active:   true
+    tags:     "java, dead, language, future"
+
+  - name:     "You’re Doing Everything Right, But…"
+    date:     "2013-04-05"
+    slug:     "youre-doing-everything-right-but"
+    abstract: "Continuous integration as the next step for managing product rollout and reducing production issues. This includes ideas of how to incorporate CI into your development environment."
+    active:   true
+    tags:     "continuous integration, bamboo, jenkins, hudson"
+
+  - name:     "How Hard is it to Develop a Website in WordPress?"
+    date:     "2013-03-01"
+    slug:     "how-hard-is-it-to-develop-a-website-in-wordpress"
+    abstract: "What should your organization be looking for in a WordPress developer? That really depends upon what type of development you're planning."
+    active:   true
+    tags:     "wordpress, development, website, web, hiring, employee"
+
+  - name:     "Go: Is Golang a Viable Option for Large-Scale Project Development?"
+    date:     "2014-03-21"
+    slug:     "golang-viable-project-dev"
+    abstract: "What are the advantages and disadvantages of Go (Golang) as a language for large-scale projects. I'll look at the benefits of utilities like channels, and compiler performance, and the negatives from buggy slices and repeatable build problems caused by the importing third-party libraries."
+    active:   true
+    tags:     "Go, Golang, go vs java, golang vs java, large-scale, project, development, comparison, channels"
+
+  - name:     "Lambda Lambda Lambda: Java 8 Goes Functional"
+    date:     "2014-03-28"
+    slug:     "lambda-lambda-lambda-java-8-goes-functional"
+    abstract: "One of the new features in Java 8 is the Lambda. While Clojure and Scala are already well established Functional Programming languages in the JVM family, this is a step towards bringing Java into the latest evolution of software design."
+    active:   true
+    tags:     "java, java8, functional programming, lambda, lambdas, programming, software"
+
+  - name:     "Deploying a Golang Website using Revel and Heroku"
+    date:     "2014-09-04"
+    slug:     "deploying-a-go-website-with-heroku-and-revel"
+    abstract: "This is a slide show presentation explaining how to simply and easily deploy a website developed in Golang with the Revel framework onto the Heroku platform."
+    active:   true
+    tags:     "go, golang, heroku, revel, programming, software, web"
+
+  - name:     "A Simple OAuth Implementation for Go"
+    date:     "2015-02-15"
+    slug:     "goauth"
+    abstract: "While there are many implementations of either OAuth 1.0 or OAuth 2.0 in Go, there is no single implementation that provides both authentication schemes, nor do any of the other implementations make coding and configuration so simple."
+    active:   true
+    tags:     "go, golang, oauth, authentication, authorization, google, facebook, twitter, yaml"
+
+  - name:     "Java 8's Optional Type"
+    date:     "2015-03-04"
+    slug:     "java8-optional"
+    abstract: "Java 8's attempt to bring an end to the NullPointerException gives us the Optional type. Taken from Scala's 'Option' type, this new feature wraps a return statement or property in order to protect developers from nullability."
+    active:   true
+    tags:     "java, java8, optional programming, software"
+
+  - name:     "Go4J: Golang for Java Developers"
+    date:     "2015-05-06"
+    slug:     "go4j-golang-for-java-developers"
+    abstract: "This is a presentation for Java Developers which provides an overview of Golang: how it works, it's toolset, and why Java Developers should be aware of this language."
+    active:   true
+    tags:     "java, go, golang, programming, software, web"
+
+  - name:     "On the Question of Phone Screens"
+    date:     "2015-07-30"
+    slug:     "on-the-question-of-phone-screens"
+    abstract: "It's hard to find good software developers, that's true, but it can be even harder to weed out bad developers during a phone screen. This incurs costs in both time and money for all involved, but how do we solve this problem."
+    active:   true
+    tags:     "interview, interviews, question, questions, software, programming, phone screens"
