@@ -1,0 +1,32 @@
+bookmarks:
+  - link     : "http://phillyemergingtech.com"
+    linktext : "Philadelphia Emerging Technologies for the Enterprise"
+    message  : "An awesome expo for East Coast developers. I am not just saying that because I work for the sponsor."
+  
+  - link     : "http://grails.org"
+    linktext : "Grails"
+    message  : "My new favorite web development framework."
+
+  - link     : "http://www.codinghorror.com/blog/"
+    linktext : "Coding Horror"
+    message  : "How could I not include Jeff Atwood's Blog."
+
+  - link     : "http://kdgregory.com/"
+    linktext : "Keith Gregory's Blog"
+    message  : "Keith Gregory is a developer that I have worked with for a couple of years. Unlike myself, he actually posts regularly."
+
+  - link     : "http://jobtipsforgeeks.com/"
+    linktext : "Job Tips for Geeks"
+    message  : "Date Fecak's blog. Dave runs the Philadelphia Java Users Group."
+
+  - link     : "http://theoatmeal.com/"
+    linktext : "The Oatmeal"
+    message  : "A funny web comic."
+
+  - link     : "http://xkcd.com/"
+    linktext : "XKCD"
+    message  : "Another great web comic, and source for holiday gifts."
+
+  - link     : "http://venganza.org/"
+    linktext : "Flying Spaghetti Monster"
+    message  : "The Church of Pastafarianism. Need I say more."
