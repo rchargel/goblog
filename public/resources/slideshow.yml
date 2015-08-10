@@ -1,0 +1,12 @@
+ items:
+ - name       : "Deploying a Golang Website using Revel and Heroku"
+   slug       : "deploying-a-go-website-with-heroku-and-revel"
+   footer     : "Back to <a href=\"/blog/deploying-a-go-website-with-heroku-and-revel\">Blog Post</a>."
+   theme      : "zcarioca"
+   transition : "default"
+
+ - name       : "Go4J: Golang for Java Developers"
+   slug       : "go4j-golang-for-java-developers"
+   footer     : "Back to <a href=\"/blog/go4j-golang-for-java-developers\">Blog Post</a>."
+   theme      : "zcarioca"
+   transition : "default"
