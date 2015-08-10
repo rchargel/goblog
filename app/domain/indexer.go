@@ -75,7 +75,7 @@ func (b *BlogList) Search(terms []string, ch chan SearchResultItem) {
 }
 
 func (b *ProjectList) Search(terms []string, ch chan SearchResultItem) {
-	for _, item := range b.items {
+	for _, item := range b.Items {
 		if item.Active {
 			score := 0
 			for _, term := range terms {

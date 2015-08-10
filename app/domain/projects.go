@@ -2,19 +2,22 @@ package domain
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
-	"io"
+	"io/ioutil"
 	"os"
 	"regexp"
 	"sort"
 	"strings"
+
+	"gopkg.in/yaml.v2"
 )
 
+// ProjectList the list of projects
 type ProjectList struct {
-	items []ProjectItem
+	Items []ProjectItem
 }
 
+// ProjectItem a single project item
 type ProjectItem struct {
 	Name        string
 	Slug        string
@@ -26,47 +29,44 @@ type ProjectItem struct {
 	Index       map[string]int
 }
 
+// ProjectItemByName sorts projects by name.
 type ProjectItemByName []ProjectItem
 
+// ProjectItemFilterActive filters out non-active projects.
 type ProjectItemFilterActive []ProjectItem
 
+// NewProjectList gets a pointer to the list of projects.
 func NewProjectList() *ProjectList {
 	projects := &ProjectList{}
-	projects.Init()
+	projects.init("./public/resources/projects.yml")
 	return projects
 }
 
-func (c *ProjectList) Init() {
-	if len(c.items) == 0 {
+func (c *ProjectList) init(filepath string) {
+	if len(c.Items) == 0 {
 		fmt.Println("INITIALIZING PROJECTS")
-		projects := make([]ProjectItem, 0, 15)
-		file, err := os.Open("./public/resources/projects.json")
+		file, err := os.Open(filepath)
 		defer file.Close()
 		if err == nil {
-			decoder := json.NewDecoder(file)
-			for {
-				if err := decoder.Decode(&projects); err == nil {
-					// resume will get set
-				} else if err == io.EOF {
-					break
-				} else {
-					panic(err)
-				}
+			data, err := ioutil.ReadAll(file)
+			if err == nil {
+				yaml.Unmarshal(data, c)
 			}
 		} else {
 			panic(err)
 		}
-		sort.Sort(ProjectItemByName(projects))
-		c.items = projects
+		sort.Sort(ProjectItemByName(c.Items))
 	}
 }
 
+// GetFilteredList gets a filtered list of project items.
 func (c *ProjectList) GetFilteredList() []ProjectItem {
-	return ProjectItemFilterActive(c.items).Filter()
+	return ProjectItemFilterActive(c.Items).Filter()
 }
 
+// GetItem gets a single item by its slug
 func (c *ProjectList) GetItem(slug string) *ProjectItem {
-	for _, item := range c.items {
+	for _, item := range c.Items {
 		if item.Slug == slug {
 			return &item
 		}
@@ -74,6 +74,7 @@ func (c *ProjectList) GetItem(slug string) *ProjectItem {
 	return nil
 }
 
+// GetContent gets the content from the project item.
 func (c *ProjectItem) GetContent() string {
 	buffer := &bytes.Buffer{}
 	file, err := os.Open("./public/resources/projects/" + c.File)
@@ -81,15 +82,15 @@ func (c *ProjectItem) GetContent() string {
 	if err == nil {
 		buffer.ReadFrom(file)
 		return buffer.String()
-	} else {
-		return ""
 	}
+	return ""
 }
 
 func (l ProjectItemByName) Len() int           { return len(l) }
 func (l ProjectItemByName) Swap(i, j int)      { l[i], l[j] = l[j], l[i] }
 func (l ProjectItemByName) Less(i, j int) bool { return l[i].Name < l[j].Name }
 
+// Filter filters out the non-active items
 func (l ProjectItemFilterActive) Filter() []ProjectItem {
 	newList := make([]ProjectItem, 0, len(l))
 	for _, item := range []ProjectItem(l) {
@@ -125,10 +126,11 @@ func indexProjectItem(b ProjectItem) ProjectItem {
 	}
 }
 
+// Index re-indexes the projects
 func (c *ProjectList) Index() {
-	for i, item := range c.items {
+	for i, item := range c.Items {
 		if item.Active {
-			c.items[i] = indexProjectItem(item)
+			c.Items[i] = indexProjectItem(item)
 		}
 	}
 }
