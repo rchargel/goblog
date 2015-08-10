@@ -22,7 +22,6 @@ type ProjectItem struct {
 	Name        string
 	Slug        string
 	Abstract    string
-	File        string
 	Tags        string
 	Active      bool
 	MoreScripts []string
@@ -77,7 +76,7 @@ func (c *ProjectList) GetItem(slug string) *ProjectItem {
 // GetContent gets the content from the project item.
 func (c *ProjectItem) GetContent() string {
 	buffer := &bytes.Buffer{}
-	file, err := os.Open("./public/resources/projects/" + c.File)
+	file, err := os.Open("./public/resources/projects/" + c.Slug + ".html")
 	defer file.Close()
 	if err == nil {
 		buffer.ReadFrom(file)
@@ -119,7 +118,6 @@ func indexProjectItem(b ProjectItem) ProjectItem {
 		Name:     b.Name,
 		Slug:     b.Slug,
 		Abstract: b.Abstract,
-		File:     b.File,
 		Tags:     b.Tags,
 		Active:   b.Active,
 		Index:    index,

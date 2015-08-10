@@ -4,49 +4,42 @@ items:
    abstract    : "A commercial website built on the JSON Wordpress Theme."
    active      : false
    tags        : "website, architecture, json, wordpress"
-   file        : "carvalho-good-pllc.html"
 
  - name        : "ZiLCh"
    slug        : "zilch"
    abstract    : "Zipcode Lookup Channel. A REST-like API built in Go to lookup zip codes and postal codes from around the globe."
    active      : true
    tags        : "zipcode, postal, codes, rest, javascript, lookup"
-   file        : "zilch.html"
 
  - name        : "JSON Wordpress Theme"
    slug        : "json-wordpress-theme"
    abstract    : "A JSON theme for Wordpress. Turns your Wordpress server into a series of AJAX calls."
    active      : true
    tags        : "json, wordpress, javascript, theme"
-   file        : "jsonwordpress.html"
 
  - name        : "Spring Configuration Library"
    slug        : "spring-configuration-library-java"
    abstract    : "Simplify the development of applications by removing the common boiler-plate code used to read and initialize project properties."
    active      : true
    tags        : "spring, java, configuration, annotations, software, programming"
-   file        : "springconfig.html"
 
  - name        : "Xebra Radiology Workstation"
    slug        : "xebra-radiology-workstation"
    abstract    : "An open source, cross-platform, thin client and server for web-based distribution and clinical review of medical imaging results."
    active      : true
    tags        : "medical, radiology, software, java, swing"
-   file        : "xebra.html"
 
  - name        : "Country-State-Lookup API"
    slug        : "country-state-lookup-rest-api"
    abstract    : "A REST-like API to lookup information on countries, states, and languages."
    active      : false
    tags        : "json, rest, javascript, software, programming, country, state, province, language"
-   file        : "csl.html"
 
  - name        : "Bird Game"
    slug        : "flappy-bird"
    abstract    : "A simple game where you press spacebar to go up and release to go back down. Grab as much fruit as you can before getting hit by the vines."
    active      : true
    tags        : "game, javascript, fun, flappy bird"
-   file        : "flappy-bird.html"
    morescripts : ["phaser.min.js"]
 
  - name        : "Space Shooter"
@@ -54,7 +47,6 @@ items:
    abstract    : "A basic space shooter game. Move with the arrow keys and shoot with the spacebar."
    active      : false
    tags        : "game, javascript, fun, space, shooter"
-   file        : "space-shooter.html"
    morescripts : ["phaser.min.js"]
 
  - name        : "GOAuth"
@@ -62,4 +54,3 @@ items:
    abstract    : "An OAuth 1.0 and OAuth 2.0 implementation in GO."
    active      : true
    tags        : "go, golang, oauth, authentication"
-   file        : "goauth.html"
